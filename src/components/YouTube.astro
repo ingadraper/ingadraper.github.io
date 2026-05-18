@@ -1,0 +1,51 @@
+---
+import { ArrowUpRight } from '@lucide/astro';
+import { siteConfig } from '../siteConfig';
+
+const topics = [
+    'Neighborhood fit across Charlotte and Lake Norman',
+    'What buyers should understand before touring',
+    'Rental-readiness and property strategy questions',
+];
+---
+
+<section class="section-band bg-ivory">
+    <div class="site-shell">
+        <div class="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+            <div class="overflow-hidden rounded-[8px] border border-line bg-ink shadow-[0_24px_70px_rgba(38,37,34,0.12)]">
+                <iframe
+                    src={siteConfig.youtube.featuredEmbedUrl}
+                    title={`${siteConfig.youtube.channelName} featured video`}
+                    class="aspect-video w-full border-0"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                ></iframe>
+            </div>
+
+            <div>
+                <p class="eyebrow">{siteConfig.youtube.channelName}</p>
+                <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">
+                    A local voice clients can get to know before they call.
+                </h2>
+                <p class="mt-6 text-lg text-smoke">
+                    Inga's YouTube channel shares a more personal view of the Charlotte area: the neighborhoods, the tradeoffs, the practical details, and the everyday questions people ask before they make a move.
+                </p>
+
+                <div class="mt-8 space-y-3">
+                    {topics.map((topic) => (
+                        <div class="flex items-start gap-3 border-t border-line pt-3 text-sm text-smoke">
+                            <ArrowUpRight class="mt-0.5 h-4 w-4 text-olive" />
+                            <span>{topic}</span>
+                        </div>
+                    ))}
+                </div>
+
+                <a href={siteConfig.links.youtube} target="_blank" rel="noopener noreferrer" class="btn-secondary mt-9">
+                    Visit the channel
+                    <ArrowUpRight class="h-4 w-4" />
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

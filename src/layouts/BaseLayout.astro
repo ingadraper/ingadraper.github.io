@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+import { siteConfig } from '../siteConfig';
+
+interface Props {
+    title: string;
+    description: string;
+}
+
+const { title, description } = Astro.props;
+const chatWidgetId = siteConfig.connectors.goHighLevelChatWidgetId || import.meta.env.PUBLIC_GHL_CHAT_WIDGET_ID;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="keywords" content="real estate agent, Charlotte NC, Huntersville, Lake Norman, short-term rental strategy, buy home, sell home" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ingadraper.com" />
+        <link rel="canonical" href="https://ingadraper.com" />
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23D4C9C1'>I</text></svg>" />
+    </head>
+    <body>
+        <slot />
+        {chatWidgetId ? (
+            <script
+                src="https://widgets.leadconnectorhq.com/loader.js"
+                data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js"
+                data-widget-id={chatWidgetId}
+                async
+            ></script>
+        ) : null}
+    </body>
+</html>

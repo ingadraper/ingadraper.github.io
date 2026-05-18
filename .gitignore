@@ -11,6 +11,10 @@ coverage/
 out/
 build/
 
+# Astro
+.astro/
+dist/
+
 # Environment variables
 .env.local
 .env.development.local

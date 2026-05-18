@@ -29,10 +29,6 @@ export const siteConfig = {
             src: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1300&q=85',
             alt: 'Polished living room prepared for a real estate showing',
         },
-        youtube: {
-            src: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1400&q=85',
-            alt: 'A welcoming home exterior representing Charlotte real estate content',
-        },
     },
     connectors: {
         goHighLevelFormUrl: '',

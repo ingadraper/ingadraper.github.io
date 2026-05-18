@@ -1,10 +1,10 @@
 # Inga Draper Link Inventory
 
-Use this file as the broader reference log for Inga's public profiles, review sources, channel URLs, and marketing references. Add new links here first, then decide whether each link belongs in `app/siteConfig.ts`, a visible page section, or internal research only.
+Use this file as the broader reference log for Inga's public profiles, review sources, channel URLs, and marketing references. Add new links here first, then decide whether each link belongs in `src/siteConfig.ts`, a visible page section, or internal research only.
 
 ## How To Use
 
-- `app/siteConfig.ts`: public facts or links reused by the live site.
+- `src/siteConfig.ts`: public facts or links reused by the live site.
 - Visible UI: high-signal links that help a visitor take action or trust Inga.
 - This document only: references that help future research, SEO checks, content writing, or profile cleanup but do not need to appear on the landing page.
 
@@ -14,8 +14,8 @@ Use this file as the broader reference log for Inga's public profiles, review so
 | --- | --- | --- | --- |
 | Website | https://www.ingadraper.com | Live site | Custom domain for GitHub Pages. |
 | GitHub Pages domain | https://ingadraper.github.io | Internal reference | Repository Pages address. |
-| Phone | (704) 560-9101 | Live site | Keep in `app/siteConfig.ts`. |
-| Email | ingibjorg.draper@exprealty.com | Live site | Keep in `app/siteConfig.ts`. |
+| Phone | (704) 560-9101 | Live site | Keep in `src/siteConfig.ts`. |
+| Email | ingibjorg.draper@exprealty.com | Live site | Keep in `src/siteConfig.ts`. |
 | Brokerage | eXp Realty | Live site | Current public brokerage fact. |
 
 ## Social And Video
@@ -41,8 +41,8 @@ Use this file as the broader reference log for Inga's public profiles, review so
 | Item | URL or Value | Use | Notes |
 | --- | --- | --- | --- |
 | GoHighLevel form URL | Pending | Live site when available | Must be a public embed URL, not a private webhook or API endpoint. |
-| GoHighLevel calendar URL | Pending | Live site when available | Public scheduling URL can go in `app/siteConfig.ts`. |
-| GoHighLevel chat widget ID | Pending | Live site when available | Public widget ID can go in `app/siteConfig.ts`. |
+| GoHighLevel calendar URL | Pending | Live site when available | Public scheduling URL can go in `src/siteConfig.ts`. |
+| GoHighLevel chat widget ID | Pending | Live site when available | Public widget ID can go in `src/siteConfig.ts`. |
 
 ## Content Facts To Recheck Periodically
 

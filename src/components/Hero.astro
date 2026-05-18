@@ -1,0 +1,72 @@
+---
+import { ArrowRight, MapPin, PlayCircle } from '@lucide/astro';
+import { siteConfig } from '../siteConfig';
+
+const heroImage = siteConfig.images.hero;
+---
+
+<section id="top" class="relative min-h-[92svh] overflow-hidden bg-ink text-ivory">
+    <img src={heroImage.src} alt={heroImage.alt} class="absolute inset-0 h-full w-full object-cover opacity-[0.76]" />
+    <div class="absolute inset-0 bg-gradient-to-r from-ink/95 via-ink/76 to-ink/28"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-ink/44 via-transparent to-ink/24"></div>
+
+    <div class="absolute inset-x-0 top-0 z-20 border-b border-white/14 bg-ink/18 backdrop-blur-md">
+        <nav class="site-shell flex min-h-20 items-center justify-between text-sm">
+            <a href="#top" class="font-display text-2xl font-semibold text-ivory">Inga Draper</a>
+            <div class="hidden items-center gap-8 text-ivory/78 md:flex">
+                <a href="#about" class="transition hover:text-ivory">About</a>
+                <a href="#services" class="transition hover:text-ivory">Services</a>
+                <a href="#strategy" class="transition hover:text-ivory">Strategy</a>
+                <a href="#reviews" class="transition hover:text-ivory">Reviews</a>
+                <a href="#contact" class="rounded-[6px] border border-white/25 px-4 py-2 text-ivory transition hover:border-white hover:bg-white/10">Contact</a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="site-shell relative z-10 flex min-h-[88svh] items-end pb-12 pt-32 sm:min-h-[92svh] sm:pb-20 sm:pt-36 lg:pb-24">
+        <div class="w-full min-w-0 max-w-4xl">
+            <p class="mb-5 flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-ivory/88 sm:text-xs sm:tracking-[0.2em]">
+                <MapPin class="h-4 w-4 flex-none" aria-hidden="true" />
+                <span>Inga Draper</span>
+                <span aria-hidden="true">|</span>
+                <span>Charlotte + Lake Norman real estate</span>
+            </p>
+
+            <h1 class="max-w-[13ch] text-4xl font-semibold leading-[1.04] text-ivory sm:max-w-4xl sm:text-5xl sm:leading-[1.08] lg:text-7xl">
+                Real estate guidance with clarity, care, and a local point of view.
+            </h1>
+
+            <p class="mt-6 max-w-2xl text-base text-ivory/88 sm:text-xl">
+                Inga Draper helps buyers, sellers, relocation clients, and property-strategy clients move through Charlotte-area real estate with thoughtful strategy and honest conversation.
+            </p>
+
+            <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+                <a href="#contact" class="btn-primary bg-ivory text-ink hover:bg-mist focus:ring-ivory focus:ring-offset-ink">
+                    Start a conversation
+                    <ArrowRight class="h-4 w-4" />
+                </a>
+                <a href={siteConfig.links.youtube} target="_blank" rel="noopener noreferrer" class="btn-secondary border-white/30 bg-ink/90 text-ivory shadow-[0_18px_44px_rgba(0,0,0,0.24)] hover:border-white/50 hover:bg-ink focus:ring-ivory focus:ring-offset-ink">
+                    <PlayCircle class="h-4 w-4" />
+                    Watch {siteConfig.youtube.channelName}
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="relative z-10 border-t border-white/12 bg-ivory/95 text-ink backdrop-blur">
+        <div class="site-shell grid gap-6 py-6 sm:grid-cols-3">
+            <div>
+                <p class="text-xs uppercase tracking-[0.22em] text-smoke">Brokerage</p>
+                <p class="mt-1 font-semibold">eXp Realty</p>
+            </div>
+            <div>
+                <p class="text-xs uppercase tracking-[0.22em] text-smoke">Service Area</p>
+                <p class="mt-1 font-semibold">Charlotte, Huntersville, Cornelius</p>
+            </div>
+            <div>
+                <p class="text-xs uppercase tracking-[0.22em] text-smoke">Specialty Lane</p>
+                <p class="mt-1 font-semibold">Property strategy + rental readiness</p>
+            </div>
+        </div>
+    </div>
+</section>

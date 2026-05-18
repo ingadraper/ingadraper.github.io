@@ -6,15 +6,15 @@ Keep the site static-export friendly. Do not add API routes, server actions, dat
 
 ## Stack And Hosting
 
-- Next.js App Router with TypeScript/TSX and Tailwind CSS.
-- Production builds export static files for GitHub Pages. Local `npm run dev` should remain a normal Next dev server.
+- Astro with TypeScript and Tailwind CSS.
+- Production builds export static files to `dist` for GitHub Pages. Local `npm run dev` should remain a normal Astro dev server.
 - The custom domain is `ingadraper.com`; `public/CNAME` should continue to contain that value.
-- GitHub Pages deploys from the generated `out` directory via `.github/workflows/deploy.yml`.
+- GitHub Pages deploys from the generated `dist` directory via `.github/workflows/deploy.yml`.
 
 ## Source Of Truth
 
-- Use `app/siteConfig.ts` for repeated public facts: contact info, public social links, connector URLs, channel labels, and placeholder image URLs.
-- Use `docs/link-inventory.md` as the broader log of Inga's public profiles, review sources, channel URLs, and research references. Add new links there first, then decide whether they belong in `app/siteConfig.ts` or the visible UI.
+- Use `src/siteConfig.ts` for repeated public facts: contact info, public social links, connector URLs, channel labels, and placeholder image URLs.
+- Use `docs/link-inventory.md` as the broader log of Inga's public profiles, review sources, channel URLs, and research references. Add new links there first, then decide whether they belong in `src/siteConfig.ts` or the visible UI.
 - Avoid hardcoding the same URL or phone/email value across components.
 - When Inga provides photos, prefer adding them under `public/images/` and update `siteConfig.images` to local paths such as `/images/inga-hero.jpg`.
 - Placeholder images should be tasteful real-estate, Charlotte-area, or polished lifestyle photography that can be swapped without component rewrites.
@@ -46,11 +46,11 @@ Use `.github/agents/real-estate-brand-coach.agent.md` when the user asks about I
 
 GoHighLevel connectors must use public embed/widget values unless hosting changes. Do not put private API keys, bearer tokens, private webhooks, or private GHL endpoints in client code. Preferred environment variables are:
 
-- `NEXT_PUBLIC_GHL_FORM_URL`
-- `NEXT_PUBLIC_GHL_CALENDAR_URL`
-- `NEXT_PUBLIC_GHL_CHAT_WIDGET_ID`
+- `PUBLIC_GHL_FORM_URL`
+- `PUBLIC_GHL_CALENDAR_URL`
+- `PUBLIC_GHL_CHAT_WIDGET_ID`
 
-Public connector values can also be committed in `app/siteConfig.ts`, which is the simplest GitHub Pages path when those values are not secret.
+Public connector values can also be committed in `src/siteConfig.ts`, which is the simplest GitHub Pages path when those values are not secret.
 
 If no GoHighLevel form URL is configured, the contact form should remain usable through the mailto fallback. The form should never show a broken connector state to visitors.
 
@@ -58,7 +58,7 @@ If no GoHighLevel form URL is configured, the contact form should remain usable 
 
 - Correct channel: `https://www.youtube.com/@ingaintheqc`
 - Channel label: `Inga in the QC`
-- Keep channel URLs and labels in `app/siteConfig.ts`.
+- Keep channel URLs and labels in `src/siteConfig.ts`.
 - Static GitHub Pages has no private backend, so do not use a private YouTube API key in client code.
 - Featured video: `https://www.youtube.com/watch?v=LYM-e6syfmQ`
 - For a manually featured video, copy the latest video ID from YouTube and embed `https://www.youtube.com/embed/VIDEO_ID`.
