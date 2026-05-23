@@ -1,4 +1,12 @@
 export const siteConfig = {
+    brand: {
+        brokerageName: 'eXp Realty',
+        guidelinesUrl: 'https://www.canva.com/design/DAGdJKsWnpg/j4RnyVFqu4jTHTslj1Icjw/view?utm_content=DAGdJKsWnpg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hb25cfc0b7b#1',
+        logos: {
+            black: '/images/brand/exp-realty-black.svg',
+            white: '/images/brand/exp-realty-white.svg',
+        },
+    },
     contact: {
         phone: '(704) 560-9101',
         phoneHref: 'tel:+17045609101',

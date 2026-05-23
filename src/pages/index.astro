@@ -8,9 +8,11 @@ import Services from '../components/Services.astro';
 import YouTube from '../components/YouTube.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { siteConfig } from '../siteConfig';
+
+const { brand } = siteConfig;
 ---
 
-<BaseLayout title="Inga Draper | Charlotte Real Estate Advisor" description="Charlotte and Lake Norman real estate guidance from Inga Draper, eXp Realty. Buyer, seller, relocation, investment, and property strategy conversations.">
+<BaseLayout title="Inga Draper | Charlotte Real Estate Advisor" description={`Charlotte and Lake Norman real estate guidance from Inga Draper, ${brand.brokerageName}. Buyer, seller, relocation, investment, and property strategy conversations.`}>
     <main class="min-h-screen bg-ivory">
         <Hero />
         <About />
@@ -24,14 +26,18 @@ import { siteConfig } from '../siteConfig';
             <div class="site-shell">
                 <div class="grid gap-8 border-b border-line pb-8 sm:grid-cols-2 lg:grid-cols-4">
                     <div>
-                        <h3 class="font-display text-2xl font-semibold">Inga Draper</h3>
+                        <div class="flex flex-wrap items-center gap-5">
+                            <h3 class="font-display text-2xl font-extrabold">Inga Draper</h3>
+                            <span class="h-8 w-px bg-line" aria-hidden="true"></span>
+                            <img src={brand.logos.black} alt={brand.brokerageName} class="h-9 w-auto" />
+                        </div>
                         <p class="mt-4 text-sm text-smoke">
-                            eXp Realty agent serving Charlotte, Huntersville, Cornelius, and Lake Norman.
+                            {brand.brokerageName} agent serving Charlotte, Huntersville, Cornelius, and Lake Norman.
                         </p>
                     </div>
 
                     <div>
-                        <h4 class="font-semibold">Explore</h4>
+                        <h4 class="font-medium">Explore</h4>
                         <ul class="mt-4 space-y-2 text-sm text-smoke">
                             <li><a href="#about" class="transition hover:text-ink">About</a></li>
                             <li><a href="#services" class="transition hover:text-ink">Services</a></li>
@@ -41,7 +47,7 @@ import { siteConfig } from '../siteConfig';
                     </div>
 
                     <div>
-                        <h4 class="font-semibold">Focus</h4>
+                        <h4 class="font-medium">Focus</h4>
                         <ul class="mt-4 space-y-2 text-sm text-smoke">
                             <li>Buyer, seller, and relocation guidance</li>
                             <li>Charlotte + Lake Norman perspective</li>
@@ -51,7 +57,7 @@ import { siteConfig } from '../siteConfig';
                     </div>
 
                     <div>
-                        <h4 class="font-semibold">Connect</h4>
+                        <h4 class="font-medium">Connect</h4>
                         <ul class="mt-4 space-y-2 text-sm text-smoke">
                             <li><a href={siteConfig.contact.phoneHref} class="transition hover:text-ink">{siteConfig.contact.phone}</a></li>
                             <li><a href={`mailto:${siteConfig.contact.email}`} class="transition hover:text-ink">Email Inga</a></li>
@@ -62,7 +68,7 @@ import { siteConfig } from '../siteConfig';
                 </div>
 
                 <p class="pt-8 text-sm text-smoke">
-                    (c) 2026 Inga Draper Real Estate. eXp Realty. Equal Housing Opportunity.
+                    (c) 2026 Inga Draper Real Estate. {brand.brokerageName}. Equal Housing Opportunity.
                 </p>
             </div>
         </footer>

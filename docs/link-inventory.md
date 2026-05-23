@@ -18,6 +18,12 @@ Use this file as the broader reference log for Inga's public profiles, review so
 | Email | ingibjorg.draper@exprealty.com | Live site | Keep in `src/siteConfig.ts`. |
 | Brokerage | eXp Realty | Live site | Current public brokerage fact. |
 
+## Brand And Design References
+
+| Item | URL | Use | Notes |
+| --- | --- | --- | --- |
+| eXp Realty brand guide | https://www.canva.com/design/DAGdJKsWnpg/j4RnyVFqu4jTHTslj1Icjw/view?utm_content=DAGdJKsWnpg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hb25cfc0b7b#1 | Design reference | 2026 guide: black/white logo usage, clear space, eXp color palette, Manrope headlines, Roboto body copy. |
+
 ## Social And Video
 
 | Item | URL | Use | Notes |

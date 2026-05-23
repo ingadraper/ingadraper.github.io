@@ -6,19 +6,19 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                ivory: '#F7F4EF',
-                porcelain: '#FFFEFB',
-                mist: '#E8ECE7',
-                rose: '#D7AFA5',
-                clay: '#B66F5E',
-                olive: '#53624D',
-                ink: '#262522',
-                smoke: '#6E6A64',
-                line: '#DDD6CD',
+                ivory: '#EEEEEE',
+                porcelain: '#FFFFFF',
+                mist: '#EEEEEE',
+                ink: '#0C0F24',
+                smoke: '#686672',
+                line: '#EEEEEE',
+                charcoal: '#31303F',
+                slate: '#506CAA',
+                frosted: '#91A3C9',
             },
             fontFamily: {
-                sans: ['Inter', 'system-ui', 'sans-serif'],
-                display: ['Playfair Display', 'serif'],
+                sans: ['Roboto', 'system-ui', 'sans-serif'],
+                display: ['Manrope', 'system-ui', 'sans-serif'],
             },
             spacing: {
                 '128': '32rem',

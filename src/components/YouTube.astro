@@ -12,7 +12,7 @@ const topics = [
 <section class="section-band bg-ivory">
     <div class="site-shell">
         <div class="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <div class="overflow-hidden rounded-[8px] border border-line bg-ink shadow-[0_24px_70px_rgba(38,37,34,0.12)]">
+            <div class="overflow-hidden rounded-[8px] border border-line bg-ink shadow-[0_24px_70px_rgba(12,15,36,0.12)]">
                 <iframe
                     src={siteConfig.youtube.featuredEmbedUrl}
                     title={`${siteConfig.youtube.channelName} featured video`}
@@ -25,7 +25,7 @@ const topics = [
 
             <div>
                 <p class="eyebrow">{siteConfig.youtube.channelName}</p>
-                <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">
+                <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">
                     A local voice clients can get to know before they call.
                 </h2>
                 <p class="mt-6 text-lg text-smoke">
@@ -35,7 +35,7 @@ const topics = [
                 <div class="mt-8 space-y-3">
                     {topics.map((topic) => (
                         <div class="flex items-start gap-3 border-t border-line pt-3 text-sm text-smoke">
-                            <ArrowUpRight class="mt-0.5 h-4 w-4 text-olive" />
+                            <ArrowUpRight class="mt-0.5 h-4 w-4 text-slate" />
                             <span>{topic}</span>
                         </div>
                     ))}

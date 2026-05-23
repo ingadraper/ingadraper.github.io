@@ -23,7 +23,7 @@ const reviews = [
         <div class="grid gap-10 lg:grid-cols-[0.78fr_1.22fr]">
             <div>
                 <p class="eyebrow">Client trust</p>
-                <h2 class="mt-4 text-4xl font-semibold sm:text-5xl">
+                <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">
                     Client feedback grounded in real relationships.
                 </h2>
                 <p class="mt-6 text-lg text-smoke">
@@ -39,12 +39,12 @@ const reviews = [
             <div class="grid gap-4 md:grid-cols-2">
                 {reviews.map((review) => (
                     <article class="soft-card p-7">
-                        <div class="flex gap-1 text-clay" aria-label="5 star review">
+                        <div class="flex gap-1 text-slate" aria-label="5 star review">
                             {Array.from({ length: 5 }).map(() => <Star class="h-4 w-4 fill-current" />)}
                         </div>
                         <p class="mt-6 text-lg text-ink">{review.text}</p>
                         <div class="mt-8 border-t border-line pt-5">
-                            <p class="font-semibold text-ink">{review.name}</p>
+                            <p class="font-medium text-ink">{review.name}</p>
                             <p class="mt-1 text-sm text-smoke">{review.transaction}</p>
                             <p class="mt-1 text-xs uppercase tracking-[0.18em] text-smoke">{review.date}</p>
                         </div>
