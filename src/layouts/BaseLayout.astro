@@ -9,6 +9,9 @@ interface Props {
 
 const { title, description } = Astro.props;
 const chatWidgetId = siteConfig.connectors.goHighLevelChatWidgetId || import.meta.env.PUBLIC_GHL_CHAT_WIDGET_ID;
+const { agent, brand, compliance } = siteConfig;
+const footerLineOne = `${agent.name}, ${agent.designation} | ${brand.brokerageName}`;
+const footerLineThree = `© 2026 ${agent.name} | ${brand.brokerageName}. Equal Housing Opportunity.`;
 ---
 
 <!doctype html>
@@ -24,10 +27,65 @@ const chatWidgetId = siteConfig.connectors.goHighLevelChatWidgetId || import.met
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ingadraper.com" />
         <link rel="canonical" href="https://ingadraper.com" />
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23D4C9C1'>I</text></svg>" />
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23B05070'>I</text></svg>" />
     </head>
     <body>
         <slot />
+        <footer class="bg-blush py-12 text-ink">
+            <div class="site-shell">
+                <div class="grid gap-8 border-b border-line pb-8 sm:grid-cols-2 lg:grid-cols-4">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-5">
+                            <h3 class="font-display text-2xl font-extrabold">{agent.name}</h3>
+                            <span class="h-8 w-px bg-line" aria-hidden="true"></span>
+                            <img src={brand.logos.black} alt={brand.logoAlt} class="h-12 w-auto max-w-full" />
+                        </div>
+                        <p class="mt-4 text-sm text-smoke">
+                            {brand.brokerageName} agent serving Charlotte, Huntersville, Cornelius, and Lake Norman.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-medium">Explore</h4>
+                        <ul class="mt-4 space-y-2 text-sm text-smoke">
+                            <li><a href="#about" class="transition hover:text-ink">About</a></li>
+                            <li><a href="#services" class="transition hover:text-ink">Services</a></li>
+                            <li><a href="#strategy" class="transition hover:text-ink">Strategy</a></li>
+                            <li><a href="#contact" class="transition hover:text-ink">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-medium">Focus</h4>
+                        <ul class="mt-4 space-y-2 text-sm text-smoke">
+                            <li>Buyer, seller, and relocation guidance</li>
+                            <li>Charlotte + Lake Norman perspective</li>
+                            <li>Short-term rental readiness questions</li>
+                            <li>Property strategy conversations</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-medium">Connect</h4>
+                        <ul class="mt-4 space-y-2 text-sm text-smoke">
+                            <li><a href={siteConfig.contact.phoneHref} class="transition hover:text-ink">{siteConfig.contact.phone}</a></li>
+                            <li><a href={`mailto:${siteConfig.contact.email}`} class="transition hover:text-ink">Email Inga</a></li>
+                            <li><a href={siteConfig.links.youtube} target="_blank" rel="noopener noreferrer" class="transition hover:text-ink">{siteConfig.youtube.channelName}</a></li>
+                            <li><a href={siteConfig.links.facebook} target="_blank" rel="noopener noreferrer" class="transition hover:text-ink">Facebook</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-5 pt-8 text-sm text-smoke sm:flex-row sm:items-center sm:justify-between">
+                    <div class="space-y-1">
+                        <p class="font-medium text-ink">{footerLineOne}</p>
+                        <p>{compliance.licenseLine}</p>
+                        <p>{footerLineThree}</p>
+                    </div>
+                    <img src={compliance.equalHousingLogo.black} alt="Equal Housing Opportunity" class="h-14 w-14 flex-none object-contain" />
+                </div>
+            </div>
+        </footer>
         {chatWidgetId ? (
             <script
                 src="https://widgets.leadconnectorhq.com/loader.js"

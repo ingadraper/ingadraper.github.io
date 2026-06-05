@@ -1,10 +1,29 @@
+const agentName = 'Inga Draper';
+const brokerageName = 'eXp Realty';
+
 export const siteConfig = {
+    agent: {
+        name: agentName,
+        designation: 'REALTOR®',
+    },
     brand: {
-        brokerageName: 'eXp Realty',
+        brokerageName,
+        logoAlt: 'eXp Realty Sports & Entertainment',
         guidelinesUrl: 'https://www.canva.com/design/DAGdJKsWnpg/j4RnyVFqu4jTHTslj1Icjw/view?utm_content=DAGdJKsWnpg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hb25cfc0b7b#1',
         logos: {
-            black: '/images/brand/exp-realty-black.svg',
-            white: '/images/brand/exp-realty-white.svg',
+            black: '/images/brand/exp-sports-entertainment-black.png',
+            white: '/images/brand/exp-sports-entertainment-white.png',
+        },
+    },
+    compliance: {
+        licenses: {
+            nc: '351209',
+            sc: '147132',
+        },
+        licenseLine: 'NC License #351209 | SC License #147132',
+        equalHousingLogo: {
+            black: '/images/brand/equal-housing-black.png',
+            white: '/images/brand/equal-housing-white.png',
         },
     },
     contact: {

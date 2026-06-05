@@ -21,56 +21,5 @@ const { brand } = siteConfig;
         <YouTube />
         <Reviews />
         <Contact />
-
-        <footer class="bg-porcelain py-12 text-ink">
-            <div class="site-shell">
-                <div class="grid gap-8 border-b border-line pb-8 sm:grid-cols-2 lg:grid-cols-4">
-                    <div>
-                        <div class="flex flex-wrap items-center gap-5">
-                            <h3 class="font-display text-2xl font-extrabold">Inga Draper</h3>
-                            <span class="h-8 w-px bg-line" aria-hidden="true"></span>
-                            <img src={brand.logos.black} alt={brand.brokerageName} class="h-9 w-auto" />
-                        </div>
-                        <p class="mt-4 text-sm text-smoke">
-                            {brand.brokerageName} agent serving Charlotte, Huntersville, Cornelius, and Lake Norman.
-                        </p>
-                    </div>
-
-                    <div>
-                        <h4 class="font-medium">Explore</h4>
-                        <ul class="mt-4 space-y-2 text-sm text-smoke">
-                            <li><a href="#about" class="transition hover:text-ink">About</a></li>
-                            <li><a href="#services" class="transition hover:text-ink">Services</a></li>
-                            <li><a href="#strategy" class="transition hover:text-ink">Strategy</a></li>
-                            <li><a href="#contact" class="transition hover:text-ink">Contact</a></li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h4 class="font-medium">Focus</h4>
-                        <ul class="mt-4 space-y-2 text-sm text-smoke">
-                            <li>Buyer, seller, and relocation guidance</li>
-                            <li>Charlotte + Lake Norman perspective</li>
-                            <li>Short-term rental readiness questions</li>
-                            <li>Property strategy conversations</li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h4 class="font-medium">Connect</h4>
-                        <ul class="mt-4 space-y-2 text-sm text-smoke">
-                            <li><a href={siteConfig.contact.phoneHref} class="transition hover:text-ink">{siteConfig.contact.phone}</a></li>
-                            <li><a href={`mailto:${siteConfig.contact.email}`} class="transition hover:text-ink">Email Inga</a></li>
-                            <li><a href={siteConfig.links.youtube} target="_blank" rel="noopener noreferrer" class="transition hover:text-ink">{siteConfig.youtube.channelName}</a></li>
-                            <li><a href={siteConfig.links.facebook} target="_blank" rel="noopener noreferrer" class="transition hover:text-ink">Facebook</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <p class="pt-8 text-sm text-smoke">
-                    (c) 2026 Inga Draper Real Estate. {brand.brokerageName}. Equal Housing Opportunity.
-                </p>
-            </div>
-        </footer>
     </main>
 </BaseLayout>
