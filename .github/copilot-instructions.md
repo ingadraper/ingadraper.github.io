@@ -34,6 +34,10 @@ Use a refined Lauren Conrad editorial direction: airy, polished, soft, feminine,
 
 Use `.github/agents/aesthetic-review.agent.md` when the user asks for visual polish, readability, UI critique, screenshot review, button contrast, spacing, layout balance, or brand/aesthetic alignment. The reviewer should return prioritized findings and suggested fixes before implementation.
 
+Use `.github/prompts/site-design-loop.prompt.md` when the user asks to judge, create, refine, review, or deploy the site design as an iterative workflow. The loop should render the site, gather desktop and mobile observations, ask the aesthetic reviewer for findings, make focused design changes, rebuild, and repeat until no high-priority visual issues remain or the remaining items are clearly deferred.
+
+Treat the rose palette as inspiration rather than a rigid recipe: ivory `#FAF7F2`, blush `#F5E6E0`, dusty rose `#D4A5A0`, deep rose `#B05070`, and burgundy `#7A2E48` should guide the mood, but the finished page should have enough warm neutrals, image clarity, and contrast that it does not read as one-note pink or burgundy.
+
 For meaningful visual work, inspect the page locally with `npm run dev` after edits. Check at least a desktop viewport and a mobile-width viewport when layout, hero, forms, buttons, or image treatments changed.
 
 When asking the aesthetic reviewer for a whole-page opinion, gather rendered screenshots or browser observations first. Include at least the hero, about/image-caption area, YouTube or social proof area, contact form, and one mobile-width view. A source-only review is useful for risks, but it should not be treated as final visual validation.
