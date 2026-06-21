@@ -21,8 +21,8 @@
     body {
         margin: 0;
         overflow-x: hidden;
-        background: #faf7f2;
-        color: #5f4d53;
+        background: #fdfaf5;
+        color: #5a4a4a;
         font-family: 'Jost', system-ui, sans-serif;
         font-weight: 300;
         line-height: 1.6;
@@ -31,14 +31,14 @@
     h1,
     h2,
     h3 {
-        color: #7a2e48;
+        color: #2c2c2c;
         font-family: 'Playfair Display', serif;
         line-height: 1.02;
         letter-spacing: 0;
     }
 
     h4 {
-        color: #7a2e48;
+        color: #2c2c2c;
         font-family: 'Cormorant Garamond', serif;
         line-height: 1.02;
         letter-spacing: 0;
@@ -67,15 +67,15 @@
     }
 
     .eyebrow {
-        @apply font-subheading text-sm font-semibold uppercase tracking-[0.18em] text-deep-rose;
+        @apply font-subheading text-sm font-semibold uppercase tracking-[0.18em] text-slate;
     }
 
     .btn-primary {
-        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-[6px] bg-deep-rose px-6 py-3 text-sm font-medium text-white transition hover:bg-burgundy focus:outline-none focus:ring-2 focus:ring-dusty focus:ring-offset-2 focus:ring-offset-ivory;
+        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-[6px] bg-ink px-6 py-3 text-sm font-medium text-ivory transition hover:bg-deep-rose focus:outline-none focus:ring-2 focus:ring-dusty focus:ring-offset-2 focus:ring-offset-ivory;
     }
 
     .btn-secondary {
-        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-[6px] border border-dusty/70 bg-ivory px-6 py-3 text-sm font-medium text-burgundy shadow-sm transition hover:border-deep-rose hover:bg-blush focus:outline-none focus:ring-2 focus:ring-deep-rose focus:ring-offset-2 focus:ring-offset-ivory;
+        @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-[6px] border border-ink bg-ink px-6 py-3 text-sm font-medium text-ivory shadow-sm transition hover:border-deep-rose hover:bg-deep-rose focus:outline-none focus:ring-2 focus:ring-deep-rose focus:ring-offset-2 focus:ring-offset-ivory;
     }
 
     .soft-card {

@@ -4,9 +4,9 @@ import { siteConfig } from '../siteConfig';
 
 const aboutImage = siteConfig.images.about;
 const stats = [
-    { label: 'Zillow rating', value: '5.0' },
-    { label: 'Recent sales', value: '3' },
-    { label: 'Avg. closed price', value: '$347K' },
+    { label: 'Sales volume', value: '$6.5M+' },
+    { label: 'Google & Zillow rating', value: '5.0' },
+    { label: 'Licensed in both states', value: 'NC & SC' },
 ];
 ---
 
@@ -26,7 +26,7 @@ const stats = [
             <div>
                 <p class="eyebrow">Meet Inga</p>
                 <h2 class="mt-4 max-w-2xl text-4xl font-extrabold sm:text-5xl">
-                    Thoughtful representation for one of life's bigger decisions.
+                    Sharp, strategic, and genuinely in your corner.
                 </h2>
 
                 <p class="mt-6 text-lg text-smoke">
@@ -41,7 +41,7 @@ const stats = [
                     {stats.map((stat) => (
                         <div class="soft-card p-5">
                             <p class="font-display text-3xl font-extrabold text-ink">{stat.value}</p>
-                            <p class="mt-1 text-sm text-smoke">{stat.label}</p>
+                            <p class="mt-1 text-sm text-deep-rose">{stat.label}</p>
                         </div>
                     ))}
                 </div>

@@ -6,12 +6,12 @@ const heroImage = siteConfig.images.hero;
 const { brand } = siteConfig;
 ---
 
-<section id="top" class="relative min-h-[92svh] overflow-hidden bg-charcoal text-ivory">
+<section id="top" class="relative min-h-[92svh] overflow-hidden bg-[#2C2927] text-ivory">
     <img src={heroImage.src} alt={heroImage.alt} class="absolute inset-0 h-full w-full object-cover opacity-[0.84]" />
-    <div class="absolute inset-0 bg-gradient-to-r from-charcoal/90 via-charcoal/62 to-burgundy/20"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-charcoal/50 via-transparent to-charcoal/25"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-[#2C2927]/90 via-[#2C2927]/62 to-[#5A3437]/24"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#2C2927]/50 via-transparent to-[#2C2927]/25"></div>
 
-    <div class="absolute inset-x-0 top-0 z-20 border-b border-white/15 bg-charcoal/20 backdrop-blur-md">
+    <div class="absolute inset-x-0 top-0 z-20 border-b border-white/15 bg-[#2C2927]/20 backdrop-blur-md">
         <nav class="site-shell flex min-h-20 items-center justify-between text-sm">
             <a href="#top" class="flex min-w-0 items-center gap-5 text-ivory sm:gap-6" aria-label={`Inga Draper, ${brand.brokerageName}`}>
                 <span class="font-display text-xl font-extrabold sm:text-2xl">Inga Draper</span>
@@ -23,7 +23,7 @@ const { brand } = siteConfig;
                 <a href="#services" class="transition hover:text-ivory">Services</a>
                 <a href="#strategy" class="transition hover:text-ivory">Strategy</a>
                 <a href="#reviews" class="transition hover:text-ivory">Reviews</a>
-                <a href="#contact" class="rounded-[6px] border border-white/25 px-4 py-2 text-ivory transition hover:border-white hover:bg-white/10">Contact</a>
+                <a href="#contact" class="rounded-[6px] border border-ivory/25 bg-ink px-4 py-2 text-ivory transition hover:border-deep-rose hover:bg-deep-rose">Contact</a>
             </div>
         </nav>
     </div>
@@ -46,11 +46,11 @@ const { brand } = siteConfig;
             </p>
 
             <div class="mt-9 flex flex-col gap-3 sm:flex-row">
-                <a href="#contact" class="btn-primary bg-ivory text-ink hover:bg-mist focus:ring-ivory focus:ring-offset-ink">
+                <a href="#contact" class="btn-primary border border-ivory/20 focus:ring-ivory focus:ring-offset-ink">
                     Start a conversation
                     <ArrowRight class="h-4 w-4" />
                 </a>
-                <a href={siteConfig.links.youtube} target="_blank" rel="noopener noreferrer" class="btn-secondary border-white/30 bg-charcoal/90 text-ivory shadow-[0_18px_44px_rgba(0,0,0,0.20)] hover:border-white/50 hover:bg-charcoal focus:ring-ivory focus:ring-offset-charcoal">
+                <a href={siteConfig.links.youtube} target="_blank" rel="noopener noreferrer" class="btn-secondary border-ivory/20 shadow-[0_18px_44px_rgba(0,0,0,0.20)] focus:ring-ivory focus:ring-offset-ink">
                     <PlayCircle class="h-4 w-4" />
                     Watch {siteConfig.youtube.channelName}
                 </a>
