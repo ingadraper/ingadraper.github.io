@@ -1,28 +1,9 @@
 ---
 import { Building2, KeyRound, Route, ShieldCheck } from '@lucide/astro';
+import editableSite from '../editable-site.json';
 
-const services = [
-    {
-        title: 'Buy with context',
-        description: 'A grounded plan for neighborhoods, offer strategy, inspections, timelines, and the tradeoffs that matter before you write.',
-        icon: KeyRound,
-    },
-    {
-        title: 'Sell with intention',
-        description: 'Pricing, prep, positioning, and negotiation support designed around your timeline and the real buyer pool.',
-        icon: ShieldCheck,
-    },
-    {
-        title: 'Relocate with clarity',
-        description: 'Practical Charlotte-area guidance for clients comparing commute patterns, schools, lifestyle, and long-term fit.',
-        icon: Route,
-    },
-    {
-        title: 'Plan property strategy',
-        description: 'Helpful conversations for investment properties, short-term rentals, and property management next steps.',
-        icon: Building2,
-    },
-];
+const icons = [KeyRound, ShieldCheck, Route, Building2];
+const services = editableSite.services.items.map((service, index) => ({ ...service, icon: icons[index] }));
 ---
 
 <section id="services" class="section-band bg-ivory">
@@ -31,11 +12,11 @@ const services = [
             <div>
                 <p class="eyebrow">How Inga helps</p>
                 <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">
-                    Focused guidance for the questions that shape your next move.
+                    {editableSite.services.headline}
                 </h2>
             </div>
             <p class="max-w-2xl text-lg text-smoke lg:justify-self-end">
-                Whether you are comparing neighborhoods, preparing to sell, relocating to the Charlotte area, or exploring income property, Inga helps turn the moving pieces into a clear plan.
+                {editableSite.services.summary}
             </p>
         </div>
 

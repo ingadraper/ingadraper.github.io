@@ -1,13 +1,10 @@
 ---
 import { BadgeCheck, Home, TrendingUp } from '@lucide/astro';
+import editableSite from '../editable-site.json';
 import { siteConfig } from '../siteConfig';
 
 const aboutImage = siteConfig.images.about;
-const stats = [
-    { label: 'Sales volume', value: '$6.5M+' },
-    { label: 'Google & Zillow rating', value: '5.0' },
-    { label: 'Licensed in both states', value: 'NC & SC' },
-];
+const { about } = editableSite;
 ---
 
 <section id="about" class="section-band bg-porcelain">
@@ -18,7 +15,7 @@ const stats = [
                 <div class="absolute inset-x-5 bottom-5 rounded-[6px] border border-line/70 bg-ivory/95 p-5 shadow-[0_16px_40px_rgba(12,15,36,0.10)] sm:inset-x-6 sm:bottom-6 sm:p-6">
                     <p class="text-xs font-medium uppercase tracking-[0.2em] text-slate">Working style</p>
                     <p class="mt-3 max-w-2xl text-lg font-medium leading-7 text-ink">
-                        Clear choices, candid tradeoffs, and calm guidance from first conversation to closing.
+                        {about.workingStyle}
                     </p>
                 </div>
             </div>
@@ -26,19 +23,15 @@ const stats = [
             <div>
                 <p class="eyebrow">Meet Inga</p>
                 <h2 class="mt-4 max-w-2xl text-4xl font-extrabold sm:text-5xl">
-                    Sharp, strategic, and genuinely in your corner.
+                    {about.headline}
                 </h2>
 
-                <p class="mt-6 text-lg text-smoke">
-                    Buying or selling a home is a big decision, and my goal is to make the process feel clear and manageable from start to finish. Working with the wrong agent can be a 6-figure mistake.
-                </p>
-
-                <p class="mt-5 text-lg text-smoke">
-                    I work with clients across Charlotte and the surrounding areas, guiding them through options with a steady, thoughtful approach. Some moves happen quickly, and others take time. My role is to help you understand your choices, talk through tradeoffs honestly, and make decisions that align with your goals.
-                </p>
+                {about.paragraphs.map((paragraph, index) => (
+                    <p class:list={["text-lg text-smoke", index === 0 ? "mt-6" : "mt-5"]}>{paragraph}</p>
+                ))}
 
                 <div class="mt-8 grid gap-3 sm:grid-cols-3">
-                    {stats.map((stat) => (
+                    {about.stats.map((stat) => (
                         <div class="soft-card p-5">
                             <p class="font-display text-3xl font-extrabold text-ink">{stat.value}</p>
                             <p class="mt-1 text-sm text-deep-rose">{stat.label}</p>

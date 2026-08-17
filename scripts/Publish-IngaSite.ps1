@@ -17,8 +17,7 @@ $repository = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $expectedRepository = 'C:\Users\ws01\ingadraper.github.io'
 $expectedOrigin = 'https://github.com/ingadraper/ingadraper.github.io.git'
 $expectedBranch = 'main'
-$allowedRoots = @('src/', 'docs/', 'public/images/')
-$allowedExtensions = @('.astro', '.css', '.js', '.json', '.md', '.mjs', '.svg', '.ts', '.tsx', '.txt')
+$allowedPaths = @('src/editable-site.json', 'docs/link-inventory.md')
 $protectedParts = @('.env', '.git', '.github', 'agents.md', 'cname', 'hermes.md', 'node_modules', 'dist', 'package.json', 'package-lock.json', 'npm-shrinkwrap.json', 'pnpm-lock.yaml', 'yarn.lock')
 $protectedTerms = @('credential', 'policy', 'secret', 'token')
 
@@ -64,11 +63,8 @@ function Test-AllowedPath {
             }
         }
     }
-    if (-not @($allowedRoots | Where-Object { $normalized.StartsWith($_, [System.StringComparison]::Ordinal) }).Count) {
-        throw "Path is outside the website content allowlist: $normalized"
-    }
-    if ($allowedExtensions -notcontains [IO.Path]::GetExtension($normalized).ToLowerInvariant()) {
-        throw "File type is outside the website text allowlist: $normalized"
+    if ($allowedPaths -cnotcontains $normalized) {
+        throw "Path is outside the inert website content allowlist: $normalized"
     }
     return $normalized
 }
@@ -130,10 +126,6 @@ Assert-SamePaths -Actual $changedPaths -Expected $managedPaths -Message 'Reposit
 [void](Invoke-Git 'fetch' '--no-tags' 'origin' 'main')
 if ((Get-GitText 'rev-parse' 'origin/main') -cne $baseline) { throw 'Fetched origin/main does not equal the transaction baseline.' }
 [void](Invoke-Git 'diff' '--check')
-[void](Invoke-External -FilePath 'npm.cmd' 'ci')
-[void](Invoke-External -FilePath 'npm.cmd' 'run' 'build')
-$postBuildPaths = @(Get-StatusPaths)
-Assert-SamePaths -Actual $postBuildPaths -Expected $changedPaths -Message 'Validation changed the bounded repository diff.'
 
 if ($DryRun) {
     [pscustomobject]@{
@@ -156,6 +148,29 @@ if ($message.Length -lt 5 -or $message.Length -gt 120 -or $message.Contains("`n"
 $stagedPaths = @((Get-GitText 'diff' '--cached' '--name-only').Split("`n", [System.StringSplitOptions]::RemoveEmptyEntries))
 Assert-SamePaths -Actual $stagedPaths -Expected $changedPaths -Message 'Explicit staging did not exactly match the bounded changed paths.'
 [void](Invoke-Git 'diff' '--cached' '--check')
+$unstagedPaths = @((Get-GitText 'diff' '--name-only').Split("`n", [System.StringSplitOptions]::RemoveEmptyEntries))
+if ($unstagedPaths.Count) { throw 'The worktree changed after explicit staging.' }
+
+$validationTree = Get-GitText 'write-tree'
+$validationRoot = Join-Path ([IO.Path]::GetTempPath()) ("inga-site-validation-" + [guid]::NewGuid().ToString('N'))
+$validationArchive = "$validationRoot.zip"
+try {
+    [void](Invoke-Git 'archive' '--format=zip' "--output=$validationArchive" $validationTree)
+    Expand-Archive -LiteralPath $validationArchive -DestinationPath $validationRoot
+    Push-Location $validationRoot
+    try {
+        [void](Invoke-External -FilePath 'npm.cmd' 'ci')
+        [void](Invoke-External -FilePath 'npm.cmd' 'run' 'build')
+    } finally {
+        Pop-Location
+    }
+} finally {
+    if (Test-Path -LiteralPath $validationArchive) { Remove-Item -LiteralPath $validationArchive -Force }
+    if (Test-Path -LiteralPath $validationRoot) { Remove-Item -LiteralPath $validationRoot -Recurse -Force }
+}
+if ((Get-GitText 'write-tree') -cne $validationTree) { throw 'The staged tree changed during validation.' }
+$unstagedPaths = @((Get-GitText 'diff' '--name-only').Split("`n", [System.StringSplitOptions]::RemoveEmptyEntries))
+if ($unstagedPaths.Count) { throw 'The worktree changed during staged-tree validation.' }
 [void](Invoke-Git 'commit' '-m' $message)
 $committedHead = Get-GitText 'rev-parse' 'HEAD'
 if ((Get-GitText 'rev-parse' 'HEAD^') -cne $baseline) { throw 'The publication commit does not have the recorded baseline parent.' }

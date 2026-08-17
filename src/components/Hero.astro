@@ -1,9 +1,11 @@
 ---
 import { ArrowRight, MapPin, PlayCircle } from '@lucide/astro';
+import editableSite from '../editable-site.json';
 import { siteConfig } from '../siteConfig';
 
 const heroImage = siteConfig.images.hero;
 const { brand } = siteConfig;
+const { hero } = editableSite;
 ---
 
 <section id="top" class="relative min-h-[92svh] overflow-hidden bg-[#2C2927] text-ivory">
@@ -34,20 +36,20 @@ const { brand } = siteConfig;
                 <MapPin class="h-4 w-4 flex-none" aria-hidden="true" />
                 <span>Inga Draper</span>
                 <span aria-hidden="true">|</span>
-                <span>Charlotte + Lake Norman real estate</span>
+                <span>{hero.location}</span>
             </p>
 
             <h1 class="max-w-[13ch] text-4xl font-extrabold leading-[1.04] text-ivory sm:max-w-4xl sm:text-5xl sm:leading-[1.08] lg:text-7xl">
-                Real estate guidance with clarity, care, and a local point of view.
+                {hero.headline}
             </h1>
 
             <p class="mt-6 max-w-2xl text-base text-ivory/90 sm:text-xl">
-                Inga Draper helps buyers, sellers, relocation clients, and property planning clients move through Charlotte-area real estate with thoughtful guidance and honest conversation.
+                {hero.summary}
             </p>
 
             <div class="mt-9 flex flex-col gap-3 sm:flex-row">
                 <a href="#contact" class="btn-primary border border-ivory/20 focus:ring-ivory focus:ring-offset-ink">
-                    Start a conversation
+                    {hero.primaryAction}
                     <ArrowRight class="h-4 w-4" />
                 </a>
                 <a href={siteConfig.links.youtube} target="_blank" rel="noopener noreferrer" class="btn-secondary border-ivory/20 shadow-[0_18px_44px_rgba(0,0,0,0.20)] focus:ring-ivory focus:ring-offset-ink">
@@ -66,11 +68,11 @@ const { brand } = siteConfig;
             </div>
             <div>
                 <p class="text-xs uppercase tracking-[0.22em] text-smoke">Service Area</p>
-                <p class="mt-1 font-semibold">Charlotte, Huntersville, Cornelius</p>
+                <p class="mt-1 font-semibold">{hero.serviceArea}</p>
             </div>
             <div>
                 <p class="text-xs uppercase tracking-[0.22em] text-smoke">Specialty Lane</p>
-                <p class="mt-1 font-semibold">Property strategy + rental readiness</p>
+                <p class="mt-1 font-semibold">{hero.specialty}</p>
             </div>
         </div>
     </div>
