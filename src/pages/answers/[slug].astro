@@ -3,18 +3,27 @@ import { ArrowLeft, ArrowRight, Check, MapPin } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import { answerPages, type AnswerPage } from '../../content/answers';
+import { sourceSets } from '../../content/sources';
 import { agentSchema, articleSchema, breadcrumbSchema, faqSchema } from '../../lib/schema';
 import { siteConfig } from '../../siteConfig';
 
 export function getStaticPaths() {
-    return answerPages.map((page) => ({ params: { slug: page.slug }, props: { page } }));
+    const includeUnverified = process.env.INCLUDE_UNVERIFIED_ANSWERS === 'true';
+    const visiblePages = includeUnverified
+        ? answerPages
+        : answerPages.filter((page) => !page.needsVerification);
+    return visiblePages.map((page) => ({ params: { slug: page.slug }, props: { page } }));
 }
 
 interface Props { page: AnswerPage }
 const { page } = Astro.props;
 const path = `/answers/${page.slug}/`;
+const includeUnverified = process.env.INCLUDE_UNVERIFIED_ANSWERS === 'true';
+const visibleAnswerPages = includeUnverified
+    ? answerPages
+    : answerPages.filter((candidate) => !candidate.needsVerification);
 const relatedPages = page.related
-    .map((slug) => answerPages.find((candidate) => candidate.slug === slug))
+    .map((slug) => visibleAnswerPages.find((candidate) => candidate.slug === slug))
     .filter((candidate): candidate is AnswerPage => Boolean(candidate));
 const schemas = [
     agentSchema,
@@ -28,6 +37,7 @@ const schemas = [
 ];
 const heroImage = siteConfig.images.about;
 const displayQuestion = page.question.replaceAll('short-term', 'short‑term');
+const sources = sourceSets[page.slug] ?? [];
 ---
 
 <BaseLayout title={`${page.title} | Inga Draper`} description={page.metaDescription} path={path} schemas={schemas}>
@@ -102,6 +112,34 @@ const displayQuestion = page.question.replaceAll('short-term', 'short‑term');
                 </aside>
             </div>
         </section>
+
+        {sources.length > 0 && (
+            <section class="border-y border-line bg-frosted py-12 sm:py-16">
+                <div class="site-shell grid gap-7 lg:grid-cols-[0.55fr_1.45fr] lg:gap-16">
+                    <div>
+                        <p class="eyebrow">Checked sources</p>
+                        <h2 class="mt-3 text-3xl font-extrabold">Primary-source research</h2>
+                        <p class="mt-4 max-w-md text-sm leading-6 text-smoke">
+                            These official sources support the factual guidance on this page. Rules and boundaries can change, so each source was checked on the date shown.
+                        </p>
+                    </div>
+                    <ol class="grid gap-3">
+                        {sources.map((source, index) => (
+                            <li class="rounded-[8px] border border-line bg-ivory px-5 py-4">
+                                <a href={source.url} target="_blank" rel="noreferrer" class="group grid gap-1 sm:grid-cols-[2rem_1fr_auto] sm:items-start sm:gap-3">
+                                    <span class="font-subheading text-xs font-semibold tracking-[0.12em] text-deep-rose">{String(index + 1).padStart(2, '0')}</span>
+                                    <span>
+                                        <strong class="block text-base font-semibold text-ink transition group-hover:text-deep-rose">{source.title}</strong>
+                                        <span class="mt-1 block text-sm text-smoke">{source.publisher}</span>
+                                    </span>
+                                    <span class="text-xs text-slate">Checked {source.checked}</span>
+                                </a>
+                            </li>
+                        ))}
+                    </ol>
+                </div>
+            </section>
+        )}
 
         <section class="section-band bg-porcelain">
             <div class="site-shell">

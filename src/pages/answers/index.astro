@@ -6,9 +6,13 @@ import { answerPages } from '../../content/answers';
 import { agentSchema, breadcrumbSchema } from '../../lib/schema';
 import { siteConfig } from '../../siteConfig';
 
+const includeUnverified = process.env.INCLUDE_UNVERIFIED_ANSWERS === 'true';
+const visibleAnswerPages = includeUnverified
+    ? answerPages
+    : answerPages.filter((page) => !page.needsVerification);
 const categoryOrder = ['Buying', 'Selling', 'Relocation', 'Rental strategy', 'Local guide'];
 const categories = categoryOrder
-    .map((category) => ({ category, pages: answerPages.filter((page) => page.category === category) }))
+    .map((category) => ({ category, pages: visibleAnswerPages.filter((page) => page.category === category) }))
     .filter(({ pages }) => pages.length);
 const schemas = [
     agentSchema,

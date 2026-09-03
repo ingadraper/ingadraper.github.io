@@ -11,8 +11,12 @@
  * (ordinance, HOA rule, tax treatment, permit process) that MUST be confirmed against
  * the primary source by a licensed person before publication. Placeholder text is
  * written to be true-but-general so nothing false ships if it is published early,
- * but these pages are NOT publication-ready until verified and dated.
+ * but these pages are NOT publication-ready until verified and dated. Production
+ * builds exclude them unless INCLUDE_UNVERIFIED_ANSWERS=true is explicitly set for
+ * a local review build.
  */
+
+import { researchedAnswerPages } from './researchedAnswers';
 
 export interface AnswerSection {
     heading: string;
@@ -37,7 +41,7 @@ export interface AnswerPage {
     related: string[];
 }
 
-export const answerPages: AnswerPage[] = [
+const baseAnswerPages: AnswerPage[] = [
     {
         slug: 'short-term-rental-rules-charlotte-area',
         question: 'Can I run a short-term rental in the Charlotte area?',
@@ -45,26 +49,36 @@ export const answerPages: AnswerPage[] = [
         metaDescription:
             'Short-term rental rules differ by municipality and HOA across Charlotte, Huntersville, Cornelius, and Davidson. Here is the checklist to work through before you buy.',
         answer:
-            'It depends on the specific address, not the region. Short-term rental permission in the Charlotte area is set by three independent layers: municipal zoning, HOA covenants, and your insurance carrier. Any one of them can prohibit it outright. Confirm all three in writing before you make an offer.',
+            'It depends on the specific address, not the region. Municipal land-use rules, recorded private covenants, and insurance terms are separate checks. A use can satisfy one and fail another. Confirm the parcel’s current classification with planning staff, have counsel review private restrictions when needed, and obtain written insurance terms before relying on rental income.',
         category: 'Rental strategy',
         datePublished: '2026-09-02',
         dateModified: '2026-09-02',
         needsVerification: true,
         verificationNote:
-            'Municipal ordinance specifics for Charlotte, Huntersville, Cornelius, Davidson, and Mooresville must be verified against each current city code before publication, and re-checked at least twice yearly.',
+            'Cornelius, Davidson, and unincorporated Iredell County have primary-source findings below. Charlotte, Huntersville, and Mooresville still require written parcel-level confirmation before publication because their public materials do not provide a single definitive STR answer.',
         sections: [
             {
                 heading: 'The three layers that decide it',
-                body: 'People usually ask whether a city "allows" short-term rentals. That framing misses how the restriction actually works. Three separate authorities each hold a veto, and they do not coordinate with each other.',
+                body: 'People usually ask whether a city "allows" short-term rentals. That framing misses how separate public, private, and insurance rules interact.',
                 bullets: [
-                    'Municipal zoning: whether the use is permitted in that zoning district, and whether a permit, registration, or inspection is required.',
-                    'HOA covenants: private restrictions that frequently impose minimum lease terms. These bind you regardless of what the city permits.',
-                    'Insurance: a standard homeowner policy generally does not cover short-term rental activity. Carriers can deny claims or cancel coverage.',
+                    'Municipal or county land-use rules: whether the use fits the parcel and whether a permit, registration, or inspection is required.',
+                    'Recorded covenants: private restrictions may impose lease limits even where government rules allow the use.',
+                    'Insurance: coverage, exclusions, and endorsements vary. A carrier may decline to cover the intended activity.',
+                ],
+            },
+            {
+                heading: 'What the current official records say',
+                body: 'The rules are not uniform across the Charlotte–Lake Norman area. These findings come from current government materials and still need to be matched to the parcel:',
+                bullets: [
+                    'Cornelius: Land Development Code §5.3.44 requires a Transient Occupancy Permit for each residence, limits operation to one individual tenancy within a seven-consecutive-day period, and requires a local contact available 24 hours a day.',
+                    'Davidson: its Planning Ordinance defines residential uses as long-term habitation and expressly excludes leasing or rental of less than one month. Ask Planning how a proposed short-term use is classified and whether it is available in that planning area.',
+                    'Unincorporated Iredell County: the county says its 2023 STR zoning regulations have been under a court order that stopped enforcement pending final adjudication. Proposed amendments were presented in January 2026, so current enforcement status must be confirmed directly.',
+                    'Charlotte, Huntersville, and Mooresville: do not interpret the absence of a simple public FAQ as permission. Request a written answer for the parcel and proposed operating model.',
                 ],
             },
             {
                 heading: 'Why the HOA layer surprises people most',
-                body: 'A property can sit in a district where the city permits short-term rentals and still be unusable for that purpose, because the HOA imposes a minimum lease term. Minimum-term covenants are common in newer Lake Norman area subdivisions, and they are enforceable private contracts. Read the recorded covenants, not the summary sheet a seller provides.',
+                body: 'A property can satisfy local land-use rules and still carry recorded private restrictions on leasing. Read the declaration and every recorded amendment rather than relying on a seller summary. If the intended use matters to the purchase, ask a North Carolina attorney to interpret the documents and available remedies.',
             },
             {
                 heading: 'What to request before you write an offer',
@@ -85,15 +99,15 @@ export const answerPages: AnswerPage[] = [
         faqs: [
             {
                 question: 'Does an HOA rule override city zoning for short-term rentals?',
-                answer: 'They operate independently. City zoning sets whether the use is legally permitted; the HOA covenant is a private contract that can restrict it further. The more restrictive of the two governs what you can actually do.',
+                answer: 'They operate independently. Local government rules address land use; recorded covenants may impose additional private restrictions. A buyer must evaluate both rather than treating either one as permission. Ask a North Carolina attorney to interpret enforceability for the specific documents.',
             },
             {
                 question: 'Will my homeowner insurance cover a short-term rental?',
-                answer: 'Generally not. Standard homeowner policies typically exclude commercial or short-term rental activity. You usually need a specific short-term rental or landlord policy, and the carrier must be told the intended use in writing.',
+                answer: 'Do not assume it will. Coverage and exclusions vary by carrier and policy. Describe the intended rental use in writing, request a written quote or endorsement, and compare that answer with any platform-provided protection before relying on coverage.',
             },
             {
                 question: 'Can a short-term rental be prohibited after I buy?',
-                answer: 'Yes. Municipalities amend ordinances and HOAs amend covenants. Some jurisdictions grandfather existing permitted uses and some do not. This is a real risk to weigh when the entire purchase depends on rental income.',
+                answer: 'Rules can change. Ask the municipality and association how amendments, existing uses, and enforcement are handled, and weigh that regulatory risk when the purchase depends on rental income.',
             },
         ],
         related: ['sell-hold-or-rent-charlotte-property', 'buying-investment-property-lake-norman'],
@@ -105,30 +119,28 @@ export const answerPages: AnswerPage[] = [
         metaDescription:
             'A practical framework for choosing where to live when relocating to the Charlotte area, including commute patterns, school assignment, and how to sequence a remote move.',
         answer:
-            'Choose your commute tolerance before you choose a neighborhood. In the Charlotte area, most relocation regret traces to underestimating drive times across the lake and river crossings, or assuming school assignment follows the mailing address. Both should be verified for a specific parcel before you commit.',
+            'Choose your recurring routes and verify school assignment before choosing a neighborhood. In the Charlotte area, lake, interstate, and local-road geography can make mileage a poor commute proxy. School assignment must be checked for the exact address and school year rather than inferred from a listing, ZIP code, or postal town.',
         category: 'Relocation',
         datePublished: '2026-09-02',
         dateModified: '2026-09-02',
-        needsVerification: true,
-        verificationNote:
-            'School assignment mechanics and any district-boundary claims must be verified against the current CMS and Iredell-Statesville assignment tools before publication.',
+        needsVerification: false,
         sections: [
             {
-                heading: 'Start with the commute, not the house',
-                body: 'The Charlotte metro is shaped by water and highway crossings. A property that looks fifteen minutes from an office on a map can be forty-five at 8am because the route funnels through a limited number of crossings. Drive the actual route at the actual hour before deciding an area works.',
+                heading: 'Commute time is geography, not mileage',
+                body: 'The Charlotte metro is shaped by Lake Norman, interstates, and a limited set of practical crossing routes. Mileage alone does not describe a commute. Test the complete route at the days and hours you expect to travel, including the final local-road segment and any school or airport trip that matters.',
             },
             {
                 heading: 'School assignment is parcel-level',
-                body: 'Assignment is determined by the specific parcel, not the town or the mailing address, and boundaries are periodically redrawn. Two houses on the same street can be assigned differently. Verify the assignment for the exact address using the district tool, and ask whether any boundary review is currently underway.',
+                body: 'Use the governing school district’s current resources for the exact property address and school year rather than relying on the town name, ZIP code, or listing. Charlotte-Mecklenburg Schools publishes maps by school year, while Iredell-Statesville Schools verifies domicile during enrollment. Ask the district directly about reassignment or boundary questions.',
             },
             {
-                heading: 'What each area tends to trade',
-                body: 'Every area in the region trades something. Naming the tradeoff up front is more useful than ranking neighborhoods.',
+                heading: 'Compare jurisdictions before comparing listings',
+                body: 'A useful first pass is administrative rather than subjective. Identify which government, school district, utility systems, and private association govern each address. Those boundaries affect the records you need and may not follow the postal city shown in a listing.',
                 bullets: [
-                    'Closer-in Charlotte neighborhoods: shorter commutes and walkability, generally older housing stock and smaller lots.',
-                    'Huntersville and Cornelius: lake access and newer construction, with crossing-dependent commutes.',
-                    'Davidson: walkable town center and strong community identity, with a tighter and more competitive inventory.',
-                    'Mooresville and outer areas: more land and lower price per square foot, with the longest commutes.',
+                    'Confirm the municipality or county with planning jurisdiction over the parcel.',
+                    'Verify the school system and current assignment for the exact address.',
+                    'Check public water, sewer, well, and septic status rather than assuming from nearby homes.',
+                    'Read the recorded plat and private covenants for lot-specific restrictions.',
                 ],
             },
             {
@@ -139,7 +151,7 @@ export const answerPages: AnswerPage[] = [
         faqs: [
             {
                 question: 'How far in advance should I start a relocation search?',
-                answer: 'Most out-of-state buyers benefit from starting sixty to ninety days ahead. That allows time to narrow areas remotely, schedule a focused visit, and secure financing without compressing inspection and due-diligence decisions.',
+                answer: 'Start early enough to verify financing, compare governing jurisdictions, test real travel routes, and schedule an in-person visit before offer deadlines compress the decision. The useful lead time depends on the move date, financing, and inventory rather than a universal number of days.',
             },
             {
                 question: 'Does the mailing address determine the assigned school?',
@@ -155,17 +167,15 @@ export const answerPages: AnswerPage[] = [
         metaDescription:
             'What first-time buyers in Charlotte, Huntersville, and Lake Norman should understand about due diligence fees, offer structure, and total monthly cost.',
         answer:
-            'Understand the due diligence fee first. In North Carolina, buyers typically pay a non-refundable due diligence fee directly to the seller for the right to inspect and terminate. It is credited at closing if you proceed, but you generally lose it if you walk away. Budget it as real money at risk.',
+            'Understand the due diligence fee before making an offer. In North Carolina, it pays the seller for the buyer’s negotiated right to terminate during the due diligence period. It is credited at closing but generally is not refunded after termination. Budget it as money at risk, not as a refundable deposit.',
         category: 'Buying',
         datePublished: '2026-09-02',
         dateModified: '2026-09-02',
-        needsVerification: true,
-        verificationNote:
-            'North Carolina due diligence and earnest money mechanics must be verified against the current NC Association of REALTORS® standard form and Real Estate Commission guidance before publication.',
+        needsVerification: false,
         sections: [
             {
                 heading: 'How North Carolina offers actually work',
-                body: 'North Carolina uses a due diligence structure that surprises buyers coming from other states. Rather than a contingency you satisfy, you buy a defined window in which you can terminate for any reason. Two separate amounts are typically negotiated: the due diligence fee, paid to the seller and generally non-refundable, and earnest money, which is usually refundable if you terminate within the window.',
+                body: 'North Carolina’s standard transaction structure can surprise buyers coming from other states. The due diligence fee pays for a defined window in which the buyer can terminate for any reason or no reason. Earnest money is a separate negotiated deposit and may be refundable when the buyer properly terminates during that window under the signed contract.',
             },
             {
                 heading: 'The tradeoff you are actually negotiating',
@@ -198,8 +208,8 @@ export const answerPages: AnswerPage[] = [
                 answer: 'Plan for closing costs, the due diligence fee, earnest money, inspections, moving costs, and an initial maintenance reserve. These are separate from the down payment and are frequently underestimated.',
             },
             {
-                question: 'Do I need twenty percent down to buy in Charlotte?',
-                answer: 'No. Several loan programs allow lower down payments, though they typically add mortgage insurance. The right structure depends on your timeline, cash position, and how long you expect to hold the property.',
+                question: 'When should I sign a buyer agency agreement?',
+                answer: 'North Carolina Real Estate Commission guidance says an oral agency relationship must be put in writing no later than the time an offer is made. The agreement should define the broker’s duties and compensation before you commit.',
             },
         ],
         related: ['relocating-to-charlotte', 'charlotte-area-neighborhood-comparison'],
@@ -211,7 +221,7 @@ export const answerPages: AnswerPage[] = [
         metaDescription:
             'A decision framework for Charlotte-area owners weighing whether to sell a property, hold it, or convert it to a rental, including the tax timing most owners miss.',
         answer:
-            'Decide based on your timeline and the capital gains exclusion clock, not on current rent estimates. If the property was your primary residence for two of the last five years, you may qualify for a significant gains exclusion when selling. Converting to a rental starts eroding that window, which is often the largest number in the decision.',
+            'Start with the IRS ownership-and-use tests, then compare the rental economics. A qualifying seller may exclude up to $250,000 of gain, or $500,000 on many joint returns, after owning and using the home as a main residence for two of the five years before sale. Depreciation allowed or allowable for rental use generally cannot be excluded.',
         category: 'Selling',
         datePublished: '2026-09-02',
         dateModified: '2026-09-02',
@@ -221,7 +231,7 @@ export const answerPages: AnswerPage[] = [
         sections: [
             {
                 heading: 'Why timing usually dominates the math',
-                body: 'Owners typically compare an estimated monthly rent against a mortgage payment and decide from the difference. That comparison ignores the item most likely to be the largest single number in the decision: the tax treatment of the eventual sale, which changes based on how long the property has been a rental.',
+                body: 'Owners often begin with estimated rent minus the mortgage payment. Before relying on that number, review IRS Publication 523’s ownership, use, and look-back tests and the treatment of depreciation after rental use. A CPA should apply those rules to the owner’s filing history and planned sale date.',
             },
             {
                 heading: 'Run the honest rental number',
@@ -246,11 +256,11 @@ export const answerPages: AnswerPage[] = [
         faqs: [
             {
                 question: 'Does renting my house affect the capital gains exclusion?',
-                answer: 'It can. The exclusion generally depends on having used the property as a primary residence for a qualifying period within the years before the sale. Converting to a rental starts a clock on that eligibility. Confirm your specific situation with a CPA.',
+                answer: 'It can. IRS guidance generally requires two years of ownership and two years of use as a main home during the five years before sale, and depreciation from rental use generally cannot be excluded. Partial exclusions and other exceptions are fact-specific, so confirm the timing with a CPA.',
             },
             {
                 question: 'Is property management worth the cost?',
-                answer: 'It depends on distance and tolerance for interruption. Management typically costs a percentage of collected rent plus leasing fees. For owners relocating out of state, it is often the difference between a workable arrangement and an ongoing problem.',
+                answer: 'It depends on distance, time, local vendor access, and tolerance for interruption. Compare written proposals that identify leasing, renewal, maintenance-coordination, inspection, and vacancy responsibilities rather than choosing from one headline percentage.',
             },
         ],
         related: ['short-term-rental-rules-charlotte-area', 'buying-investment-property-lake-norman'],
@@ -262,7 +272,7 @@ export const answerPages: AnswerPage[] = [
         metaDescription:
             'What to verify before buying a rental or investment property near Lake Norman, including covenant restrictions, seasonality, and the costs specific to lake-area properties.',
         answer:
-            'Verify the covenant restrictions before you evaluate the returns. Near Lake Norman, many subdivisions impose minimum lease terms that eliminate short-term rental use entirely, and some restrict rentals altogether. A property that fails this test cannot produce the income the pro forma assumes, regardless of how strong the numbers look.',
+            'Verify permitted use and recorded covenants before evaluating returns. A private restriction, zoning rule, insurance limitation, or shoreline condition can make the intended rental strategy impossible. Near Lake Norman, also confirm dock and shoreline authorization, flood information, utilities, and what water access legally conveys with the exact parcel.',
         category: 'Rental strategy',
         datePublished: '2026-09-02',
         dateModified: '2026-09-02',
@@ -287,7 +297,7 @@ export const answerPages: AnswerPage[] = [
             },
             {
                 heading: 'Seasonality is a real variable here',
-                body: 'Demand near the lake is not evenly distributed across the year. A pro forma built on peak-season rates will overstate annual income. Build the model on a conservative annual occupancy assumption and confirm it against actual comparable performance rather than platform projections.',
+                body: 'If the proposed strategy depends on seasonal demand, do not apply a peak-period rate across the full year. Build month-by-month scenarios for occupancy, rate, vacancy, cleaning, utilities, and management, then test the downside case rather than relying only on a platform projection.',
             },
         ],
         faqs: [
@@ -297,7 +307,7 @@ export const answerPages: AnswerPage[] = [
             },
             {
                 question: 'What is the most common reason an investment purchase disappoints?',
-                answer: 'A restriction discovered after closing that prevents the intended use, or a pro forma built on peak-season rates applied across the full year. Both are avoidable during due diligence.',
+                answer: 'Two preventable risks are discovering a use restriction after closing and underwriting revenue without conservative vacancy, operating-cost, and capital-repair assumptions. Address both during due diligence with records for the exact parcel and a downside scenario.',
             },
         ],
         related: ['short-term-rental-rules-charlotte-area', 'sell-hold-or-rent-charlotte-property'],
@@ -322,14 +332,13 @@ export const answerPages: AnswerPage[] = [
                 body: 'Town-level comparisons are a starting filter, not a decision. Within any of these towns the range is wide enough that a specific street can behave nothing like the town average. Use this to narrow to two or three areas, then evaluate specific parcels.',
             },
             {
-                heading: 'The tradeoff each area asks you to accept',
-                body: 'Stated plainly, so you can pick the one you are willing to live with rather than the one that sounds best.',
+                heading: 'The official records differ by town',
+                body: 'The towns do not use one shared land-development record. Charlotte has its Unified Development Ordinance; Huntersville publishes zoning maps and verification processes; Cornelius directs owners to parcel, plat, and lakefront-buffer records; Davidson uses planning areas with the same legal authority as zoning districts; and Mooresville administers its own Unified Development Ordinance.',
                 bullets: [
-                    'Charlotte proper: proximity and walkability, generally older stock, smaller lots, and higher price per square foot closer in.',
-                    'Huntersville: newer construction and lake proximity, with commute times that depend heavily on crossing routes.',
-                    'Cornelius: strong lake access and established neighborhoods, often with covenant restrictions worth reading closely.',
-                    'Davidson: walkable center and distinct community identity, with limited and competitive inventory.',
-                    'Mooresville: more land per dollar, with the longest and least flexible commutes into Charlotte.',
+                    'Identify the government with planning jurisdiction over the exact parcel.',
+                    'Use that jurisdiction’s current map and ordinance rather than a listing summary.',
+                    'Verify the school system separately; postal town names do not settle assignment.',
+                    'Check recorded covenants, utilities, flood information, and any shoreline authority at the parcel level.',
                 ],
             },
             {
@@ -350,6 +359,8 @@ export const answerPages: AnswerPage[] = [
         related: ['relocating-to-charlotte', 'buying-investment-property-lake-norman'],
     },
 ];
+
+export const answerPages: AnswerPage[] = [...baseAnswerPages, ...researchedAnswerPages];
 
 export function findAnswerPage(slug: string): AnswerPage | undefined {
     return answerPages.find((page) => page.slug === slug);

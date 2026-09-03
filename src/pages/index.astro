@@ -12,6 +12,10 @@ import { agentSchema, faqSchema } from '../lib/schema';
 import { answerPages } from '../content/answers';
 
 const { brand } = siteConfig;
+const includeUnverified = process.env.INCLUDE_UNVERIFIED_ANSWERS === 'true';
+const visibleAnswerPages = includeUnverified
+    ? answerPages
+    : answerPages.filter((page) => !page.needsVerification);
 
 const schemas = [
     agentSchema,
@@ -22,7 +26,7 @@ const schemas = [
         url: 'https://ingadraper.com',
         publisher: { '@id': 'https://ingadraper.com/#agent' },
     },
-    faqSchema(answerPages.map((page) => ({ question: page.question, answer: page.answer }))),
+    faqSchema(visibleAnswerPages.map((page) => ({ question: page.question, answer: page.answer }))),
 ];
 ---
 
