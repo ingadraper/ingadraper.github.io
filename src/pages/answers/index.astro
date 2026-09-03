@@ -10,7 +10,7 @@ const includeUnverified = process.env.INCLUDE_UNVERIFIED_ANSWERS === 'true';
 const visibleAnswerPages = includeUnverified
     ? answerPages
     : answerPages.filter((page) => !page.needsVerification);
-const categoryOrder = ['Buying', 'Selling', 'Relocation', 'Rental strategy', 'Local guide'];
+const categoryOrder = ['Buying', 'Selling', 'Relocation', 'Rental questions', 'Local guide'];
 const categories = categoryOrder
     .map((category) => ({ category, pages: visibleAnswerPages.filter((page) => page.category === category) }))
     .filter(({ pages }) => pages.length);
@@ -21,7 +21,7 @@ const schemas = [
         '@type': 'CollectionPage',
         name: 'Charlotte and Lake Norman Real Estate Answers',
         url: 'https://ingadraper.com/answers/',
-        description: 'Direct answers to real estate questions from Inga Draper, REALTOR®, serving Charlotte and the Lake Norman area.',
+        description: 'Plain-English answers from Inga Draper to help buyers, sellers, and people moving to Charlotte understand their choices and find the right fit.',
         author: { '@id': 'https://ingadraper.com/#agent' },
     },
     breadcrumbSchema([
@@ -33,7 +33,7 @@ const schemas = [
 
 <BaseLayout
     title="Charlotte & Lake Norman Real Estate Answers | Inga Draper"
-    description="Clear answers from Inga Draper, REALTOR®, about buying, selling, relocating, rental strategy, and property decisions across Charlotte and Lake Norman."
+    description="Plain-English answers from Inga Draper about buying, selling, moving to Charlotte, and finding the home or next step that fits."
     path="/answers/"
     schemas={schemas}
 >
@@ -41,7 +41,17 @@ const schemas = [
 
     <main>
         <section class="relative min-h-[540px] overflow-hidden bg-[#2C2927] text-ivory">
-            <img src={siteConfig.images.hero.src} alt="" class="absolute inset-0 h-full w-full object-cover opacity-70" />
+            <img
+                src={siteConfig.images.hero.src}
+                srcset={siteConfig.images.hero.srcset}
+                sizes="100vw"
+                width={siteConfig.images.hero.width}
+                height={siteConfig.images.hero.height}
+                alt=""
+                class="absolute inset-0 h-full w-full object-cover opacity-70"
+                fetchpriority="high"
+                decoding="async"
+            />
             <div class="absolute inset-0 bg-gradient-to-r from-[#2C2927]/95 via-[#2C2927]/70 to-[#5A3437]/15"></div>
             <div class="absolute inset-0 bg-gradient-to-t from-[#2C2927]/55 via-transparent to-[#2C2927]/15"></div>
             <div class="site-shell relative flex min-h-[540px] items-end py-16 sm:py-20">
@@ -50,10 +60,10 @@ const schemas = [
                         <MapPin class="h-4 w-4" /> Charlotte + Lake Norman
                     </p>
                     <h1 class="mt-5 max-w-[14ch] text-5xl font-extrabold leading-[1.03] text-ivory sm:text-6xl lg:text-7xl">
-                        Clear answers before the decision gets expensive.
+                        Answers to help you find what fits.
                     </h1>
                     <p class="mt-7 max-w-xl text-lg font-normal leading-8 text-ivory/90 sm:text-xl">
-                        Practical context for buying, selling, relocating, and evaluating property across Charlotte and the Lake Norman area—from a licensed agent who will tell you where the answer depends.
+                        Buying, selling, or moving comes with unfamiliar words and big choices. Inga explains what they mean, why they matter, and how each answer connects to the life you want in Charlotte.
                     </p>
                     <a href="#questions" class="mt-9 inline-flex min-h-12 items-center justify-center gap-2 rounded-[6px] border border-ivory bg-ivory px-6 py-3 text-sm font-medium text-ink transition hover:border-blush hover:bg-blush focus:outline-none focus:ring-2 focus:ring-ivory focus:ring-offset-2 focus:ring-offset-ink">
                         Explore the questions <ArrowRight class="h-4 w-4" />
@@ -66,11 +76,11 @@ const schemas = [
             <div class="site-shell">
                 <div class="grid gap-10 border-b border-line pb-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
                     <div>
-                        <p class="eyebrow">Real estate answers</p>
-                        <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">Start with what you are weighing.</h2>
+                        <p class="eyebrow">Start with your question</p>
+                        <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">Start with what matters to you.</h2>
                     </div>
                     <p class="max-w-2xl text-lg leading-8 text-smoke lg:justify-self-end">
-                        Each guide begins with a direct answer, then shows the tradeoffs, documents, and local questions worth checking before you act.
+                        You do not need to speak real estate. Each guide starts with a short answer, explains any unfamiliar terms, and shows you what to check before deciding whether something fits.
                     </p>
                 </div>
 
@@ -102,13 +112,23 @@ const schemas = [
         <section class="relative overflow-hidden bg-blush">
             <div class="site-shell grid lg:grid-cols-2">
                 <div class="flex flex-col justify-center py-20 sm:py-24 lg:pr-20">
-                    <p class="eyebrow">The answer is rarely the whole decision</p>
-                    <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">Bring the address. Bring the tradeoffs.</h2>
-                    <p class="mt-6 max-w-xl text-lg leading-8 text-smoke">Online guidance gets you oriented. The useful conversation begins when the property, timing, financing, and your actual goals are in the room together.</p>
+                    <p class="eyebrow">The details matter</p>
+                    <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">Bring the address, your priorities, and your questions.</h2>
+                    <p class="mt-6 max-w-xl text-lg leading-8 text-smoke">These guides can help you get started. A conversation about the actual home, your timing, your budget, and the way you want to live will help Inga give you an answer that fits.</p>
                     <a href="/#contact" class="btn-primary mt-8 w-fit">Start a conversation <ArrowRight class="h-4 w-4" /></a>
                 </div>
                 <div class="relative min-h-[420px] lg:min-h-[560px]">
-                    <img src={siteConfig.images.about.src} alt={siteConfig.images.about.alt} class="absolute inset-0 h-full w-full object-cover" />
+                    <img
+                        src={siteConfig.images.about.src}
+                        srcset={siteConfig.images.about.srcset}
+                        sizes="(min-width: 1024px) 50vw, 100vw"
+                        width={siteConfig.images.about.width}
+                        height={siteConfig.images.about.height}
+                        alt={siteConfig.images.about.alt}
+                        class="absolute inset-0 h-full w-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                    />
                     <div class="absolute inset-0 bg-gradient-to-r from-blush/50 to-transparent lg:from-blush/20"></div>
                 </div>
             </div>

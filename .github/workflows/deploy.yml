@@ -34,6 +34,9 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Validate generated AEO output
+        run: npm run validate:aeo
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

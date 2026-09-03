@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { agentSchema } from '../lib/schema';
+---
+
+<BaseLayout
+    title="Page not found | Inga Draper"
+    description="That page could not be found. Explore Charlotte real estate services and consumer answers from Inga Draper."
+    path="/404.html"
+    schemas={[agentSchema]}
+>
+    <SiteHeader />
+    <main class="min-h-[64vh] bg-cream py-24 sm:py-32">
+        <div class="site-shell max-w-3xl">
+            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-rose">404 · Page not found</p>
+            <h1 class="mt-4 font-display text-5xl font-extrabold leading-tight text-ink sm:text-6xl">
+                This address does not lead to a page.
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg leading-relaxed text-smoke">
+                The link may be old, or the page may have moved. Start with Inga's Charlotte-area services or browse practical answers for buyers, sellers, and people relocating.
+            </p>
+            <nav aria-label="Helpful pages" class="mt-10 flex flex-wrap gap-3">
+                <a href="/" class="btn-primary">Return home</a>
+                <a href="/answers/" class="btn-secondary">Browse answers</a>
+                <a href="/buying/" class="btn-secondary">Buying</a>
+                <a href="/selling/" class="btn-secondary">Selling</a>
+                <a href="/relocating/" class="btn-secondary">Relocating</a>
+            </nav>
+        </div>
+    </main>
+</BaseLayout>

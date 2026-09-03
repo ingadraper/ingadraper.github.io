@@ -1,0 +1,73 @@
+---
+import SiteHeader from '../components/SiteHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { agentSchema, breadcrumbSchema } from '../lib/schema';
+import { siteConfig } from '../siteConfig';
+
+const path = '/privacy/';
+const title = 'Privacy Notice | Inga Draper Real Estate';
+const description = 'How the Inga Draper real estate website handles contact information, external services, embedded media, and basic hosting data.';
+---
+
+<BaseLayout
+    title={title}
+    description={description}
+    path={path}
+    schemas={[
+        agentSchema,
+        breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Privacy notice', path },
+        ]),
+    ]}
+>
+    <SiteHeader />
+    <main class="section-band bg-ivory">
+        <article class="site-shell max-w-4xl">
+            <p class="eyebrow">Privacy notice</p>
+            <h1 class="mt-4 text-4xl font-extrabold sm:text-6xl">Your information should stay understandable, too.</h1>
+            <p class="mt-6 text-lg leading-8 text-smoke">Last updated September 3, 2026.</p>
+
+            <div class="privacy-copy mt-10 max-w-none text-lg leading-8 text-smoke">
+                <h2>What this website collects</h2>
+                <p>This static website does not use an on-site customer database, advertising tracker, or analytics tool. If you use the contact form, your entries stay in your browser and are placed into a draft in your email application. Nothing is sent until you choose to send that email.</p>
+
+                <h2>What happens when you contact Inga</h2>
+                <p>If you call or email, Inga and eXp Realty LLC may use the information you provide to respond to your question, discuss real estate services, and keep ordinary business records. Do not place financial account numbers, government identifiers, passwords, or other highly sensitive information in an initial message.</p>
+
+                <h2>Hosting and technical logs</h2>
+                <p>The site is hosted through GitHub Pages. Like most hosting providers, GitHub may process basic request information such as an IP address, browser information, requested URL, and timestamps for security and service operation. See GitHub's own privacy documentation for its practices.</p>
+
+                <h2>External profiles and video</h2>
+                <p>Links to Google, Zillow, YouTube, LinkedIn, Facebook, Instagram, Nextdoor, and other websites are governed by those services' privacy policies. The featured YouTube video is not loaded until you choose its play button; that click connects your browser to YouTube.</p>
+
+                <h2>Your choices</h2>
+                <p>You can browse the site's written guides without using the contact form or loading the YouTube player. To ask about information you previously provided, contact Inga at <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a> or <a href={siteConfig.contact.phoneHref}>{siteConfig.contact.phone}</a>.</p>
+
+                <h2>Scope</h2>
+                <p>This notice describes this website. A brokerage, transaction platform, lender, closing professional, inspector, or other provider may give you a separate privacy notice for information it controls.</p>
+            </div>
+        </article>
+    </main>
+</BaseLayout>
+
+<style>
+    .privacy-copy h2 {
+        margin-top: 2.5rem;
+        font-family: var(--font-display);
+        font-size: 1.75rem;
+        font-weight: 800;
+        line-height: 1.2;
+        color: #202020;
+    }
+
+    .privacy-copy p {
+        margin-top: 0.9rem;
+    }
+
+    .privacy-copy a {
+        color: #7a344c;
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
+</style>

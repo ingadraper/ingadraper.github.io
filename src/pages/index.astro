@@ -8,33 +8,16 @@ import Services from '../components/Services.astro';
 import YouTube from '../components/YouTube.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { siteConfig } from '../siteConfig';
-import { agentSchema, faqSchema } from '../lib/schema';
-import { answerPages } from '../content/answers';
+import { agentSchema } from '../lib/schema';
 
 const { brand } = siteConfig;
-const includeUnverified = process.env.INCLUDE_UNVERIFIED_ANSWERS === 'true';
-const visibleAnswerPages = includeUnverified
-    ? answerPages
-    : answerPages.filter((page) => !page.needsVerification);
-
-const schemas = [
-    agentSchema,
-    {
-        '@context': 'https://schema.org',
-        '@type': 'WebSite',
-        name: 'Inga Draper — Charlotte Real Estate',
-        url: 'https://ingadraper.com',
-        publisher: { '@id': 'https://ingadraper.com/#agent' },
-    },
-    faqSchema(visibleAnswerPages.map((page) => ({ question: page.question, answer: page.answer }))),
-];
 ---
 
 <BaseLayout
-    title="Inga Draper | Charlotte Real Estate Advisor"
-    description={`Charlotte and Lake Norman real estate guidance from Inga Draper, ${brand.brokerageName}. Buyer, seller, relocation, investment, and property strategy conversations.`}
+    title="Helping You Find Your Fit in Charlotte | Inga Draper"
+    description={`Inga Draper of ${brand.brokerageName} helps buyers, sellers, and people moving to Charlotte find the home, neighborhood, and next step that fit their lives, with real estate explained in plain English.`}
     path="/"
-    schemas={schemas}
+    schemas={[agentSchema]}
 >
     <main class="min-h-screen bg-ivory">
         <Hero />

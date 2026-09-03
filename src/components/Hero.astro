@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, MapPin, PlayCircle } from '@lucide/astro';
+import { ArrowRight, MapPin, Menu, PlayCircle } from '@lucide/astro';
 import editableSite from '../editable-site.json';
 import { siteConfig } from '../siteConfig';
 
@@ -9,25 +9,50 @@ const { hero } = editableSite;
 ---
 
 <section id="top" class="relative min-h-[92svh] overflow-hidden bg-[#2C2927] text-ivory">
-    <img src={heroImage.src} alt={heroImage.alt} class="absolute inset-0 h-full w-full object-cover opacity-[0.84]" />
+    <img
+        src={heroImage.src}
+        srcset={heroImage.srcset}
+        sizes="100vw"
+        width={heroImage.width}
+        height={heroImage.height}
+        alt={heroImage.alt}
+        class="absolute inset-0 h-full w-full object-cover opacity-[0.84]"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+    />
     <div class="absolute inset-0 bg-gradient-to-r from-[#2C2927]/90 via-[#2C2927]/62 to-[#5A3437]/24"></div>
     <div class="absolute inset-0 bg-gradient-to-t from-[#2C2927]/50 via-transparent to-[#2C2927]/25"></div>
 
     <div class="absolute inset-x-0 top-0 z-20 border-b border-white/15 bg-[#2C2927]/20 backdrop-blur-md">
         <nav class="site-shell flex min-h-20 items-center justify-between text-sm">
-            <a href="#top" class="flex min-w-0 items-center gap-5 text-ivory sm:gap-6" aria-label={`Inga Draper, ${brand.brokerageName}`}>
+            <a href="#top" class="flex min-w-0 items-center gap-3 text-ivory sm:gap-6" aria-label={`Inga Draper, ${brand.brokerageName}`}>
                 <span class="font-display text-xl font-extrabold sm:text-2xl">Inga Draper</span>
                 <span class="h-8 w-px flex-none bg-white/30" aria-hidden="true"></span>
-                <img src={brand.logos.white} alt={brand.logoAlt} class="h-7 w-auto flex-none sm:h-8" />
+                <img src={brand.logos.white} srcset={brand.logoSrcsets.white} sizes="(min-width: 640px) 152px, 114px" alt={brand.logoAlt} width="360" height="75" class="h-6 w-auto flex-none sm:h-8" />
             </a>
             <div class="hidden items-center gap-8 text-ivory/80 md:flex">
                 <a href="#about" class="transition hover:text-ivory">About</a>
                 <a href="#services" class="transition hover:text-ivory">Services</a>
-                <a href="#strategy" class="transition hover:text-ivory">Strategy</a>
+                <a href="#strategy" class="transition hover:text-ivory">Planning</a>
                 <a href="/answers/" class="transition hover:text-ivory">Answers</a>
                 <a href="#reviews" class="transition hover:text-ivory">Reviews</a>
                 <a href="#contact" class="rounded-[6px] border border-ivory/25 bg-ink px-4 py-2 text-ivory transition hover:border-deep-rose hover:bg-deep-rose">Contact</a>
             </div>
+            <details class="mobile-nav relative md:hidden">
+                <summary class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-[6px] border border-white/30 bg-ink/80 text-ivory focus:outline-none focus:ring-2 focus:ring-ivory">
+                    <Menu class="h-5 w-5" aria-hidden="true" />
+                    <span class="sr-only">Open primary navigation</span>
+                </summary>
+                <div class="absolute right-0 top-full mt-3 w-56 overflow-hidden rounded-[8px] border border-white/20 bg-[#2C2927]/[0.98] p-2 shadow-2xl">
+                    <a href="#about" class="block min-h-11 rounded-[6px] px-4 py-3 hover:bg-white/10">About</a>
+                    <a href="#services" class="block min-h-11 rounded-[6px] px-4 py-3 hover:bg-white/10">Services</a>
+                    <a href="#strategy" class="block min-h-11 rounded-[6px] px-4 py-3 hover:bg-white/10">Planning</a>
+                    <a href="/answers/" class="block min-h-11 rounded-[6px] px-4 py-3 hover:bg-white/10">Answers</a>
+                    <a href="#reviews" class="block min-h-11 rounded-[6px] px-4 py-3 hover:bg-white/10">Reviews</a>
+                    <a href="#contact" class="mt-1 block min-h-11 rounded-[6px] bg-ivory px-4 py-3 font-medium text-ink">Contact Inga</a>
+                </div>
+            </details>
         </nav>
     </div>
 
@@ -65,14 +90,14 @@ const { hero } = editableSite;
         <div class="site-shell grid gap-6 py-6 sm:grid-cols-3">
             <div>
                 <p class="text-xs uppercase tracking-[0.22em] text-smoke">Brokerage</p>
-                <img src={brand.logos.black} alt={brand.logoAlt} class="mt-2 h-12 w-auto max-w-full" />
+                <img src={brand.logos.black} srcset={brand.logoSrcsets.black} sizes="230px" alt={brand.logoAlt} width="360" height="75" class="mt-2 h-12 w-auto max-w-full" loading="lazy" decoding="async" />
             </div>
             <div>
                 <p class="text-xs uppercase tracking-[0.22em] text-smoke">Service Area</p>
                 <p class="mt-1 font-semibold">{hero.serviceArea}</p>
             </div>
             <div>
-                <p class="text-xs uppercase tracking-[0.22em] text-smoke">Specialty Lane</p>
+                <p class="text-xs uppercase tracking-[0.22em] text-smoke">How Inga Helps</p>
                 <p class="mt-1 font-semibold">{hero.specialty}</p>
             </div>
         </div>

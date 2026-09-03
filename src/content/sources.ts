@@ -154,6 +154,18 @@ export const sourceSets: Record<string, ResearchSource[]> = {
             url: 'https://www.fema.gov/flood-maps/know-your-risk/homeowners',
             checked: '2026-09-02',
         },
+        {
+            title: 'Potential Buyers Info Sheet',
+            publisher: 'Duke Energy',
+            url: 'https://www.duke-energy.com/-/media/pdfs/community/lakes-and-rec/potential-buyers-info-sheet.pdf?rev=0cc88e87a6ba457781bb4379328ef9f0',
+            checked: '2026-09-03',
+        },
+        {
+            title: 'G.S. 42A-19 — Transfer of Property Subject to a Vacation Rental Agreement',
+            publisher: 'North Carolina General Assembly',
+            url: 'https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_42A/GS_42A-19.html',
+            checked: '2026-09-03',
+        },
     ],
     'charlotte-area-neighborhood-comparison': [
         {

@@ -1,0 +1,353 @@
+---
+import {
+    ArrowRight,
+    Check,
+    ClipboardList,
+    Map,
+    MapPin,
+    School,
+    Search,
+    ShieldCheck,
+    Video,
+} from '@lucide/astro';
+import Contact from '../components/Contact.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { answerPages } from '../content/answers';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { agentSchema, breadcrumbSchema, faqSchema } from '../lib/schema';
+import { siteConfig } from '../siteConfig';
+
+const path = '/relocating/';
+
+const answerLinks = [
+    {
+        slug: 'relocating-to-charlotte',
+        label: 'Relocation planning',
+        description: 'What to check before choosing an area or booking a focused visit.',
+    },
+    {
+        slug: 'verify-school-assignment-charlotte-lake-norman',
+        label: 'School assignment',
+        description: 'How to verify the district, address, and school year with official tools.',
+    },
+    {
+        slug: 'verify-zoning-before-buying-charlotte-area',
+        label: 'Zoning and property use',
+        description: 'How to ask the responsible local government about your exact plans.',
+    },
+].map((link) => {
+    const page = answerPages.find((candidate) => candidate.slug === link.slug);
+
+    if (!page || page.needsVerification) {
+        throw new Error(`Relocation page requires a verified answer: ${link.slug}`);
+    }
+
+    return { ...link, question: page.question };
+});
+
+const steps = [
+    {
+        icon: ClipboardList,
+        title: 'Build the search brief',
+        body: 'Start with your move date, comfortable price range, financing plan, home needs, and the places you expect to visit every week. This gives the search a practical shape before individual listings take over.',
+        items: ['Timing and financing', 'Home needs and tradeoffs', 'Regular destinations and routines'],
+    },
+    {
+        icon: Search,
+        title: 'Narrow the map remotely',
+        body: 'Compare available homes and objective location details, then narrow the search to two or three areas worth seeing. Video walk-throughs can help you rule homes in or out, but they do not replace seeing the finalists yourself.',
+        items: ['Review listings together', 'Use video to inspect the layout', 'Keep a short, workable area list'],
+    },
+    {
+        icon: ShieldCheck,
+        title: 'Verify each serious address',
+        body: 'Check property-specific facts before treating a home as a fit. School assignment, zoning, utilities, and private deed or homeowners association rules can depend on the exact address rather than the ZIP code or mailing city.',
+        items: ['Official school-district lookup', 'Responsible planning office', 'Property and association documents'],
+    },
+    {
+        icon: Map,
+        title: 'Use the visit to test real life',
+        body: 'Plan a focused visit around the routes and homes that survived the remote search. Drive regular trips at relevant times, compare homes across your realistic price range, and revisit the strongest options before deciding.',
+        items: ['Test the full routes', 'Tour a useful range of homes', 'Revisit finalists and open questions'],
+    },
+];
+
+const faqs = [
+    {
+        question: 'Can I start a Charlotte home search before I move?',
+        answer: 'Yes. Start with your timing, budget, home needs, and regular destinations. Remote listing reviews and video walk-throughs can narrow the search, while a focused visit lets you test routes and see the strongest options in person.',
+    },
+    {
+        question: 'Can a real estate agent tell me which Charlotte schools are best?',
+        answer: 'Inga does not rank schools or steer buyers toward or away from a neighborhood based on schools or protected characteristics. She can help you find the official district lookup for an exact address. You can then review programs, transportation, district information, and independent state data based on your own priorities.',
+    },
+    {
+        question: 'How many areas should I visit before choosing?',
+        answer: 'There is no required number. A practical remote search can narrow the visit to two or three areas, but the right list depends on your budget, home needs, regular trips, timing, and the homes available when you visit.',
+    },
+    {
+        question: 'Can commute time be guaranteed before I buy?',
+        answer: 'No. Traffic and travel times vary. Test the complete route on the days and at the times you expect to travel, including the local streets at both ends, and decide whether that trip works for you.',
+    },
+];
+
+const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `https://ingadraper.com${path}#service`,
+    name: 'Charlotte-area relocation real estate guidance',
+    description: 'Remote home-search planning, address-specific due diligence, and focused visit preparation for people moving to the Charlotte and Lake Norman area.',
+    url: `https://ingadraper.com${path}`,
+    provider: { '@id': 'https://ingadraper.com/#business' },
+    areaServed: ['Charlotte', 'Huntersville', 'Cornelius', 'Davidson', 'Mooresville'],
+    serviceType: 'Residential real estate relocation guidance',
+};
+
+const schemas = [
+    agentSchema,
+    breadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Relocating to Charlotte', path },
+    ]),
+    serviceSchema,
+    faqSchema(faqs),
+];
+---
+
+<BaseLayout
+    title="Relocating to Charlotte | Remote Home Search with Inga Draper"
+    description="Relocating to Charlotte? Start your home search remotely, narrow the right areas, verify address-specific details, and plan a focused visit with Inga Draper."
+    path={path}
+    schemas={schemas}
+>
+    <SiteHeader />
+
+    <main>
+        <section class="relative overflow-hidden bg-[#2C2927] text-ivory">
+            <div class="absolute inset-y-0 right-0 hidden w-[45%] lg:block">
+                <img
+                    src={siteConfig.images.about.src}
+                    srcset={siteConfig.images.about.srcset}
+                    sizes="45vw"
+                    width={siteConfig.images.about.width}
+                    height={siteConfig.images.about.height}
+                    alt=""
+                    class="h-full w-full object-cover opacity-75"
+                />
+                <div class="absolute inset-0 bg-gradient-to-r from-[#2C2927] via-[#2C2927]/45 to-[#2C2927]/10"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-[#2C2927]/50 via-transparent to-[#2C2927]/20"></div>
+            </div>
+
+            <div class="site-shell relative grid min-h-[600px] items-center py-14 sm:py-20 lg:grid-cols-[1.08fr_0.72fr] lg:py-24">
+                <div class="max-w-3xl">
+                    <nav aria-label="Breadcrumb" class="text-xs font-medium uppercase tracking-[0.18em] text-ivory/65">
+                        <ol class="flex flex-wrap items-center gap-2">
+                            <li><a href="/" class="transition hover:text-ivory">Home</a></li>
+                            <li aria-hidden="true">/</li>
+                            <li aria-current="page" class="text-ivory">Relocating to Charlotte</li>
+                        </ol>
+                    </nav>
+
+                    <p class="mt-10 flex items-center gap-2 font-subheading text-sm font-semibold uppercase tracking-[0.2em] text-dusty">
+                        <MapPin aria-hidden="true" class="h-4 w-4" /> Charlotte relocation help
+                    </p>
+                    <h1 class="mt-5 max-w-[15ch] text-4xl font-extrabold leading-[1.04] text-ivory sm:text-5xl lg:text-6xl">
+                        Make progress on your move before you arrive.
+                    </h1>
+
+                    <div class="mt-7 max-w-2xl border-l-2 border-dusty pl-5 sm:pl-7">
+                        <p class="text-xs font-medium uppercase tracking-[0.18em] text-ivory/65">The short answer</p>
+                        <p class="mt-3 text-base leading-7 text-ivory/90 sm:text-lg sm:leading-8">
+                            Yes—you can start relocating to Charlotte from a distance. Define your budget, timing, home needs, and weekly trips; narrow the search to two or three areas; verify school assignment and zoning for exact addresses; then use a focused visit to test routes, compare homes, and revisit the strongest options.
+                        </p>
+                    </div>
+
+                    <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                        <a href="#relocation-process" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-[6px] border border-ivory bg-ivory px-6 py-3 text-sm font-medium text-ink transition hover:border-blush hover:bg-blush focus:outline-none focus:ring-2 focus:ring-ivory focus:ring-offset-2 focus:ring-offset-ink">
+                            See the process <ArrowRight aria-hidden="true" class="h-4 w-4" />
+                        </a>
+                        <a href="#contact" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-[6px] border border-ivory/35 px-6 py-3 text-sm font-medium text-ivory transition hover:border-ivory hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-ivory focus:ring-offset-2 focus:ring-offset-ink">
+                            Plan my move
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="border-b border-line bg-blush py-10 sm:py-12">
+            <div class="site-shell grid gap-6 md:grid-cols-[0.68fr_1.32fr] md:items-center">
+                <div>
+                    <p class="eyebrow">A search built around you</p>
+                    <h2 class="mt-3 text-3xl font-extrabold sm:text-4xl">Start with life, not a list of town names.</h2>
+                </div>
+                <p class="max-w-3xl text-base leading-7 text-smoke md:justify-self-end sm:text-lg sm:leading-8">
+                    The useful first question is not “Which neighborhood is best?” It is “What does this move need to make possible?” Your schedule, budget, home needs, regular destinations, and personal priorities create a clearer and fairer way to compare options.
+                </p>
+            </div>
+        </section>
+
+        <section id="relocation-process" class="section-band scroll-mt-6 bg-ivory" aria-labelledby="process-heading">
+            <div class="site-shell">
+                <div class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+                    <div>
+                        <p class="eyebrow">Remote search → focused visit</p>
+                        <h2 id="process-heading" class="mt-4 max-w-xl text-4xl font-extrabold sm:text-5xl">A staged process, so every step has a job.</h2>
+                    </div>
+                    <p class="max-w-2xl text-lg leading-8 text-smoke lg:justify-self-end">
+                        Remote work should reduce the noise, not pressure you into a choice. Each stage narrows the next one and keeps property-specific questions visible.
+                    </p>
+                </div>
+
+                <ol class="mt-12 grid gap-px overflow-hidden rounded-[8px] border border-line bg-line lg:grid-cols-2">
+                    {steps.map((step, index) => {
+                        const Icon = step.icon;
+                        return (
+                            <li class="bg-frosted p-6 sm:p-8 lg:p-10">
+                                <div class="flex items-center justify-between gap-5">
+                                    <span class="font-subheading text-sm font-semibold uppercase tracking-[0.18em] text-deep-rose">
+                                        Stage {String(index + 1).padStart(2, '0')}
+                                    </span>
+                                    <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-blush text-deep-rose">
+                                        <Icon aria-hidden="true" class="h-5 w-5" />
+                                    </span>
+                                </div>
+                                <h3 class="mt-6 text-2xl font-extrabold sm:text-3xl">{step.title}</h3>
+                                <p class="mt-4 text-base leading-7 text-smoke">{step.body}</p>
+                                <ul class="mt-6 space-y-3 border-t border-line/70 pt-5">
+                                    {step.items.map((item) => (
+                                        <li class="flex gap-3 text-sm leading-6 text-smoke">
+                                            <Check aria-hidden="true" class="mt-1 h-4 w-4 flex-none text-deep-rose" stroke-width={2.5} />
+                                            <span>{item}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        );
+                    })}
+                </ol>
+            </div>
+        </section>
+
+        <section class="border-y border-line bg-porcelain py-16 sm:py-20" aria-labelledby="school-heading">
+            <div class="site-shell grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start lg:gap-16">
+                <div>
+                    <p class="eyebrow">Schools and fair housing</p>
+                    <h2 id="school-heading" class="mt-4 max-w-lg text-4xl font-extrabold sm:text-5xl">You decide what school information matters.</h2>
+                </div>
+
+                <div class="rounded-[8px] border border-line bg-ivory p-6 shadow-[0_18px_46px_rgba(122,46,72,0.08)] sm:p-8">
+                    <div class="flex items-start gap-4">
+                        <span class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-blush text-deep-rose">
+                            <School aria-hidden="true" class="h-5 w-5" />
+                        </span>
+                        <div>
+                            <h3 class="text-2xl font-extrabold">Address first. Official sources second.</h3>
+                            <p class="mt-4 text-base leading-7 text-smoke">
+                                Inga does not rank schools, label neighborhoods as “good,” “bad,” or “safe,” or steer buyers based on schools or any protected characteristic. She can help you find the governing district and its official lookup tool for the complete street address and the school year you need.
+                            </p>
+                            <p class="mt-4 text-base leading-7 text-smoke">
+                                Review programs, transportation, district information, and independent state data according to your own priorities. Treat a listing, ZIP code, mailing city, or current assignment as a starting point—not a guarantee for a future school year.
+                            </p>
+                            <a href="/answers/verify-school-assignment-charlotte-lake-norman/" class="mt-6 inline-flex min-h-12 items-center gap-2 rounded-[6px] border border-ink px-5 py-3 text-sm font-medium text-ink transition hover:border-deep-rose hover:text-deep-rose focus:outline-none focus:ring-2 focus:ring-deep-rose focus:ring-offset-2 focus:ring-offset-ivory">
+                                Read the school-assignment answer <ArrowRight aria-hidden="true" class="h-4 w-4" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-band bg-ivory" aria-labelledby="answers-heading">
+            <div class="site-shell">
+                <div class="grid gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+                    <div>
+                        <p class="eyebrow">Verified next reads</p>
+                        <h2 id="answers-heading" class="mt-4 text-4xl font-extrabold sm:text-5xl">Get the property-specific questions right.</h2>
+                    </div>
+                    <p class="max-w-2xl text-lg leading-8 text-smoke lg:justify-self-end">
+                        These plain-English answers come from this site’s verified answer library. Use them to prepare better questions before a home becomes a finalist.
+                    </p>
+                </div>
+
+                <div class="mt-10 grid gap-px overflow-hidden rounded-[8px] border border-line bg-line md:grid-cols-3">
+                    {answerLinks.map((link, index) => (
+                        <a href={`/answers/${link.slug}/`} class="group flex min-h-72 flex-col justify-between bg-frosted p-7 transition hover:bg-blush sm:p-8">
+                            <div>
+                                <div class="flex items-center justify-between gap-3">
+                                    <p class="font-subheading text-xs font-semibold uppercase tracking-[0.16em] text-deep-rose">{link.label}</p>
+                                    {index === 0 ? <Video aria-hidden="true" class="h-5 w-5 text-dusty" /> : index === 1 ? <School aria-hidden="true" class="h-5 w-5 text-dusty" /> : <ShieldCheck aria-hidden="true" class="h-5 w-5 text-dusty" />}
+                                </div>
+                                <h3 class="mt-5 text-2xl font-extrabold leading-tight transition group-hover:text-deep-rose">{link.question}</h3>
+                                <p class="mt-4 text-sm leading-7 text-smoke">{link.description}</p>
+                            </div>
+                            <span class="mt-8 inline-flex items-center gap-2 text-sm font-medium text-ink">
+                                Read the answer <ArrowRight aria-hidden="true" class="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            </span>
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        <section class="section-band bg-blush" aria-labelledby="fit-heading">
+            <div class="site-shell grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:gap-16">
+                <div>
+                    <p class="eyebrow">What “fit” means here</p>
+                    <h2 id="fit-heading" class="mt-4 max-w-lg text-4xl font-extrabold sm:text-5xl">Clear criteria, without steering.</h2>
+                    <p class="mt-6 max-w-xl text-lg leading-8 text-smoke">
+                        You set the priorities. Inga helps turn them into questions you can check against homes, routes, records, and your own experience.
+                    </p>
+                </div>
+                <ul class="grid gap-px overflow-hidden rounded-[8px] border border-line bg-line sm:grid-cols-2">
+                    {[
+                        'Price and the full cost of ownership',
+                        'Home features and condition',
+                        'Routes to destinations you choose',
+                        'Official school assignment for the address',
+                        'Zoning, deed, and association restrictions',
+                        'Your own observations during the visit',
+                    ].map((item) => (
+                        <li class="flex min-h-24 items-start gap-3 bg-ivory p-5 text-sm leading-6 text-smoke sm:p-6">
+                            <Check aria-hidden="true" class="mt-1 h-4 w-4 flex-none text-deep-rose" stroke-width={2.5} />
+                            <span>{item}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </section>
+
+        <section class="section-band bg-porcelain" aria-labelledby="faq-heading">
+            <div class="site-shell grid gap-10 lg:grid-cols-[0.75fr_1.25fr]">
+                <div>
+                    <p class="eyebrow">Relocation questions</p>
+                    <h2 id="faq-heading" class="mt-4 max-w-md text-4xl font-extrabold sm:text-5xl">A few answers before we talk.</h2>
+                </div>
+                <div class="divide-y divide-line border-y border-line">
+                    {faqs.map((faq) => (
+                        <details class="group py-6">
+                            <summary class="flex min-h-11 cursor-pointer list-none items-start justify-between gap-6 text-lg font-medium text-ink">
+                                <span>{faq.question}</span>
+                                <span aria-hidden="true" class="text-2xl font-light text-dusty transition group-open:rotate-45">+</span>
+                            </summary>
+                            <p class="max-w-2xl pt-4 leading-7 text-smoke">{faq.answer}</p>
+                        </details>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-ink py-14 text-ivory sm:py-16" aria-labelledby="cta-heading">
+            <div class="site-shell flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                    <p class="text-xs font-medium uppercase tracking-[0.2em] text-dusty">Start from where you are</p>
+                    <h2 id="cta-heading" class="mt-3 max-w-3xl text-3xl font-extrabold text-ivory sm:text-4xl">Bring your timing, budget, regular trips, and open questions.</h2>
+                </div>
+                <a href="#contact" class="inline-flex min-h-12 flex-none items-center justify-center gap-2 rounded-[6px] bg-ivory px-6 py-3 text-sm font-medium text-ink transition hover:bg-blush focus:outline-none focus:ring-2 focus:ring-ivory focus:ring-offset-2 focus:ring-offset-ink">
+                    Talk with Inga <ArrowRight aria-hidden="true" class="h-4 w-4" />
+                </a>
+            </div>
+        </section>
+
+        <Contact />
+    </main>
+</BaseLayout>

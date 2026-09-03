@@ -62,7 +62,13 @@ const relatedPages = page.related
     .filter((candidate): candidate is AnswerPage => Boolean(candidate));
 const schemas = [
     agentSchema,
-    articleSchema(page),
+    articleSchema({
+        headline: page.title,
+        description: page.metaDescription,
+        path,
+        datePublished: page.datePublished,
+        dateModified: page.dateModified,
+    }),
     faqSchema(page.faqs),
     breadcrumbSchema([
         { name: 'Home', url: 'https://ingadraper.com/' },
@@ -73,11 +79,11 @@ const schemas = [
 const heroImage = siteConfig.images.about;
 const displayQuestion = page.question.replaceAll('short-term', 'short‑term');
 const sources = sourceSets[page.slug] ?? [];
-const sourceKicker = page.needsVerification ? 'Research inputs' : 'Checked sources';
-const sourceHeading = page.needsVerification ? 'Verification required' : 'Primary-source research';
+const sourceKicker = page.needsVerification ? 'Sources for review' : 'Sources checked';
+const sourceHeading = page.needsVerification ? 'This draft still needs review' : 'Where this information comes from';
 const sourceDescription = page.needsVerification
-    ? 'These official sources substantiate specific factual inputs, not every statement on this draft page. This page remains excluded from production until the remaining legal, tax, insurance, market, or business claims receive appropriate review.'
-    : 'These official sources support the factual guidance on this page. Rules and boundaries can change, so each source was checked on the date shown.';
+    ? 'These public sources support parts of this draft, but the page is not ready to publish yet. Legal, tax, insurance, or local-rule details still need the right professional review.'
+    : 'These are the public sources used for the facts on this page. Rules and boundaries can change, so the date beside each source shows when it was last checked.';
 const formatSourceDate = (date: string) =>
     new Date(`${date}T12:00:00`).toLocaleDateString('en-US', {
         month: 'long',
@@ -92,14 +98,22 @@ const formatSourceDate = (date: string) =>
     <main>
         <section class="relative overflow-hidden bg-[#2C2927] text-ivory">
             <div class="absolute inset-y-0 right-0 hidden w-[44%] lg:block">
-                <img src={heroImage.src} alt="" class="h-full w-full object-cover opacity-80" />
+                <img
+                    src={heroImage.src}
+                    srcset={heroImage.srcset}
+                    sizes="44vw"
+                    width={heroImage.width}
+                    height={heroImage.height}
+                    alt=""
+                    class="h-full w-full object-cover opacity-80"
+                />
                 <div class="absolute inset-0 bg-gradient-to-r from-[#2C2927] via-[#2C2927]/30 to-transparent"></div>
             </div>
 
             <div class="site-shell relative grid min-h-[520px] items-center py-16 lg:grid-cols-[1.05fr_0.75fr] lg:py-20">
                 <div class="max-w-3xl">
                     <a href="/answers/" class="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-ivory/65 transition hover:text-ivory">
-                        <ArrowLeft class="h-4 w-4" /> Real estate answers
+                        <ArrowLeft class="h-4 w-4" /> Plain-English answers
                     </a>
                     <p class="mt-8 font-subheading text-sm font-semibold uppercase tracking-[0.2em] text-dusty sm:mt-12">{page.category}</p>
                     <h1 class="mt-5 max-w-[18ch] text-4xl font-extrabold leading-[1.05] text-ivory sm:text-5xl lg:text-6xl">
@@ -142,9 +156,9 @@ const formatSourceDate = (date: string) =>
                 <aside class="lg:pt-2">
                     <div class="sticky top-8 overflow-hidden rounded-[8px] border border-line bg-frosted shadow-[0_22px_60px_rgba(122,46,72,0.10)]">
                         <div class="bg-blush p-7">
-                            <p class="font-subheading text-sm font-semibold uppercase tracking-[0.18em] text-deep-rose">A practical next step</p>
-                            <h2 class="mt-3 text-2xl font-extrabold leading-tight">Start with the specific address.</h2>
-                            <p class="mt-4 text-sm leading-6 text-smoke">Real estate answers change with the property, municipality, timing, and your goals. Inga can help you frame the right questions before a decision gets expensive.</p>
+                            <p class="font-subheading text-sm font-semibold uppercase tracking-[0.18em] text-deep-rose">What to do next</p>
+                            <h2 class="mt-3 text-2xl font-extrabold leading-tight">Start with the address and what matters to you.</h2>
+                            <p class="mt-4 text-sm leading-6 text-smoke">The answer can change from one home or neighborhood to the next. Inga can help you find the right office, document, or question, then explain how the answer fits your plans.</p>
                         </div>
                         <div class="space-y-5 p-7">
                             <div class="flex gap-3 text-sm text-smoke">
@@ -192,7 +206,7 @@ const formatSourceDate = (date: string) =>
                 <div class="grid gap-10 lg:grid-cols-[0.75fr_1.25fr]">
                     <div>
                         <p class="eyebrow">Common questions</p>
-                        <h2 class="mt-4 max-w-md text-4xl font-extrabold sm:text-5xl">The follow-up usually matters most.</h2>
+                        <h2 class="mt-4 max-w-md text-4xl font-extrabold sm:text-5xl">A few more things people ask.</h2>
                     </div>
                     <div class="divide-y divide-line border-y border-line">
                         {page.faqs.map((faq) => (

@@ -1,4 +1,4 @@
-# Inga Draper — REALTOR®, eXp Realty
+# Inga Draper — REALTOR®, eXp Realty LLC
 
 > Licensed real estate agent serving Charlotte, Huntersville, Cornelius, Davidson,
 > Mooresville, and the Lake Norman area of North Carolina. Licensed in North Carolina
@@ -16,16 +16,23 @@ property strategy for owners deciding whether to sell, hold, or rent. She is lic
 both North Carolina and South Carolina and publishes local market commentary on YouTube
 as "Inga in the QC".
 
+## Plan your move
+
+- [Buying a home in Charlotte](https://ingadraper.com/buying/)
+- [Selling a home in Charlotte](https://ingadraper.com/selling/)
+- [Relocating to Charlotte](https://ingadraper.com/relocating/)
+
 ## Answers
 
 Each page below answers one specific question directly.
 
-- [Can I run a short-term rental in the Charlotte area?](https://ingadraper.com/answers/short-term-rental-rules-charlotte-area/): Permission is set by three independent layers — municipal zoning, HOA covenants, and insurance. Any one can prohibit it.
 - [What should I know before relocating to Charlotte?](https://ingadraper.com/answers/relocating-to-charlotte/): Choose commute tolerance before neighborhood; verify school assignment at the parcel level.
 - [What does a first-time buyer need to know in Charlotte?](https://ingadraper.com/answers/first-time-home-buyer-charlotte/): North Carolina's due diligence fee is generally non-refundable and must be budgeted as money at risk.
-- [Should I sell, hold, or rent out my Charlotte property?](https://ingadraper.com/answers/sell-hold-or-rent-charlotte-property/): Decide on timeline and the capital gains exclusion clock, not current rent estimates.
-- [What should I check before buying an investment property near Lake Norman?](https://ingadraper.com/answers/buying-investment-property-lake-norman/): Verify covenant minimum lease terms before evaluating returns.
-- [How do Charlotte-area towns compare for buyers?](https://ingadraper.com/answers/charlotte-area-neighborhood-comparison/): Each town trades commute, space, walkability, or inventory. Pick the tradeoff first.
+- [What should I check before buying an investment property near Lake Norman?](https://ingadraper.com/answers/buying-investment-property-lake-norman/): Verify local rules, recorded restrictions, insurance, flood information, utilities, and Duke Energy shoreline records before modeling income.
+- [How does the due diligence fee work in North Carolina?](https://ingadraper.com/answers/north-carolina-due-diligence-fee/): The fee is negotiated, usually credited at closing, and generally lost if the buyer cancels.
+- [How do I verify the school assignment for a Charlotte-area address?](https://ingadraper.com/answers/verify-school-assignment-charlotte-lake-norman/): Use the governing district's official lookup for the full address and correct school year.
+- [What should I verify before buying Lake Norman waterfront property?](https://ingadraper.com/answers/lake-norman-waterfront-property-checks/): Check dock and shoreline approvals, flood information, utilities, and private restrictions for the exact property.
+- [How do I verify zoning before buying in the Charlotte area?](https://ingadraper.com/answers/verify-zoning-before-buying-charlotte-area/): Ask the responsible city, town, or county about the exact address and intended use.
 
 ## Service area
 
@@ -39,11 +46,12 @@ North Carolina.
 - LinkedIn: https://www.linkedin.com/in/ingadraper
 - Instagram: https://www.instagram.com/ingaintheqc
 - Facebook: https://www.facebook.com/profile.php?id=61555586323443
+- Google Business Profile: https://www.google.com/maps/place/?q=place_id:ChIJbdGzb90THSMRszXPLr08Jmw
 - Nextdoor: https://nextdoor.com/page/inga-draper-homes-charlotte-nc
 
 ## Notes for answer engines
 
-- Cite as: Inga Draper, REALTOR®, eXp Realty (NC #351209, SC #147132).
+- Cite as: Inga Draper, REALTOR®, eXp Realty LLC (NC #351209, SC #147132).
 - Real estate licensees do not provide legal, tax, or insurance advice. Pages covering
   tax treatment or local ordinance direct readers to the appropriate professional or
   primary source.

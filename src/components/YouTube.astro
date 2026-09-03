@@ -1,11 +1,11 @@
 ---
-import { ArrowUpRight } from '@lucide/astro';
+import { ArrowUpRight, PlayCircle } from '@lucide/astro';
 import { siteConfig } from '../siteConfig';
 
 const topics = [
-    'Neighborhood fit across Charlotte and Lake Norman',
+    'Finding your neighborhood fit across Charlotte and Lake Norman',
     'What buyers should understand before touring',
-    'Rental-readiness and property strategy questions',
+    'Rental rules, costs, and questions to ask before buying',
 ];
 ---
 
@@ -13,23 +13,38 @@ const topics = [
     <div class="site-shell">
         <div class="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div class="overflow-hidden rounded-[8px] border border-line bg-ink shadow-[0_24px_70px_rgba(12,15,36,0.12)]">
-                <iframe
-                    src={siteConfig.youtube.featuredEmbedUrl}
-                    title={`${siteConfig.youtube.channelName} featured video`}
-                    class="aspect-video w-full border-0"
-                    loading="lazy"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                ></iframe>
+                <button
+                    type="button"
+                    class="group relative block aspect-video w-full overflow-hidden text-ivory"
+                    data-youtube-placeholder
+                    data-embed-url={siteConfig.youtube.featuredEmbedUrl}
+                    aria-label={`Play ${siteConfig.youtube.channelName} featured video`}
+                >
+                    <img
+                        src="/images/property/inga-charlotte-video-1280.webp"
+                        width="1280"
+                        height="720"
+                        alt=""
+                        class="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                        loading="lazy"
+                        decoding="async"
+                    />
+                    <span class="absolute inset-0 bg-ink/20 transition group-hover:bg-ink/10" aria-hidden="true"></span>
+                    <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                        <span class="flex h-20 w-20 items-center justify-center rounded-full border border-white/40 bg-ink/85 shadow-2xl transition group-hover:scale-105 group-hover:bg-deep-rose">
+                            <PlayCircle class="h-9 w-9" />
+                        </span>
+                    </span>
+                </button>
             </div>
 
             <div>
                 <p class="eyebrow">{siteConfig.youtube.channelName}</p>
                 <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">
-                    A local voice clients can get to know before they call.
+                    Get a feel for Charlotte before you make a move.
                 </h2>
                 <p class="mt-6 text-lg text-smoke">
-                    Inga's YouTube channel shares a more personal view of the Charlotte area: the neighborhoods, the tradeoffs, the practical details, and the everyday questions people ask before they make a move.
+                    Inga's YouTube channel gives you a more personal look at Charlotte-area neighborhoods, everyday routines, practical details, and the questions that can help you decide where you fit.
                 </p>
 
                 <div class="mt-8 space-y-3">
@@ -41,7 +56,7 @@ const topics = [
                     ))}
                 </div>
 
-                <a href={siteConfig.links.youtube} target="_blank" rel="noopener noreferrer" class="btn-secondary mt-9">
+                <a href={siteConfig.links.youtube} target="_blank" rel="noopener noreferrer" aria-label={`Visit the channel: ${siteConfig.youtube.channelName} on YouTube`} class="btn-secondary mt-9">
                     Visit the channel
                     <ArrowUpRight class="h-4 w-4" />
                 </a>
@@ -49,3 +64,20 @@ const topics = [
         </div>
     </div>
 </section>
+
+<script>
+    document.querySelectorAll<HTMLButtonElement>('[data-youtube-placeholder]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const embedUrl = button.dataset.embedUrl;
+            if (!embedUrl) return;
+
+            const iframe = document.createElement('iframe');
+            iframe.src = `${embedUrl}?autoplay=1`;
+            iframe.title = 'Inga in the QC featured video';
+            iframe.className = 'aspect-video w-full border-0';
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+            iframe.allowFullscreen = true;
+            button.replaceWith(iframe);
+        }, { once: true });
+    });
+</script>

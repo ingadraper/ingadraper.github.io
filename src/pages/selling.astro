@@ -1,0 +1,356 @@
+---
+import {
+    ArrowRight,
+    Check,
+    ClipboardCheck,
+    FileSearch,
+    Home,
+    LineChart,
+    Scale,
+} from '@lucide/astro';
+import Contact from '../components/Contact.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import { answerPages } from '../content/answers';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { agentSchema, breadcrumbSchema, faqSchema } from '../lib/schema';
+import { siteConfig } from '../siteConfig';
+
+const path = '/selling/';
+const title = 'Selling a Home in Charlotte | Inga Draper';
+const description =
+    'Plain-English help preparing, pricing, marketing, and comparing offers when selling a home in Charlotte or the Lake Norman area.';
+
+const processSteps = [
+    {
+        number: '01',
+        title: 'Prepare what matters',
+        summary:
+            'Start with a walk-through and your priorities. Inga helps separate useful repairs and presentation work from projects that may not fit your budget, timing, or plans.',
+        details: [
+            'Identify the likely buyer questions and documents to gather.',
+            'Prioritize cleaning, repairs, editing, and staging choices.',
+            'Plan photography, showing access, pets, and day-to-day logistics.',
+        ],
+        icon: ClipboardCheck,
+    },
+    {
+        number: '02',
+        title: 'Choose a pricing approach',
+        summary:
+            'Review recent comparable sales, competing listings, the home’s condition, location, and features. Inga explains the tradeoffs so you can choose a list-price approach that fits your goals.',
+        details: [
+            'Compare the most relevant nearby sales and current alternatives.',
+            'Account for differences buyers are likely to notice.',
+            'Agree on what market feedback would lead you to revisit the plan.',
+        ],
+        icon: LineChart,
+    },
+    {
+        number: '03',
+        title: 'Compare the whole offer',
+        summary:
+            'A higher price is not always the strongest fit. Inga organizes the price, estimated seller-paid costs, financing, deposits, dates, conditions, and requested concessions so you can compare offers side by side.',
+        details: [
+            'See the main financial terms and estimated proceeds together.',
+            'Review timing, financing, and buyer requests—not just price.',
+            'Flag contract or tax questions for the right attorney or tax professional.',
+        ],
+        icon: Scale,
+    },
+];
+
+const offerFactors = [
+    {
+        term: 'Price and estimated proceeds',
+        explanation: 'Compare the offer price with seller-paid costs, concessions, and other known transaction expenses.',
+    },
+    {
+        term: 'Financing and appraisal',
+        explanation: 'Look at how the buyer plans to pay and what the offer says about financing or appraisal-related decisions.',
+    },
+    {
+        term: 'Deposits and deadlines',
+        explanation: 'Review due diligence and earnest money amounts, the investigation period, and the proposed closing date.',
+    },
+    {
+        term: 'Conditions and requests',
+        explanation: 'Note requested personal property, home-sale conditions, repair expectations, occupancy, or other terms that affect you.',
+    },
+];
+
+const faqs = [
+    {
+        question: 'How does Inga help me sell a home in Charlotte?',
+        answer:
+            'Inga helps you decide what to prepare, understand the market evidence behind pricing options, present the home to buyers, manage showing feedback, and compare offers beyond price. She explains the choices in plain English, keeps your priorities visible, and brings legal or tax questions to the right professional.',
+    },
+    {
+        question: 'What should I do before listing my home?',
+        answer:
+            'Begin with your timing, budget, and move plan before starting repairs. Walk through the home with Inga, gather permits, warranties, homeowners association documents, and other useful records, then prioritize the work that supports a clean, well-documented launch. Not every update will fit every seller or home.',
+    },
+    {
+        question: 'How is a list price chosen?',
+        answer:
+            'A list-price discussion should consider recent comparable sales, current competing homes, condition, location, features, and your priorities. Inga explains which comparisons are most useful and how different pricing approaches may affect buyer attention. Market evidence can guide the decision, but it cannot guarantee a sale price or timing.',
+    },
+    {
+        question: 'Should I accept the highest offer?',
+        answer:
+            'Not automatically. Compare estimated proceeds, financing, deposits, deadlines, requested concessions, conditions, and closing timing along with price. The best fit depends on what matters to you and the risk you are comfortable taking. Inga can organize the terms side by side and explain where you need professional advice.',
+    },
+];
+
+const answerLinks = [
+    {
+        slug: 'north-carolina-due-diligence-fee',
+        context: 'Understand a North Carolina offer term that can affect how sellers compare buyers and deadlines.',
+    },
+    {
+        slug: 'verify-zoning-before-buying-charlotte-area',
+        context: 'See the address-specific records and use questions a buyer may want answered before closing.',
+    },
+    {
+        slug: 'lake-norman-waterfront-property-checks',
+        context: 'Learn which dock, shoreline, flood, septic, and well records may matter for a Lake Norman home.',
+    },
+];
+
+const verifiedAnswers = answerLinks
+    .map((link) => {
+        const page = answerPages.find((answerPage) => answerPage.slug === link.slug && !answerPage.needsVerification);
+        return page ? { ...link, page } : null;
+    })
+    .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
+
+const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `https://ingadraper.com${path}#service`,
+    name: 'Charlotte-area home selling guidance',
+    description,
+    url: `https://ingadraper.com${path}`,
+    provider: { '@id': 'https://ingadraper.com/#business' },
+    areaServed: ['Charlotte', 'Huntersville', 'Cornelius', 'Davidson', 'Mooresville'],
+    serviceType: 'Residential real estate seller representation',
+};
+
+const schemas = [
+    agentSchema,
+    breadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Selling in Charlotte', path },
+    ]),
+    serviceSchema,
+    faqSchema(faqs),
+];
+---
+
+<BaseLayout title={title} description={description} path={path} schemas={schemas}>
+    <SiteHeader />
+
+    <main>
+        <section class="relative isolate overflow-hidden bg-[#2C2927] text-ivory">
+            <div class="absolute inset-y-0 right-0 -z-10 hidden w-[44%] lg:block">
+                <img
+                    src={siteConfig.images.about.src}
+                    srcset={siteConfig.images.about.srcset}
+                    sizes="44vw"
+                    width={siteConfig.images.about.width}
+                    height={siteConfig.images.about.height}
+                    alt=""
+                    class="h-full w-full object-cover opacity-75"
+                />
+                <div class="absolute inset-0 bg-gradient-to-r from-[#2C2927] via-[#2C2927]/35 to-transparent"></div>
+            </div>
+
+            <div class="site-shell grid min-h-[610px] items-center py-16 sm:py-20 lg:grid-cols-[1.1fr_0.75fr] lg:py-24">
+                <div class="max-w-3xl">
+                    <p class="font-subheading text-sm font-semibold uppercase tracking-[0.2em] text-dusty">
+                        Selling in Charlotte + Lake Norman
+                    </p>
+                    <h1 class="mt-5 max-w-[15ch] text-5xl font-extrabold leading-[1.03] text-ivory sm:text-6xl lg:text-7xl">
+                        A clear plan for selling your home.
+                    </h1>
+                    <p class="mt-7 max-w-2xl text-lg font-normal leading-8 text-ivory/90 sm:text-xl sm:leading-9">
+                        Inga helps you decide what to prepare, understand the evidence behind pricing choices, present the home clearly, and compare every offer beyond the headline price. You get plain-English guidance shaped around your home, timing, budget, and next move—without promises about price or how quickly the home will sell.
+                    </p>
+                    <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                        <a href="#contact" class="btn-primary w-full bg-ivory text-ink hover:bg-blush sm:w-auto">
+                            Talk through your sale
+                            <ArrowRight class="h-4 w-4" aria-hidden="true" />
+                        </a>
+                        <a
+                            href="#process"
+                            class="inline-flex min-h-12 w-full items-center justify-center rounded-[6px] border border-ivory/35 px-6 py-3 text-sm font-medium text-ivory transition hover:border-ivory hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-ivory focus:ring-offset-2 focus:ring-offset-ink sm:w-auto"
+                        >
+                            See the process
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="border-b border-line bg-frosted py-10 sm:py-12" aria-labelledby="help-heading">
+            <div class="site-shell grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:items-center">
+                <div>
+                    <p class="eyebrow">How Inga helps</p>
+                    <h2 id="help-heading" class="mt-3 text-3xl font-extrabold sm:text-4xl">
+                        Decisions first. Tasks second.
+                    </h2>
+                </div>
+                <div class="grid gap-4 sm:grid-cols-3">
+                    <div class="flex items-start gap-3">
+                        <Home class="mt-1 h-5 w-5 flex-none text-dusty" aria-hidden="true" />
+                        <p class="text-sm leading-6 text-smoke"><strong class="block text-ink">Your situation</strong>Start with why you are moving, your timing, and what the sale needs to support.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <FileSearch class="mt-1 h-5 w-5 flex-none text-dusty" aria-hidden="true" />
+                        <p class="text-sm leading-6 text-smoke"><strong class="block text-ink">The evidence</strong>Use relevant sales, competing homes, property details, and buyer feedback.</p>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <Scale class="mt-1 h-5 w-5 flex-none text-dusty" aria-hidden="true" />
+                        <p class="text-sm leading-6 text-smoke"><strong class="block text-ink">The tradeoffs</strong>Understand what each pricing, preparation, and offer choice asks of you.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="process" class="section-band scroll-mt-8 bg-ivory" aria-labelledby="process-heading">
+            <div class="site-shell">
+                <div class="grid gap-8 border-b border-line pb-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+                    <div>
+                        <p class="eyebrow">A simple selling process</p>
+                        <h2 id="process-heading" class="mt-4 text-4xl font-extrabold sm:text-5xl">
+                            Prepare, price, and compare.
+                        </h2>
+                    </div>
+                    <p class="max-w-2xl text-lg leading-8 text-smoke lg:justify-self-end">
+                        Each home and move is different. This three-part framework keeps the important decisions in order while leaving room to adjust as new information arrives.
+                    </p>
+                </div>
+
+                <ol class="mt-10 grid gap-5 lg:grid-cols-3">
+                    {processSteps.map((step) => {
+                        const Icon = step.icon;
+
+                        return (
+                            <li class="soft-card flex h-full flex-col p-6 sm:p-8">
+                                <div class="flex items-center justify-between gap-5">
+                                    <span class="font-subheading text-sm font-semibold tracking-[0.18em] text-deep-rose">{step.number}</span>
+                                    <span class="flex h-12 w-12 items-center justify-center rounded-full bg-frosted text-dusty">
+                                        <Icon class="h-5 w-5" aria-hidden="true" />
+                                    </span>
+                                </div>
+                                <h3 class="mt-7 text-2xl font-extrabold leading-tight">{step.title}</h3>
+                                <p class="mt-4 text-base leading-7 text-smoke">{step.summary}</p>
+                                <ul class="mt-6 grid gap-3 border-t border-line/70 pt-6">
+                                    {step.details.map((detail) => (
+                                        <li class="flex gap-3 text-sm leading-6 text-smoke">
+                                            <span class="mt-1 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-frosted text-deep-rose">
+                                                <Check class="h-3 w-3" stroke-width={2.5} aria-hidden="true" />
+                                            </span>
+                                            <span>{detail}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        );
+                    })}
+                </ol>
+
+                <p class="mt-8 rounded-[8px] border border-line bg-frosted px-5 py-4 text-sm leading-6 text-smoke sm:px-6">
+                    <strong class="text-ink">What this process can—and cannot—do:</strong> Good preparation and current market evidence can support a reasoned decision. They cannot guarantee a buyer, sale price, appraisal, closing date, or other outcome.
+                </p>
+            </div>
+        </section>
+
+        <section class="section-band bg-porcelain" aria-labelledby="offers-heading">
+            <div class="site-shell grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:items-start lg:gap-20">
+                <div>
+                    <p class="eyebrow">When offers arrive</p>
+                    <h2 id="offers-heading" class="mt-4 text-4xl font-extrabold sm:text-5xl">
+                        Compare more than the number at the top.
+                    </h2>
+                    <p class="mt-6 text-lg leading-8 text-smoke">
+                        Inga can lay the material terms out in one view, explain practical tradeoffs, and help you prepare questions. You choose the offer that best fits your priorities.
+                    </p>
+                    <a href="#contact" class="btn-primary mt-8 w-full sm:w-auto">
+                        Get help with your next step
+                        <ArrowRight class="h-4 w-4" aria-hidden="true" />
+                    </a>
+                </div>
+
+                <dl class="overflow-hidden rounded-[8px] border border-line bg-ivory shadow-[0_18px_46px_rgba(122,46,72,0.08)]">
+                    {offerFactors.map((factor) => (
+                        <div class="grid gap-2 border-b border-line/70 p-5 last:border-b-0 sm:grid-cols-[0.72fr_1.28fr] sm:gap-8 sm:p-6">
+                            <dt class="font-medium text-ink">{factor.term}</dt>
+                            <dd class="text-sm leading-6 text-smoke">{factor.explanation}</dd>
+                        </div>
+                    ))}
+                </dl>
+            </div>
+        </section>
+
+        {verifiedAnswers.length > 0 && (
+            <section class="section-band bg-frosted" aria-labelledby="answers-heading">
+                <div class="site-shell">
+                    <div class="flex flex-col gap-5 border-b border-line pb-8 sm:flex-row sm:items-end sm:justify-between">
+                        <div>
+                            <p class="eyebrow">Source-checked answers</p>
+                            <h2 id="answers-heading" class="mt-3 text-4xl font-extrabold sm:text-5xl">
+                                Useful details before you list.
+                            </h2>
+                        </div>
+                        <a href="/answers/" class="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-ink transition hover:text-deep-rose">
+                            Browse every answer
+                            <ArrowRight class="h-4 w-4" aria-hidden="true" />
+                        </a>
+                    </div>
+
+                    <div class="mt-8 grid gap-px overflow-hidden rounded-[8px] border border-line bg-line lg:grid-cols-3">
+                        {verifiedAnswers.map(({ page, context }) => (
+                            <article class="flex h-full flex-col bg-ivory p-6 sm:p-7">
+                                <p class="font-subheading text-xs font-semibold uppercase tracking-[0.16em] text-slate">{page.category}</p>
+                                <h3 class="mt-4 text-xl font-extrabold leading-snug">{page.question}</h3>
+                                <p class="mt-4 flex-1 text-sm leading-6 text-smoke">{context}</p>
+                                <a href={`/answers/${page.slug}/`} class="mt-7 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-ink transition hover:text-deep-rose">
+                                    Read the answer
+                                    <ArrowRight class="h-4 w-4" aria-hidden="true" />
+                                </a>
+                            </article>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        )}
+
+        <section class="section-band bg-ivory" aria-labelledby="faq-heading">
+            <div class="site-shell grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
+                <div>
+                    <p class="eyebrow">Selling questions</p>
+                    <h2 id="faq-heading" class="mt-4 max-w-md text-4xl font-extrabold sm:text-5xl">
+                        Straight answers to start with.
+                    </h2>
+                    <p class="mt-6 max-w-md text-base leading-7 text-smoke">
+                        The right answer can change with the property, contract, and your plans. These are useful starting points—not legal, tax, or financial advice.
+                    </p>
+                </div>
+
+                <div class="divide-y divide-line border-y border-line">
+                    {faqs.map((faq) => (
+                        <details class="group py-6">
+                            <summary class="flex min-h-11 cursor-pointer list-none items-start justify-between gap-6 rounded-[4px] text-lg font-medium leading-7 text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-dusty focus-visible:ring-offset-4">
+                                <span>{faq.question}</span>
+                                <span class="mt-0.5 text-2xl font-light text-dusty transition group-open:rotate-45" aria-hidden="true">+</span>
+                            </summary>
+                            <p class="max-w-3xl pt-4 text-base leading-7 text-smoke">{faq.answer}</p>
+                        </details>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        <Contact />
+    </main>
+</BaseLayout>

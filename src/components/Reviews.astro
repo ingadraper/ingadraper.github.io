@@ -8,12 +8,16 @@ const reviews = [
         date: 'February 2026',
         text: '"Inga\'s spiel about being your realtor and your best friend is actually true. Somewhere along the way, she really did become someone I value beyond the transaction."',
         transaction: 'Bought a home in Huntersville, NC',
+        source: 'Zillow',
+        sourceUrl: siteConfig.links.zillow,
     },
     {
         name: 'Blake Cole',
         date: 'May 2024',
         text: '"Inga did an outstanding job working with me and making sure my needs were met. She was able to help negotiate a lower price for the home I purchased."',
         transaction: 'Bought a Single Family home in Huntersville, NC',
+        source: 'Zillow',
+        sourceUrl: siteConfig.links.zillow,
     },
 ];
 ---
@@ -22,31 +26,40 @@ const reviews = [
     <div class="site-shell">
         <div class="grid gap-10 lg:grid-cols-[0.78fr_1.22fr]">
             <div>
-                <p class="eyebrow">Client trust</p>
+                <p class="eyebrow">Client reviews</p>
                 <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">
-                    Client feedback grounded in real relationships.
+                    The right fit starts with an agent who listens.
                 </h2>
                 <p class="mt-6 text-lg text-smoke">
-                    Buyers describe Inga as steady, thoughtful, and deeply invested in helping them feel supported beyond the transaction itself.
+                    Inga’s clients talk about feeling heard, supported, and cared for before and after closing. That is what finding the right fit should feel like.
                 </p>
 
-                <a href={siteConfig.links.zillow} target="_blank" rel="noopener noreferrer" class="btn-secondary mt-9">
-                    View Zillow profile
-                    <ArrowUpRight class="h-4 w-4" />
-                </a>
+                <div class="mt-9 flex flex-wrap gap-3">
+                    <a href={siteConfig.links.googleBusiness} target="_blank" rel="noopener noreferrer" aria-label="View Inga Draper's Google Business Profile" class="btn-secondary">
+                        View Google profile
+                        <ArrowUpRight class="h-4 w-4" />
+                    </a>
+                    <a href={siteConfig.links.zillow} target="_blank" rel="noopener noreferrer" aria-label="View Zillow profile for Inga Draper" class="btn-secondary">
+                        View Zillow profile
+                        <ArrowUpRight class="h-4 w-4" />
+                    </a>
+                </div>
             </div>
 
             <div class="grid gap-4 md:grid-cols-2">
                 {reviews.map((review) => (
                     <article class="soft-card p-7">
-                        <div class="flex gap-1 text-slate" aria-label="5 star review">
-                            {Array.from({ length: 5 }).map(() => <Star class="h-4 w-4 fill-current" />)}
+                        <div class="flex gap-1 text-slate" role="img" aria-label="5 out of 5 stars">
+                            {Array.from({ length: 5 }).map(() => <Star class="h-4 w-4 fill-current" aria-hidden="true" />)}
                         </div>
                         <p class="mt-6 text-lg text-ink">{review.text}</p>
                         <div class="mt-8 border-t border-line pt-5">
                             <p class="font-medium text-ink">{review.name}</p>
                             <p class="mt-1 text-sm text-smoke">{review.transaction}</p>
                             <p class="mt-1 text-xs uppercase tracking-[0.18em] text-smoke">{review.date}</p>
+                            <a href={review.sourceUrl} target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex items-center gap-1 text-xs font-medium uppercase tracking-[0.14em] text-deep-rose underline underline-offset-2">
+                                Source: {review.source} <ArrowUpRight class="h-3.5 w-3.5" aria-hidden="true" />
+                            </a>
                         </div>
                     </article>
                 ))}

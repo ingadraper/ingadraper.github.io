@@ -11,7 +11,17 @@ const { about } = editableSite;
     <div class="site-shell">
         <div class="grid gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-center">
             <div class="relative min-h-[420px] overflow-hidden rounded-[8px] bg-ink sm:min-h-[520px] lg:min-h-[560px]">
-                <img src={aboutImage.src} alt={aboutImage.alt} class="absolute inset-0 h-full w-full object-cover brightness-[0.94] saturate-[0.92]" />
+                <img
+                    src={aboutImage.src}
+                    srcset={aboutImage.srcset}
+                    sizes="(min-width: 1024px) 42vw, 100vw"
+                    width={aboutImage.width}
+                    height={aboutImage.height}
+                    alt={aboutImage.alt}
+                    class="absolute inset-0 h-full w-full object-cover brightness-[0.94] saturate-[0.92]"
+                    loading="lazy"
+                    decoding="async"
+                />
                 <div class="absolute inset-x-5 bottom-5 rounded-[6px] border border-line/70 bg-ivory/95 p-5 shadow-[0_16px_40px_rgba(12,15,36,0.10)] sm:inset-x-6 sm:bottom-6 sm:p-6">
                     <p class="text-xs font-medium uppercase tracking-[0.2em] text-slate">Working style</p>
                     <p class="mt-3 max-w-2xl text-lg font-medium leading-7 text-ink">
@@ -50,7 +60,7 @@ const { about } = editableSite;
                     </div>
                     <div class="flex items-start gap-3">
                         <TrendingUp class="mt-1 h-5 w-5 text-slate" />
-                        <p class="text-sm text-smoke"><span class="font-medium text-ink">Investor aware</span><br />Short-term rental and property strategy</p>
+                        <p class="text-sm text-smoke"><span class="font-medium text-ink">Rental questions</span><br />Clear help with rules, costs, and next steps</p>
                     </div>
                 </div>
             </div>

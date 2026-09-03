@@ -13,9 +13,12 @@ interface Props {
 
 const { title, description, path = '/', schemas = [] } = Astro.props;
 const canonical = new URL(path, 'https://ingadraper.com').href;
+const socialImage = new URL('/images/social/inga-draper-charlotte-og.jpg', canonical).href;
+const socialType = schemas.some(
+    (schema) => typeof schema === 'object' && schema !== null && '@type' in schema && schema['@type'] === 'Article',
+) ? 'article' : 'website';
 const chatWidgetId = siteConfig.connectors.goHighLevelChatWidgetId || import.meta.env.PUBLIC_GHL_CHAT_WIDGET_ID;
 const { agent, brand, compliance } = siteConfig;
-const footerLineOne = `${agent.name}, ${agent.designation} | ${brand.brokerageName}`;
 const footerLineThree = `© 2026 ${agent.name} | ${brand.brokerageName}. Equal Housing Opportunity.`;
 ---
 
@@ -26,15 +29,21 @@ const footerLineThree = `© 2026 ${agent.name} | ${brand.brokerageName}. Equal H
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{title}</title>
         <meta name="description" content={description} />
-        <meta name="keywords" content="real estate agent, Charlotte NC, Huntersville, Lake Norman, short-term rental strategy, buy home, sell home" />
+        <meta name="keywords" content="real estate agent, Charlotte NC, Huntersville, Lake Norman, short-term rental questions, buy home, sell home" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={socialType} />
         <meta property="og:url" content={canonical} />
         <meta property="og:site_name" content={agent.name} />
+        <meta property="og:image" content={socialImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Inga Draper, Charlotte real estate advisor" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={socialImage} />
+        <meta name="twitter:image:alt" content="Inga Draper, Charlotte real estate advisor" />
         <meta name="author" content={agent.name} />
         <link rel="canonical" href={canonical} />
         <link rel="sitemap" href="/sitemap-index.xml" />
@@ -52,10 +61,10 @@ const footerLineThree = `© 2026 ${agent.name} | ${brand.brokerageName}. Equal H
                         <div class="flex flex-wrap items-center gap-5">
                             <h3 class="font-display text-2xl font-extrabold">{agent.name}</h3>
                             <span class="h-8 w-px bg-line" aria-hidden="true"></span>
-                            <img src={brand.logos.black} alt={brand.logoAlt} class="h-12 w-auto max-w-full" />
+                            <img src={brand.logos.black} srcset={brand.logoSrcsets.black} sizes="230px" alt={brand.logoAlt} width="360" height="75" class="h-12 w-auto max-w-full" loading="lazy" decoding="async" />
                         </div>
                         <p class="mt-4 text-sm text-smoke">
-                            {brand.brokerageName} agent serving Charlotte, Huntersville, Cornelius, and Lake Norman.
+                            Helping you find your fit in Charlotte, Huntersville, Cornelius, and Lake Norman.
                         </p>
                     </div>
 
@@ -63,8 +72,10 @@ const footerLineThree = `© 2026 ${agent.name} | ${brand.brokerageName}. Equal H
                         <h4 class="font-medium">Explore</h4>
                         <ul class="mt-4 space-y-2 text-sm text-smoke">
                             <li><a href="/#about" class="transition hover:text-ink">About</a></li>
-                            <li><a href="/#services" class="transition hover:text-ink">Services</a></li>
-                            <li><a href="/#strategy" class="transition hover:text-ink">Strategy</a></li>
+                            <li><a href="/buying/" class="transition hover:text-ink">Buying</a></li>
+                            <li><a href="/selling/" class="transition hover:text-ink">Selling</a></li>
+                            <li><a href="/relocating/" class="transition hover:text-ink">Relocating</a></li>
+                            <li><a href="/#strategy" class="transition hover:text-ink">Planning</a></li>
                             <li><a href="/answers/" class="transition hover:text-ink">Answers</a></li>
                             <li><a href="/#contact" class="transition hover:text-ink">Contact</a></li>
                         </ul>
@@ -73,10 +84,10 @@ const footerLineThree = `© 2026 ${agent.name} | ${brand.brokerageName}. Equal H
                     <div>
                         <h4 class="font-medium">Focus</h4>
                         <ul class="mt-4 space-y-2 text-sm text-smoke">
-                            <li>Buyer, seller, and relocation guidance</li>
-                            <li>Charlotte + Lake Norman perspective</li>
-                            <li>Short-term rental readiness questions</li>
-                            <li>Property strategy conversations</li>
+                            <li>A home and neighborhood that fit your life</li>
+                            <li>Plain-English help with each choice</li>
+                            <li>Short-term rental rules and costs</li>
+                            <li>Clear explanations without the jargon</li>
                         </ul>
                     </div>
 
@@ -85,19 +96,26 @@ const footerLineThree = `© 2026 ${agent.name} | ${brand.brokerageName}. Equal H
                         <ul class="mt-4 space-y-2 text-sm text-smoke">
                             <li><a href={siteConfig.contact.phoneHref} class="transition hover:text-ink">{siteConfig.contact.phone}</a></li>
                             <li><a href={`mailto:${siteConfig.contact.email}`} class="transition hover:text-ink">Email Inga</a></li>
+                            <li><a href={siteConfig.links.googleBusiness} target="_blank" rel="noopener noreferrer" class="transition hover:text-ink">Google Business Profile</a></li>
                             <li><a href={siteConfig.links.youtube} target="_blank" rel="noopener noreferrer" class="transition hover:text-ink">{siteConfig.youtube.channelName}</a></li>
                             <li><a href={siteConfig.links.facebook} target="_blank" rel="noopener noreferrer" class="transition hover:text-ink">Facebook</a></li>
+                            <li><a href="/privacy/" class="transition hover:text-ink">Privacy notice</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="flex flex-col gap-5 pt-8 text-sm text-smoke sm:flex-row sm:items-center sm:justify-between">
                     <div class="space-y-1">
-                        <p class="font-medium text-ink">{footerLineOne}</p>
+                        <p class="font-medium text-ink">
+                            {agent.name}, {agent.designation} |
+                            <a href={brand.brokerageHomepage} target="_blank" rel="noopener noreferrer" class="ml-1 underline decoration-line underline-offset-2 transition hover:text-deep-rose">
+                                {compliance.legalBrokerageName}
+                            </a>
+                        </p>
                         <p>{compliance.licenseLine}</p>
                         <p>{footerLineThree}</p>
                     </div>
-                    <img src={compliance.equalHousingLogo.black} alt="Equal Housing Opportunity" class="h-14 w-14 flex-none object-contain" />
+                    <img src={compliance.equalHousingLogo.black} alt="Equal Housing Opportunity" width="121" height="128" class="h-14 w-14 flex-none object-contain" loading="lazy" decoding="async" />
                 </div>
             </div>
         </footer>

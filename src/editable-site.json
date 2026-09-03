@@ -1,44 +1,44 @@
 {
     "hero": {
         "location": "Charlotte + Lake Norman real estate",
-        "headline": "Real estate guidance with clarity, care, and a local point of view.",
-        "summary": "Inga Draper helps buyers, sellers, relocation clients, and property planning clients move through Charlotte-area real estate with thoughtful guidance and honest conversation.",
+        "headline": "Helping you find your fit in Charlotte",
+        "summary": "The right home is not just about square footage or price. It should fit your life. Inga helps you make sense of the neighborhoods, numbers, paperwork, and choices so you can feel good about what comes next.",
         "primaryAction": "Start a conversation",
         "serviceArea": "Charlotte, Huntersville, Cornelius",
-        "specialty": "Property strategy + rental readiness"
+        "specialty": "Buying, selling + finding your fit"
     },
     "about": {
-        "workingStyle": "Clear choices, candid tradeoffs, and calm guidance from first conversation to closing.",
-        "headline": "Sharp, strategic, and genuinely in your corner.",
+        "workingStyle": "Straight answers, plain English, and help finding the move that fits your life.",
+        "headline": "Finding the right fit starts with feeling understood.",
         "paragraphs": [
-            "Buying or selling a home is a big decision, and my goal is to make the process feel clear and manageable from start to finish. Working with the wrong agent can be a 6-figure mistake.",
-            "I work with clients across Charlotte and the surrounding areas, guiding them through options with a steady, thoughtful approach. Some moves happen quickly, and others take time. My role is to help you understand your choices, talk through tradeoffs honestly, and make decisions that align with your goals."
+            "The right move looks different for everyone. My first job is to listen: where you are now, what matters to you, and what you want daily life to feel like after the boxes are unpacked.",
+            "I work with clients across Charlotte and the surrounding areas. You should never feel like you need to speak real estate to understand what is happening. My job is to explain the terms, lay out the choices, and help you find the home, neighborhood, or next step that fits."
         ],
         "stats": [
-            { "label": "Sales volume", "value": "$6.5M+" },
-            { "label": "Google & Zillow rating", "value": "5.0" },
+            { "label": "Charlotte + Lake Norman", "value": "Local" },
+            { "label": "2 Zillow reviews · Sep 2026", "value": "5.0" },
             { "label": "Licensed in both states", "value": "NC & SC" }
         ]
     },
     "services": {
-        "headline": "Focused guidance for the questions that shape your next move.",
-        "summary": "Whether you are comparing neighborhoods, preparing to sell, relocating to the Charlotte area, or exploring income property, Inga helps turn the moving pieces into a clear plan.",
+        "headline": "Find the move that fits where you are now.",
+        "summary": "Whether you are buying, selling, moving to Charlotte, or thinking about a rental, Inga starts with what matters to you and makes the process easier to understand.",
         "items": [
             {
-                "title": "Buy with context",
-                "description": "A grounded plan for neighborhoods, offer strategy, inspections, timelines, and the tradeoffs that matter before you write."
+                "title": "Buying a home",
+                "description": "Find a home and neighborhood that fit your budget, routines, and plans, then understand the offer, inspections, and deadlines before you sign."
             },
             {
-                "title": "Sell with intention",
-                "description": "Pricing, prep, positioning, and negotiation support designed around your timeline and the real buyer pool."
+                "title": "Selling a home",
+                "description": "Make a selling plan that fits your timing and priorities: what to fix, what to skip, how to price, and how to compare offers without the jargon."
             },
             {
-                "title": "Relocate with clarity",
-                "description": "Practical Charlotte-area guidance for clients comparing commute patterns, schools, lifestyle, and long-term fit."
+                "title": "Moving to Charlotte",
+                "description": "Find the part of the Charlotte area that fits your daily life by comparing commutes, school assignments, routines, and the feel of each community."
             },
             {
-                "title": "Plan property strategy",
-                "description": "Helpful conversations for investment properties, short-term rentals, and property management next steps."
+                "title": "Thinking about a rental",
+                "description": "Decide whether renting fits your plans by asking about the rules, costs, insurance, upkeep, and day-to-day work before you count on the income."
             }
         ]
     }

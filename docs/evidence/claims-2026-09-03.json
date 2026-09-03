@@ -1,0 +1,141 @@
+{
+  "subject": "Inga Draper public website claims",
+  "checkedAt": "2026-09-03",
+  "policy": "Consult this file before describing a claim as unverified. Statuses distinguish official verification, current public corroboration, and prior maintainer/owner attestation. Re-check dynamic third-party counts before publication.",
+  "claims": [
+    {
+      "id": "nc-license",
+      "claim": "North Carolina broker license 351209; active and eligible to practice; primary firm eXp Realty LLC",
+      "status": "verified-official",
+      "source": "https://license.ncrec.gov/ncrec/oecgi3.exe/O4W_WRAPPER?ID=O4W_LIC_SHOW_DETAIL_CMP&LIC_NO=351209",
+      "evidence": "NCREC returned License 351209, Type BROKER, Status ACTIVE, Primary Firm EXP REALTY LLC, and stated the broker is presently eligible to practice real estate brokerage in North Carolina.",
+      "refresh": "Before a major redesign and at least annually"
+    },
+    {
+      "id": "sc-license",
+      "claim": "South Carolina real-estate license 147132",
+      "status": "previously-verified-maintainer-attested",
+      "source": "https://verify.llronline.com/LicLookup/Rec/Rec.aspx?div=19",
+      "evidence": "The license number is part of the prior verified site record and was reaffirmed by the authorized maintainer on 2026-09-03. The current official lookup required reCAPTCHA, so a fresh machine-readable official result could not be saved in this run.",
+      "refresh": "Have Inga or the authorized maintainer save a dated official lookup export/screenshot annually"
+    },
+    {
+      "id": "brokerage",
+      "claim": "Inga Draper is affiliated with eXp Realty LLC",
+      "status": "verified-official",
+      "source": "https://license.ncrec.gov/ncrec/oecgi3.exe/O4W_WRAPPER?ID=O4W_LIC_SHOW_DETAIL_CMP&LIC_NO=351209",
+      "publicHomepage": "https://www.exprealty.com/",
+      "evidence": "NCREC lists Primary Firm C22682 EXP REALTY LLC.",
+      "refresh": "Annually"
+    },
+    {
+      "id": "google-business-profile",
+      "claim": "Inga Draper has a Google Business Profile",
+      "status": "verified-stable-place-id-and-owner-attestation",
+      "stableProfileUrl": "https://www.google.com/maps/place/?q=place_id:ChIJbdGzb90THSMRszXPLr08Jmw",
+      "evidence": "Stable Google Place ID ChIJbdGzb90THSMRszXPLr08Jmw resolves through Google Maps and Google's write-review endpoint; the authorized maintainer supplied the profile search and affirmed ownership. Anonymous Google search was CAPTCHA-blocked, so the exact current display name and rating were not asserted from that response.",
+      "refresh": "Annually or after profile edits"
+    },
+    {
+      "id": "google-review-action",
+      "claim": "Stable Google review action for the business profile",
+      "status": "verified-stable-endpoint",
+      "source": "https://search.google.com/local/writereview?placeid=ChIJbdGzb90THSMRszXPLr08Jmw",
+      "evidence": "Google accepted the Place ID and redirected anonymous access to Google sign-in, consistent with a valid review action.",
+      "refresh": "Annually"
+    },
+    {
+      "id": "zillow-rating",
+      "claim": "Zillow rating 5.0 from 2 reviews",
+      "status": "verified-current-public",
+      "source": "https://www.zillow.com/profile/ingaintheqc",
+      "evidence": "Public Zillow output returned 'Inga Draper', 'eXp Realty', and '5.0 2 reviews' on 2026-09-03.",
+      "refresh": "Quarterly; counts are dynamic"
+    },
+    {
+      "id": "zillow-review-nicole",
+      "claim": "Nicole Rodzen testimonial and February 2026 attribution",
+      "status": "verified-current-public",
+      "source": "https://www.zillow.com/profile/ingaintheqc",
+      "evidence": "Zillow showed a 5.0 review dated 2026-02-25 by Nicole Rodzen, including the site's quoted sentence about Inga becoming someone valued beyond the transaction.",
+      "refresh": "Annually"
+    },
+    {
+      "id": "zillow-review-blake",
+      "claim": "Blake Cole testimonial and May 2024 attribution",
+      "status": "verified-current-public",
+      "source": "https://www.zillow.com/profile/ingaintheqc",
+      "evidence": "Zillow showed a 5.0 review dated 2024-05-15 by Blake Cole, including the site's quoted language about needs being met and negotiating a lower purchase price.",
+      "refresh": "Annually"
+    },
+    {
+      "id": "sales-volume-6-5m",
+      "claim": "$6.5M+ sales volume",
+      "status": "previously-verified-maintainer-attested-not-displayed",
+      "source": "internal prior verification; no primary export currently stored",
+      "evidence": "The authorized maintainer stated on 2026-09-03 that this claim had been verified in earlier work. Current public Zillow and Homes.com profiles expose partial and inconsistent transaction histories and cannot independently reproduce the total. Retain the claim only with a defined timeframe/source in the next primary-record refresh.",
+      "refresh": "Before changing the number; save a dated MLS/brokerage report or owner-provided production statement in the private evidence location"
+    },
+    {
+      "id": "phone",
+      "claim": "Public business phone (704) 560-9101",
+      "status": "verified-current-public",
+      "source": "https://trulia.com/home/1548-westbrook-cir-gastonia-nc-28052-5854817",
+      "evidence": "A current listing attribution names Inga Draper, (704) 560-9101, EXP Realty LLC. Additional MLS-distributed listings use the same number.",
+      "refresh": "Annually"
+    },
+    {
+      "id": "youtube",
+      "claim": "Official consumer channel @ingaintheqc / Inga in The QC",
+      "status": "verified-current-public",
+      "source": "https://www.youtube.com/@ingaintheqc",
+      "evidence": "Search results identify 'Inga in The QC' and describe Inga Draper as a Charlotte Realtor with eXp Realty.",
+      "refresh": "Annually"
+    }
+  ],
+  "assetProvenance": [
+    {
+      "asset": "inga-draper-charlotte portrait WebP set",
+      "source": "https://i.ytimg.com/vi/LYM-e6syfmQ/maxresdefault.jpg",
+      "checked": "2026-09-03",
+      "role": "Cropped first-party thumbnail from Inga's linked YouTube video; used for About and service-page imagery."
+    },
+    {
+      "asset": "public/images/social/inga-draper-charlotte-og.jpg",
+      "source": "Derived from the same first-party YouTube thumbnail",
+      "checked": "2026-09-03",
+      "role": "Site-branded 1200 by 630 social preview image."
+    },
+    {
+      "asset": "public/images/property/charlotte-home-hero-*.webp",
+      "source": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=max&w=2200&q=92",
+      "sourceDownloadSha256": "61910928c49de6cccbf15b02cdef8715ed85c44e7f03744df632b759178edf3d",
+      "license": "https://unsplash.com/license",
+      "licenseEvidence": "Unsplash's official help center states that Unsplash images may be used free for commercial purposes without attribution; verified at https://help.unsplash.com/en/articles/2612337-do-i-have-to-give-credit-to-a-contributor-when-i-use-their-image.",
+      "checked": "2026-09-03",
+      "role": "Generic stock interior used as the homepage hero. It is not represented as a listing, transaction, or property marketed by Inga. The six local WebP variants were derived from this source download."
+    }
+  ],
+  "profileInconsistencies": [
+    {
+      "profile": "Zillow",
+      "issue": "The profile's YouTube link surfaced as https://www.youtube.com/@HonestlyCharlotte while the current first-party channel is @ingaintheqc.",
+      "action": "Update Zillow to @ingaintheqc."
+    },
+    {
+      "profile": "Homes.com",
+      "issue": "The public profile surfaced a stale (336) 715-4021 phone number and a partial transaction history.",
+      "action": "Claim/update the profile or request correction to (704) 560-9101."
+    },
+    {
+      "profile": "Experience.com",
+      "issue": "The profile is presented as unclaimed and may contain automatically generated details.",
+      "action": "Claim it only if Inga wants to maintain it; otherwise avoid using it as a primary factual source."
+    },
+    {
+      "profile": "Google Business Profile",
+      "issue": "The stable Place ID is known, but exact display name/rating could not be read anonymously because Google served CAPTCHA/limited Maps data.",
+      "action": "Confirm name, category, phone, website, service area, and review count while signed into Inga's own profile before any rating claim is tied to Google."
+    }
+  ]
+}
