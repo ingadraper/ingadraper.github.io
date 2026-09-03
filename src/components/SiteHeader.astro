@@ -1,0 +1,31 @@
+---
+import { siteConfig } from '../siteConfig';
+
+interface Props {
+    active?: 'answers';
+}
+
+const { active } = Astro.props;
+const { brand } = siteConfig;
+---
+
+<header class="border-b border-white/15 bg-[#2C2927] text-ivory">
+    <nav class="site-shell flex min-h-20 items-center justify-between text-sm" aria-label="Primary navigation">
+        <a href="/" class="flex min-w-0 items-center gap-5 text-ivory sm:gap-6" aria-label={`Inga Draper, ${brand.brokerageName} — home`}>
+            <span class="font-display text-xl font-extrabold sm:text-2xl">Inga Draper</span>
+            <span class="hidden items-center gap-6 sm:flex">
+                <span class="h-8 w-px flex-none bg-white/30" aria-hidden="true"></span>
+                <img src={brand.logos.white} alt={brand.logoAlt} class="h-8 w-auto flex-none" />
+            </span>
+        </a>
+        <div class="hidden items-center gap-8 font-medium text-ivory/85 md:flex">
+            <a href="/#about" class="transition hover:text-ivory">About</a>
+            <a href="/#services" class="transition hover:text-ivory">Services</a>
+            <a href="/#strategy" class="transition hover:text-ivory">Strategy</a>
+            <a href="/answers/" class:list={["transition hover:text-ivory", active === 'answers' && "text-ivory"]}>Answers</a>
+            <a href="/#reviews" class="transition hover:text-ivory">Reviews</a>
+            <a href="/#contact" class="rounded-[6px] border border-ivory/25 bg-ink px-4 py-2 text-ivory transition hover:border-deep-rose hover:bg-deep-rose">Contact</a>
+        </div>
+        <a href="/answers/" class="text-xs font-medium uppercase tracking-[0.14em] text-ivory md:hidden">Answers</a>
+    </nav>
+</header>

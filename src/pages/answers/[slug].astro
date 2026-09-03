@@ -1,142 +1,150 @@
 ---
+import { ArrowLeft, ArrowRight, Check, MapPin } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
 import { answerPages, type AnswerPage } from '../../content/answers';
 import { agentSchema, articleSchema, breadcrumbSchema, faqSchema } from '../../lib/schema';
+import { siteConfig } from '../../siteConfig';
 
 export function getStaticPaths() {
-    return answerPages.map((page) => ({
-        params: { slug: page.slug },
-        props: { page },
-    }));
+    return answerPages.map((page) => ({ params: { slug: page.slug }, props: { page } }));
 }
 
-interface Props {
-    page: AnswerPage;
-}
-
+interface Props { page: AnswerPage }
 const { page } = Astro.props;
 const path = `/answers/${page.slug}/`;
-
-const related = page.related
+const relatedPages = page.related
     .map((slug) => answerPages.find((candidate) => candidate.slug === slug))
     .filter((candidate): candidate is AnswerPage => Boolean(candidate));
-
 const schemas = [
     agentSchema,
-    articleSchema({
-        headline: page.title,
-        description: page.metaDescription,
-        path,
-        datePublished: page.datePublished,
-        dateModified: page.dateModified,
-    }),
-    faqSchema([{ question: page.question, answer: page.answer }, ...page.faqs]),
+    articleSchema(page),
+    faqSchema(page.faqs),
     breadcrumbSchema([
-        { name: 'Home', path: '/' },
-        { name: 'Answers', path: '/answers/' },
-        { name: page.question, path },
+        { name: 'Home', url: 'https://ingadraper.com/' },
+        { name: 'Answers', url: 'https://ingadraper.com/answers/' },
+        { name: page.question, url: `https://ingadraper.com${path}` },
     ]),
 ];
-
-const formattedDate = new Date(`${page.dateModified}T00:00:00Z`).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    timeZone: 'UTC',
-});
+const heroImage = siteConfig.images.about;
+const displayQuestion = page.question.replaceAll('short-term', 'short‑term');
 ---
 
 <BaseLayout title={`${page.title} | Inga Draper`} description={page.metaDescription} path={path} schemas={schemas}>
-    <main class="min-h-screen bg-ivory">
-        <article class="section-band">
-            <div class="site-shell max-w-3xl">
-                <nav aria-label="Breadcrumb" class="text-sm text-smoke">
-                    <a href="/" class="transition hover:text-ink">Home</a>
-                    <span aria-hidden="true" class="px-2">/</span>
-                    <a href="/answers/" class="transition hover:text-ink">Answers</a>
-                </nav>
+    <SiteHeader active="answers" />
 
-                <p class="eyebrow mt-8">{page.category}</p>
+    <main>
+        <section class="relative overflow-hidden bg-[#2C2927] text-ivory">
+            <div class="absolute inset-y-0 right-0 hidden w-[44%] lg:block">
+                <img src={heroImage.src} alt="" class="h-full w-full object-cover opacity-80" />
+                <div class="absolute inset-0 bg-gradient-to-r from-[#2C2927] via-[#2C2927]/30 to-transparent"></div>
+            </div>
 
-                <h1 class="mt-4 text-4xl font-extrabold sm:text-5xl">{page.question}</h1>
-
-                {page.needsVerification && (
-                    <aside class="mt-8 rounded-xl border-2 border-dashed border-deep-rose bg-porcelain p-5">
-                        <p class="text-sm font-medium text-ink">Draft — requires verification before publication</p>
-                        <p class="mt-2 text-sm text-smoke">{page.verificationNote}</p>
-                    </aside>
-                )}
-
-                {/* The extractable direct answer. This is the block an answer engine lifts. */}
-                <div class="mt-8 rounded-xl bg-blush p-6">
-                    <p class="text-lg font-medium leading-relaxed text-ink">{page.answer}</p>
+            <div class="site-shell relative grid min-h-[520px] items-center py-16 lg:grid-cols-[1.05fr_0.75fr] lg:py-20">
+                <div class="max-w-3xl">
+                    <a href="/answers/" class="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-ivory/65 transition hover:text-ivory">
+                        <ArrowLeft class="h-4 w-4" /> Real estate answers
+                    </a>
+                    <p class="mt-8 font-subheading text-sm font-semibold uppercase tracking-[0.2em] text-dusty sm:mt-12">{page.category}</p>
+                    <h1 class="mt-5 max-w-[18ch] text-4xl font-extrabold leading-[1.05] text-ivory sm:text-5xl lg:text-6xl">
+                        {displayQuestion}
+                    </h1>
+                    <p class="mt-7 max-w-xl text-base font-normal leading-7 text-ivory/90 sm:text-lg sm:leading-8">{page.answer}</p>
+                    <div class="mt-8 flex flex-col items-start gap-2 text-sm text-ivory/75 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5">
+                        <span>By {siteConfig.agent.name}, {siteConfig.agent.designation}</span>
+                        <span class="hidden h-1 w-1 rounded-full bg-dusty sm:block"></span>
+                        <span>Updated {new Date(`${page.dateModified}T12:00:00`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                    </div>
                 </div>
+            </div>
+        </section>
 
-                <p class="mt-4 text-sm text-smoke">
-                    By <strong class="font-medium text-ink">Inga Draper</strong>, REALTOR®, eXp Realty ·
-                    <span> Updated <time datetime={page.dateModified}>{formattedDate}</time></span>
-                </p>
+        <section class="bg-ivory py-12 sm:py-20 lg:py-28">
+            <div class="site-shell grid gap-14 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-20">
+                <article class="answer-prose max-w-3xl">
+                    {page.sections.map((section, index) => (
+                        <section class:list={[index > 0 && 'mt-14 border-t border-line/70 pt-14']}>
+                            <p class="eyebrow text-base text-deep-rose">{String(index + 1).padStart(2, '0')}</p>
+                            <h2 class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl">{section.heading}</h2>
+                            <p class="mt-6 text-lg leading-8 text-smoke">{section.body}</p>
+                            {section.bullets && (
+                                <ul class="mt-7 grid gap-4">
+                                    {section.bullets.map((bullet) => (
+                                        <li class="flex gap-4 border-b border-line/55 pb-4 text-base leading-7 text-smoke last:border-0">
+                                            <span class="mt-1.5 flex h-5 w-5 flex-none items-center justify-center rounded-full bg-blush text-deep-rose">
+                                                <Check class="h-3 w-3" stroke-width={2.5} />
+                                            </span>
+                                            <span>{bullet}</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </section>
+                    ))}
+                </article>
 
-                {page.sections.map((section) => (
-                    <section class="mt-12">
-                        <h2 class="text-2xl font-extrabold sm:text-3xl">{section.heading}</h2>
-                        <p class="mt-4 text-lg text-smoke">{section.body}</p>
-                        {section.bullets && (
-                            <ul class="mt-5 space-y-3">
-                                {section.bullets.map((bullet) => (
-                                    <li class="flex gap-3 text-smoke">
-                                        <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-dusty" aria-hidden="true"></span>
-                                        <span>{bullet}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </section>
-                ))}
-
-                <section class="mt-16">
-                    <h2 class="text-2xl font-extrabold sm:text-3xl">Common follow-up questions</h2>
-                    <div class="mt-6 space-y-4">
-                        {page.faqs.map((faq) => (
-                            <div class="soft-card p-6">
-                                <h3 class="text-lg font-extrabold">{faq.question}</h3>
-                                <p class="mt-3 text-smoke">{faq.answer}</p>
+                <aside class="lg:pt-2">
+                    <div class="sticky top-8 overflow-hidden rounded-[8px] border border-line bg-frosted shadow-[0_22px_60px_rgba(122,46,72,0.10)]">
+                        <div class="bg-blush p-7">
+                            <p class="font-subheading text-sm font-semibold uppercase tracking-[0.18em] text-deep-rose">A practical next step</p>
+                            <h2 class="mt-3 text-2xl font-extrabold leading-tight">Start with the specific address.</h2>
+                            <p class="mt-4 text-sm leading-6 text-smoke">Real estate answers change with the property, municipality, timing, and your goals. Inga can help you frame the right questions before a decision gets expensive.</p>
+                        </div>
+                        <div class="space-y-5 p-7">
+                            <div class="flex gap-3 text-sm text-smoke">
+                                <MapPin class="mt-0.5 h-4 w-4 flex-none text-dusty" />
+                                <span>Charlotte, Huntersville, Cornelius, Davidson & Lake Norman</span>
                             </div>
+                            <a href="/#contact" class="btn-primary w-full">Talk with Inga <ArrowRight class="h-4 w-4" /></a>
+                            <p class="text-center text-sm leading-5 text-smoke">NC License #351209 · SC License #147132</p>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="section-band bg-porcelain">
+            <div class="site-shell">
+                <div class="grid gap-10 lg:grid-cols-[0.75fr_1.25fr]">
+                    <div>
+                        <p class="eyebrow">Common questions</p>
+                        <h2 class="mt-4 max-w-md text-4xl font-extrabold sm:text-5xl">The follow-up usually matters most.</h2>
+                    </div>
+                    <div class="divide-y divide-line border-y border-line">
+                        {page.faqs.map((faq) => (
+                            <details class="group py-6">
+                                <summary class="flex cursor-pointer list-none items-start justify-between gap-6 text-lg font-medium text-ink">
+                                    <span>{faq.question}</span>
+                                    <span class="text-2xl font-light text-dusty transition group-open:rotate-45">+</span>
+                                </summary>
+                                <p class="max-w-2xl pt-4 leading-7 text-smoke">{faq.answer}</p>
+                            </details>
                         ))}
                     </div>
-                </section>
-
-                <section class="mt-16 rounded-xl bg-porcelain p-8">
-                    <h2 class="text-2xl font-extrabold">Talk it through with Inga</h2>
-                    <p class="mt-3 text-smoke">
-                        Every property and timeline is different. If you are weighing this decision now, a short
-                        conversation is usually faster than more reading.
-                    </p>
-                    <div class="mt-6 flex flex-wrap gap-4">
-                        <a href="/#contact" class="rounded-full bg-deep-rose px-7 py-3 font-medium text-white transition hover:bg-dusty">
-                            Start a conversation
-                        </a>
-                        <a href="tel:+17045609101" class="rounded-full border border-line px-7 py-3 font-medium text-ink transition hover:bg-blush">
-                            (704) 560-9101
-                        </a>
-                    </div>
-                </section>
-
-                {related.length > 0 && (
-                    <section class="mt-16">
-                        <h2 class="text-2xl font-extrabold">Related questions</h2>
-                        <ul class="mt-6 space-y-3">
-                            {related.map((item) => (
-                                <li>
-                                    <a href={`/answers/${item.slug}/`} class="text-lg text-deep-rose transition hover:text-ink">
-                                        {item.question}
-                                    </a>
-                                </li>
-                            ))}
-                        </ul>
-                    </section>
-                )}
+                </div>
             </div>
-        </article>
+        </section>
+
+        <section class="section-band bg-ivory">
+            <div class="site-shell">
+                <div class="flex flex-col gap-4 border-b border-line pb-8 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="eyebrow">Keep exploring</p>
+                        <h2 class="mt-3 text-4xl font-extrabold">Related questions</h2>
+                    </div>
+                    <a href="/answers/" class="inline-flex items-center gap-2 text-sm font-medium text-ink">View every answer <ArrowRight class="h-4 w-4" /></a>
+                </div>
+                <div class="mt-8 grid gap-px overflow-hidden rounded-[8px] border border-line bg-line md:grid-cols-3">
+                    {relatedPages.map((related) => (
+                        <a href={`/answers/${related.slug}/`} class="group bg-frosted p-7 transition hover:bg-blush">
+                            <p class="font-subheading text-xs font-semibold uppercase tracking-[0.16em] text-slate">{related.category}</p>
+                            <h3 class="mt-4 text-xl font-extrabold leading-snug transition group-hover:text-deep-rose">{related.question}</h3>
+                            <span class="mt-7 inline-flex items-center gap-2 text-sm font-medium text-smoke">Read the answer <ArrowRight class="h-4 w-4" /></span>
+                        </a>
+                    ))}
+                </div>
+            </div>
+        </section>
     </main>
+    <!-- Editorial verification state remains in source data; it is intentionally not public UI. -->
 </BaseLayout>

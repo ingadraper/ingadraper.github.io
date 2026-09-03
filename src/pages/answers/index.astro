@@ -1,74 +1,112 @@
 ---
+import { ArrowRight, MapPin } from '@lucide/astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
 import { answerPages } from '../../content/answers';
 import { agentSchema, breadcrumbSchema } from '../../lib/schema';
+import { siteConfig } from '../../siteConfig';
 
-const categories = ['Buying', 'Selling', 'Relocation', 'Rental strategy', 'Local guide'] as const;
-
-const grouped = categories
-    .map((category) => ({
-        category,
-        pages: answerPages.filter((page) => page.category === category),
-    }))
-    .filter((group) => group.pages.length > 0);
-
+const categoryOrder = ['Buying', 'Selling', 'Relocation', 'Rental strategy', 'Local guide'];
+const categories = categoryOrder
+    .map((category) => ({ category, pages: answerPages.filter((page) => page.category === category) }))
+    .filter(({ pages }) => pages.length);
 const schemas = [
     agentSchema,
-    breadcrumbSchema([
-        { name: 'Home', path: '/' },
-        { name: 'Answers', path: '/answers/' },
-    ]),
     {
         '@context': 'https://schema.org',
         '@type': 'CollectionPage',
-        name: 'Charlotte Real Estate Answers',
+        name: 'Charlotte and Lake Norman Real Estate Answers',
         url: 'https://ingadraper.com/answers/',
-        about: 'Straight answers to questions Charlotte-area buyers, sellers, and investors ask.',
-        hasPart: answerPages.map((page) => ({
-            '@type': 'Article',
-            headline: page.title,
-            url: `https://ingadraper.com/answers/${page.slug}/`,
-        })),
+        description: 'Direct answers to real estate questions from Inga Draper, REALTOR®, serving Charlotte and the Lake Norman area.',
+        author: { '@id': 'https://ingadraper.com/#agent' },
     },
+    breadcrumbSchema([
+        { name: 'Home', url: 'https://ingadraper.com/' },
+        { name: 'Answers', url: 'https://ingadraper.com/answers/' },
+    ]),
 ];
 ---
 
 <BaseLayout
-    title="Charlotte Real Estate Answers | Inga Draper"
-    description="Straight answers to the questions Charlotte, Huntersville, Cornelius, and Lake Norman buyers, sellers, and investors actually ask."
+    title="Charlotte & Lake Norman Real Estate Answers | Inga Draper"
+    description="Clear answers from Inga Draper, REALTOR®, about buying, selling, relocating, rental strategy, and property decisions across Charlotte and Lake Norman."
     path="/answers/"
     schemas={schemas}
 >
-    <main class="min-h-screen bg-ivory">
-        <section class="section-band">
+    <SiteHeader active="answers" />
+
+    <main>
+        <section class="relative min-h-[540px] overflow-hidden bg-[#2C2927] text-ivory">
+            <img src={siteConfig.images.hero.src} alt="" class="absolute inset-0 h-full w-full object-cover opacity-70" />
+            <div class="absolute inset-0 bg-gradient-to-r from-[#2C2927]/95 via-[#2C2927]/70 to-[#5A3437]/15"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#2C2927]/55 via-transparent to-[#2C2927]/15"></div>
+            <div class="site-shell relative flex min-h-[540px] items-end py-16 sm:py-20">
+                <div class="max-w-4xl">
+                    <p class="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-ivory/80">
+                        <MapPin class="h-4 w-4" /> Charlotte + Lake Norman
+                    </p>
+                    <h1 class="mt-5 max-w-[14ch] text-5xl font-extrabold leading-[1.03] text-ivory sm:text-6xl lg:text-7xl">
+                        Clear answers before the decision gets expensive.
+                    </h1>
+                    <p class="mt-7 max-w-xl text-lg font-normal leading-8 text-ivory/90 sm:text-xl">
+                        Practical context for buying, selling, relocating, and evaluating property across Charlotte and the Lake Norman area—from a licensed agent who will tell you where the answer depends.
+                    </p>
+                    <a href="#questions" class="mt-9 inline-flex min-h-12 items-center justify-center gap-2 rounded-[6px] border border-ivory bg-ivory px-6 py-3 text-sm font-medium text-ink transition hover:border-blush hover:bg-blush focus:outline-none focus:ring-2 focus:ring-ivory focus:ring-offset-2 focus:ring-offset-ink">
+                        Explore the questions <ArrowRight class="h-4 w-4" />
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="questions" class="bg-ivory py-16 sm:py-20 lg:py-24">
             <div class="site-shell">
-                <nav aria-label="Breadcrumb" class="text-sm text-smoke">
-                    <a href="/" class="transition hover:text-ink">Home</a>
-                </nav>
+                <div class="grid gap-10 border-b border-line pb-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+                    <div>
+                        <p class="eyebrow">Real estate answers</p>
+                        <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">Start with what you are weighing.</h2>
+                    </div>
+                    <p class="max-w-2xl text-lg leading-8 text-smoke lg:justify-self-end">
+                        Each guide begins with a direct answer, then shows the tradeoffs, documents, and local questions worth checking before you act.
+                    </p>
+                </div>
 
-                <p class="eyebrow mt-8">Answers</p>
-                <h1 class="mt-4 max-w-3xl text-4xl font-extrabold sm:text-5xl">
-                    Straight answers to the questions people actually ask.
-                </h1>
-                <p class="mt-6 max-w-2xl text-lg text-smoke">
-                    Each page answers one question directly, then explains the reasoning behind it. If your
-                    situation is not covered here, ask Inga and it will likely become a page.
-                </p>
+                <div class="mt-16 space-y-20">
+                    {categories.map(({ category, pages }, categoryIndex) => (
+                        <section class="grid gap-8 lg:grid-cols-[220px_1fr]">
+                            <div>
+                                <p class="font-subheading text-sm font-semibold uppercase tracking-[0.18em] text-slate">{String(categoryIndex + 1).padStart(2, '0')}</p>
+                                <h2 class="mt-2 text-3xl font-extrabold">{category}</h2>
+                            </div>
+                            <div class="grid gap-px overflow-hidden rounded-[8px] border border-line bg-line md:grid-cols-2">
+                                {pages.map((page) => (
+                                    <a href={`/answers/${page.slug}/`} class="group flex min-h-64 flex-col justify-between bg-frosted p-8 transition hover:bg-blush">
+                                        <div>
+                                            <p class="text-xs font-medium uppercase tracking-[0.14em] text-dusty">Charlotte-area guidance</p>
+                                            <h3 class="mt-4 text-2xl font-extrabold leading-tight transition group-hover:text-deep-rose">{page.question}</h3>
+                                            <p class="mt-5 line-clamp-3 text-sm leading-7 text-smoke">{page.answer}</p>
+                                        </div>
+                                        <span class="mt-8 inline-flex items-center gap-2 text-sm font-medium text-ink">Read Inga's answer <ArrowRight class="h-4 w-4 transition-transform group-hover:translate-x-1" /></span>
+                                    </a>
+                                ))}
+                            </div>
+                        </section>
+                    ))}
+                </div>
+            </div>
+        </section>
 
-                {grouped.map((group) => (
-                    <section class="mt-14">
-                        <h2 class="text-2xl font-extrabold">{group.category}</h2>
-                        <div class="mt-6 grid gap-4 md:grid-cols-2">
-                            {group.pages.map((page) => (
-                                <a href={`/answers/${page.slug}/`} class="soft-card block p-6 transition hover:border-dusty">
-                                    <h3 class="text-xl font-extrabold">{page.question}</h3>
-                                    <p class="mt-3 text-sm text-smoke">{page.answer.slice(0, 150)}…</p>
-                                    <p class="mt-4 text-sm font-medium text-deep-rose">Read the answer →</p>
-                                </a>
-                            ))}
-                        </div>
-                    </section>
-                ))}
+        <section class="relative overflow-hidden bg-blush">
+            <div class="site-shell grid lg:grid-cols-2">
+                <div class="flex flex-col justify-center py-20 sm:py-24 lg:pr-20">
+                    <p class="eyebrow">The answer is rarely the whole decision</p>
+                    <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">Bring the address. Bring the tradeoffs.</h2>
+                    <p class="mt-6 max-w-xl text-lg leading-8 text-smoke">Online guidance gets you oriented. The useful conversation begins when the property, timing, financing, and your actual goals are in the room together.</p>
+                    <a href="/#contact" class="btn-primary mt-8 w-fit">Start a conversation <ArrowRight class="h-4 w-4" /></a>
+                </div>
+                <div class="relative min-h-[420px] lg:min-h-[560px]">
+                    <img src={siteConfig.images.about.src} alt={siteConfig.images.about.alt} class="absolute inset-0 h-full w-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-r from-blush/50 to-transparent lg:from-blush/20"></div>
+                </div>
             </div>
         </section>
     </main>

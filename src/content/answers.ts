@@ -47,8 +47,8 @@ export const answerPages: AnswerPage[] = [
         answer:
             'It depends on the specific address, not the region. Short-term rental permission in the Charlotte area is set by three independent layers: municipal zoning, HOA covenants, and your insurance carrier. Any one of them can prohibit it outright. Confirm all three in writing before you make an offer.',
         category: 'Rental strategy',
-        datePublished: '2026-09-03',
-        dateModified: '2026-09-03',
+        datePublished: '2026-09-02',
+        dateModified: '2026-09-02',
         needsVerification: true,
         verificationNote:
             'Municipal ordinance specifics for Charlotte, Huntersville, Cornelius, Davidson, and Mooresville must be verified against each current city code before publication, and re-checked at least twice yearly.',
@@ -107,8 +107,8 @@ export const answerPages: AnswerPage[] = [
         answer:
             'Choose your commute tolerance before you choose a neighborhood. In the Charlotte area, most relocation regret traces to underestimating drive times across the lake and river crossings, or assuming school assignment follows the mailing address. Both should be verified for a specific parcel before you commit.',
         category: 'Relocation',
-        datePublished: '2026-09-03',
-        dateModified: '2026-09-03',
+        datePublished: '2026-09-02',
+        dateModified: '2026-09-02',
         needsVerification: true,
         verificationNote:
             'School assignment mechanics and any district-boundary claims must be verified against the current CMS and Iredell-Statesville assignment tools before publication.',
@@ -157,8 +157,8 @@ export const answerPages: AnswerPage[] = [
         answer:
             'Understand the due diligence fee first. In North Carolina, buyers typically pay a non-refundable due diligence fee directly to the seller for the right to inspect and terminate. It is credited at closing if you proceed, but you generally lose it if you walk away. Budget it as real money at risk.',
         category: 'Buying',
-        datePublished: '2026-09-03',
-        dateModified: '2026-09-03',
+        datePublished: '2026-09-02',
+        dateModified: '2026-09-02',
         needsVerification: true,
         verificationNote:
             'North Carolina due diligence and earnest money mechanics must be verified against the current NC Association of REALTORS® standard form and Real Estate Commission guidance before publication.',
@@ -213,8 +213,8 @@ export const answerPages: AnswerPage[] = [
         answer:
             'Decide based on your timeline and the capital gains exclusion clock, not on current rent estimates. If the property was your primary residence for two of the last five years, you may qualify for a significant gains exclusion when selling. Converting to a rental starts eroding that window, which is often the largest number in the decision.',
         category: 'Selling',
-        datePublished: '2026-09-03',
-        dateModified: '2026-09-03',
+        datePublished: '2026-09-02',
+        dateModified: '2026-09-02',
         needsVerification: true,
         verificationNote:
             'Capital gains exclusion mechanics are federal tax matters. This page must be reviewed for accuracy and must direct readers to a CPA. Real estate licensees should not give tax advice.',
@@ -264,8 +264,8 @@ export const answerPages: AnswerPage[] = [
         answer:
             'Verify the covenant restrictions before you evaluate the returns. Near Lake Norman, many subdivisions impose minimum lease terms that eliminate short-term rental use entirely, and some restrict rentals altogether. A property that fails this test cannot produce the income the pro forma assumes, regardless of how strong the numbers look.',
         category: 'Rental strategy',
-        datePublished: '2026-09-03',
-        dateModified: '2026-09-03',
+        datePublished: '2026-09-02',
+        dateModified: '2026-09-02',
         needsVerification: true,
         verificationNote:
             'Any claim about specific subdivisions, lake access rules, dock permitting, or municipal boundaries must be verified against current recorded covenants and the relevant authority before publication.',
@@ -311,8 +311,8 @@ export const answerPages: AnswerPage[] = [
         answer:
             'Each town trades one thing for another. Closer-in Charlotte trades space for commute. Huntersville and Cornelius trade commute for lake access and newer construction. Davidson trades inventory for walkability. Mooresville trades drive time for land. Pick the tradeoff you can live with daily, then search inside it.',
         category: 'Local guide',
-        datePublished: '2026-09-03',
-        dateModified: '2026-09-03',
+        datePublished: '2026-09-02',
+        dateModified: '2026-09-02',
         needsVerification: true,
         verificationNote:
             'Any price bands, inventory levels, tax rates, or school data added to this page must be sourced and dated, and refreshed at least quarterly.',
