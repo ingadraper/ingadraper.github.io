@@ -209,7 +209,7 @@ const baseAnswerPages: AnswerPage[] = [
             },
             {
                 question: 'When should I sign a buyer agency agreement?',
-                answer: 'North Carolina Real Estate Commission guidance says an oral agency relationship must be put in writing no later than the time an offer is made. The agreement should define the broker’s duties and compensation before you commit.',
+                answer: 'North Carolina rules require the agreement to be express, written, and signed no later than the time either party makes an offer. An agreement that immediately binds or restricts the buyer must be written from formation. Review its duties, duration, exclusivity, and compensation before signing.',
             },
         ],
         related: ['relocating-to-charlotte', 'charlotte-area-neighborhood-comparison'],
@@ -241,8 +241,12 @@ const baseAnswerPages: AnswerPage[] = [
                     'Property management, if you will not self-manage from where you are moving.',
                     'Maintenance and capital reserve for systems that will eventually need replacement.',
                     'Landlord insurance, which differs from your current homeowner policy.',
-                    'Tax treatment changes, including depreciation and its recapture at sale.',
+                    'Tax treatment changes, including depreciation allowed or allowable and the resulting taxable gain at sale.',
                 ],
+            },
+            {
+                heading: 'Becoming a landlord adds legal duties',
+                body: 'North Carolina law requires landlords to keep covered premises fit and habitable and maintain specified systems. The Tenant Security Deposit Act regulates custody, permitted deductions, deposit caps, and accounting deadlines. A property manager or North Carolina attorney should apply the complete current requirements to the proposed tenancy and lease.',
             },
             {
                 heading: 'When holding tends to make sense',
@@ -317,9 +321,9 @@ const baseAnswerPages: AnswerPage[] = [
         question: 'How do Charlotte-area towns compare for buyers?',
         title: 'Charlotte, Huntersville, Cornelius, Davidson, and Mooresville: How They Compare',
         metaDescription:
-            'A practical comparison of Charlotte-area towns for buyers weighing commute, housing stock, lake access, and long-term fit across the Lake Norman corridor.',
+            'An objective process for comparing Charlotte, Huntersville, Cornelius, Davidson, and Mooresville by jurisdiction, school district, utilities, zoning, and actual commute route.',
         answer:
-            'Each town trades one thing for another. Closer-in Charlotte trades space for commute. Huntersville and Cornelius trade commute for lake access and newer construction. Davidson trades inventory for walkability. Mooresville trades drive time for land. Pick the tradeoff you can live with daily, then search inside it.',
+            'Compare the exact address, not a town stereotype. Charlotte, Huntersville, Cornelius, Davidson, and Mooresville use different planning records, and postal names do not settle county, school district, utilities, or zoning. Lake Norman spans four counties. Verify the parcel, then test the real commute route and services against the buyer’s stated criteria.',
         category: 'Local guide',
         datePublished: '2026-09-02',
         dateModified: '2026-09-02',
@@ -344,6 +348,10 @@ const baseAnswerPages: AnswerPage[] = [
             {
                 heading: 'What to verify for any specific address',
                 body: 'Regardless of town, the same parcel-level items decide whether a property works: school assignment for that exact parcel, actual drive time on your real route at your real hour, HOA covenants and dues, flood and insurance considerations, and any pending development nearby that will change the area.',
+            },
+            {
+                heading: 'Commute comparisons need current route facts',
+                body: 'NCDOT says the I-77 Express Lanes run from Exit 11 in Mecklenburg County to Exit 36 at N.C. 150 in Iredell County, with a choice between tolled express lanes and free general-purpose lanes. NCDOT is also widening N.C. 150 and adding a westbound Lake Norman bridge, with completion scheduled for spring 2030. Check live conditions and project updates rather than promising a fixed travel time.',
             },
         ],
         faqs: [

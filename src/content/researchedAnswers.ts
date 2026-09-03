@@ -10,9 +10,9 @@ export const researchedAnswerPages: AnswerPage[] = [
         question: 'How does the due diligence fee work in North Carolina?',
         title: 'North Carolina Due Diligence Fee: What Buyers Need to Know',
         metaDescription:
-            'The North Carolina Real Estate Commission explains what the due diligence fee buys, when it is credited, and the limited situations in which it may be refunded.',
+            'The North Carolina standard purchase contract explains what the due diligence fee buys, when it is credited, and why financing and appraisal timing matter.',
         answer:
-            'In North Carolina, the due diligence fee pays the seller for the buyer’s negotiated right to terminate during the due diligence period. It is generally nonrefundable, including after a low appraisal or loan denial. If the purchase closes, the fee is credited to the buyer at closing.',
+            'Under North Carolina’s standard purchase contract, the due diligence fee is a negotiated amount, if any, paid for the buyer’s termination right during the due diligence period. It is generally nonrefundable and credited at closing. The form has no general loan or appraisal contingency, so timing matters.',
         category: 'Buying',
         datePublished: '2026-09-02',
         dateModified: '2026-09-02',
@@ -20,7 +20,7 @@ export const researchedAnswerPages: AnswerPage[] = [
         sections: [
             {
                 heading: 'What the fee actually buys',
-                body: 'The North Carolina Real Estate Commission describes the fee as payment for the buyer’s right to terminate the contract for any reason or no reason during the negotiated due diligence period. The amount and length of that period are negotiable; there is no universal amount that is “normal” for every transaction.',
+                body: 'NC REALTORS’ July 2026 changes document for the NC REALTORS/NC Bar standard contract describes the fee as a negotiated amount, if any, paid for the buyer’s right to terminate for any reason or no reason during the negotiated period. NCREC also states that neither a due diligence fee nor earnest money is required by law. The signed contract can nevertheless make an agreed payment binding.',
             },
             {
                 heading: 'When the money comes back—and when it does not',
@@ -28,7 +28,7 @@ export const researchedAnswerPages: AnswerPage[] = [
             },
             {
                 heading: 'Why the deadline matters',
-                body: 'Inspections, specialist evaluations, repair negotiations, financing work, insurance review, and title questions all compete for the same negotiated period. A useful offer strategy budgets both the fee and enough calendar time to complete the investigations that matter for that property.',
+                body: 'The standard form expressly says it has no general loan or appraisal contingency. Inspections, specialist evaluations, repair negotiations, financing, appraisal, insurance, and title questions therefore compete for the same negotiated period. An addendum or nonstandard contract can change the result, so the executed documents control.',
                 bullets: [
                     'Schedule general and specialist inspections immediately after contract formation.',
                     'Confirm lender and appraisal timing before proposing the deadline.',
@@ -50,6 +50,10 @@ export const researchedAnswerPages: AnswerPage[] = [
                 question: 'Is there a standard due diligence fee?',
                 answer: 'No. The amount and the due diligence period are negotiated for each offer. Price, competition, property condition, investigation needs, and the buyer’s risk tolerance all matter.',
             },
+            {
+                question: 'Is a due diligence fee required by North Carolina law?',
+                answer: 'No. NCREC states that neither a due diligence fee nor earnest money is required by law. A seller can still require or negotiate either as a term of the offer, and the signed contract governs the parties’ obligations.',
+            },
         ],
         related: ['first-time-home-buyer-charlotte', 'verify-zoning-before-buying-charlotte-area'],
     },
@@ -58,9 +62,9 @@ export const researchedAnswerPages: AnswerPage[] = [
         question: 'How do I verify the school assignment for a Charlotte-area address?',
         title: 'How to Verify a School Assignment in Charlotte and Lake Norman',
         metaDescription:
-            'Use the current CMS boundary maps or Iredell-Statesville enrollment resources to verify school assignment for the exact property address rather than relying on a listing.',
+            'Use current CMS, Iredell-Statesville, or Mooresville Graded address resources to verify school assignment and check announced boundary changes for the relevant year.',
         answer:
-            'Verify schools with the district for the exact property address and school year. Charlotte-Mecklenburg Schools publishes current student-boundary maps, while Iredell-Statesville Schools verifies domicile during enrollment. A listing, neighborhood name, or nearby school is not authoritative, and assignments or boundaries can change.',
+            'Verify with the governing district for the exact property and school year. CMS and Iredell-Statesville offer address-based tools; Mooresville Graded is separate and domicile-based. Iredell-Statesville is planning 2027–28 zones for two new schools, potentially affecting Lake Norman High and other boundaries. A listing or current assignment is not a future guarantee.',
         category: 'Relocation',
         datePublished: '2026-09-02',
         dateModified: '2026-09-02',
@@ -68,7 +72,7 @@ export const researchedAnswerPages: AnswerPage[] = [
         sections: [
             {
                 heading: 'Start with the district, not the listing',
-                body: 'Charlotte-area addresses can fall into different school systems, and a postal city does not necessarily identify the governing district. For Mecklenburg County, use Charlotte-Mecklenburg Schools’ current boundary resources. For an Iredell-Statesville address, use the district’s enrollment and domicile-verification process.',
+                body: 'Charlotte-area addresses can fall into different school systems, and a postal city does not necessarily identify the governing district. CMS and Iredell-Statesville publish address tools. Mooresville Graded School District is separate from Iredell-Statesville and generally limits enrollment to students meeting its domicile or residence requirements.',
             },
             {
                 heading: 'Verify the exact address and year',
@@ -83,6 +87,10 @@ export const researchedAnswerPages: AnswerPage[] = [
             {
                 heading: 'Keep the real-estate conversation objective',
                 body: 'An agent can help identify the district tools and document the buyer’s stated criteria, but should not rank schools or steer a client toward or away from a community. Families can review district programs and independent state data, then decide which factors fit their needs.',
+            },
+            {
+                heading: 'Check the year after the move, too',
+                body: 'Iredell-Statesville says potential 2027–28 boundaries tied to Weather’s Creek High and Parkertown Elementary may affect several existing zones, including Lake Norman High. CMS also uses a public process for periodic boundary changes. Treat today’s assignment as year-specific and recheck announced changes before relying on it.',
             },
         ],
         faqs: [
@@ -102,9 +110,9 @@ export const researchedAnswerPages: AnswerPage[] = [
         question: 'What should I verify before buying Lake Norman waterfront property?',
         title: 'Lake Norman Waterfront Property: Dock, Shoreline, Flood, and Lot Checks',
         metaDescription:
-            'Before buying Lake Norman waterfront property, verify Duke Energy shoreline authorization, municipal setbacks and buffers, FEMA flood information, and private covenants for the exact parcel.',
+            'Before buying Lake Norman waterfront property, verify Duke Energy shoreline authorization, local zoning, FEMA flood information, septic or sewer capacity, wells, and private covenants.',
         answer:
-            'Before buying Lake Norman waterfront property, verify four separate records for the exact parcel: Duke Energy shoreline authorization, municipal zoning and watershed restrictions, FEMA flood information, and private covenants. Existing water access or a neighboring dock does not prove that a new dock, replacement, expansion, or shoreline project will be approved.',
+            'Before buying Lake Norman waterfront property, verify Duke Energy shoreline authorization, local zoning, FEMA flood information, septic or sewer capacity, private-well records, and recorded covenants for the exact parcel. Existing water access or a neighboring dock does not prove that a dock replacement, expansion, shoreline project, or higher bedroom count will be approved.',
         category: 'Buying',
         datePublished: '2026-09-02',
         dateModified: '2026-09-02',
@@ -128,6 +136,10 @@ export const researchedAnswerPages: AnswerPage[] = [
                 heading: 'A neighboring dock is not an approval',
                 body: 'Duke’s Shoreline Management Plan uses shoreline classifications and project-specific review. Conditions can differ from one cove or parcel to the next. Make the intended use part of due diligence and obtain written answers from the relevant authority before relying on a future improvement.',
             },
+            {
+                heading: 'Lake Norman is a four-county record search',
+                body: 'North Carolina law defines Lake Norman across Catawba, Iredell, Lincoln, and Mecklenburg counties. Each county maintains its own septic or private-well process. Match existing permits to the parcel, dwelling, bedroom count, and improvements; then use qualified inspections or water testing because a historical record does not establish present condition or capacity.',
+            },
         ],
         faqs: [
             {
@@ -141,6 +153,10 @@ export const researchedAnswerPages: AnswerPage[] = [
             {
                 question: 'Can I assume I can replace a dock with a larger one?',
                 answer: 'No. Replacement or expansion can require project-specific approval under current shoreline rules. Verify the proposed dimensions and location before purchase.',
+            },
+            {
+                question: 'Does an old septic permit prove the system supports my plans?',
+                answer: 'No. Confirm that the permit matches the current dwelling, bedroom count, additions, and parcel. Ask the responsible county about existing records and obtain appropriate condition and capacity evaluations before relying on expansion or rental occupancy.',
             },
         ],
         related: ['buying-investment-property-lake-norman', 'verify-zoning-before-buying-charlotte-area'],
