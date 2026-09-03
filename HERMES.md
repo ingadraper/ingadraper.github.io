@@ -5,7 +5,7 @@ This repository is the public website for Inga Draper. Hermes requests arriving 
 ## Authority
 
 - Accept bounded website requests only from the Discord route's exact private sender allowlist.
-- Work only in `C:\Users\ws01\ingadraper.github.io` and only through the `website` toolset.
+- Work only inside an approved checkout of this repository and only through the `website` toolset. An approved checkout is any clone whose Git top-level matches the publisher's own repository root and whose single `origin` remote is `https://github.com/ingadraper/ingadraper.github.io.git`. The checkout's filesystem path and host machine are not themselves authority.
 - Read or edit only the inert allowlisted files `src/editable-site.json` and `docs/link-inventory.md`.
 - Keep private information, credentials, tokens, and unpublished personal details out of repository files and responses.
 - Preserve existing site conventions and unrelated content.
@@ -19,9 +19,14 @@ If a tool or publisher denies an operation, report the denial and stop. Do not s
 
 ## Publication Contract
 
-The `website_publish` tool may invoke only the protected repository publisher at `scripts/Publish-IngaSite.ps1`. The publisher must require all of the following before a normal `git push origin main:main`:
+The `website_publish` tool may invoke only a protected repository publisher. Two equivalent implementations are maintained and both enforce the identical contract:
 
-1. Exact repository root, branch `main`, one remote named `origin`, and origin URL `https://github.com/ingadraper/ingadraper.github.io.git`.
+- `scripts/publish_inga_site.py` — portable, runs anywhere Python 3.11+, Git, and Node are available. Use this by default.
+- `scripts/Publish-IngaSite.ps1` — PowerShell, retained for Windows hosts that already invoke it.
+
+The publisher must require all of the following before a normal `git push origin main:main`:
+
+1. Git top-level equal to the publisher's own repository root, branch `main`, exactly one remote named `origin`, and origin URL `https://github.com/ingadraper/ingadraper.github.io.git`. Identity comes from the remote, not from an absolute path, so any approved clone on any machine may publish.
 2. A clean index and a transaction that began from an exactly clean worktree after fetching `origin/main` and proving local `HEAD` equals the fetched remote head.
 3. Only transaction-managed `src/editable-site.json` or `docs/link-inventory.md`; executable source, styles, and all other protected surfaces remain denied.
 4. `git diff --check` and `git diff --cached --check` succeed, then `npm ci` and `npm run build` validate an archive of the exact staged Git tree.

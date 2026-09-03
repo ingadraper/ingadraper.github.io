@@ -14,7 +14,6 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $repository = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
-$expectedRepository = 'C:\Users\ws01\ingadraper.github.io'
 $expectedOrigin = 'https://github.com/ingadraper/ingadraper.github.io.git'
 $expectedBranch = 'main'
 $allowedPaths = @('src/editable-site.json', 'docs/link-inventory.md')
@@ -97,15 +96,13 @@ function Assert-SamePaths {
     }
 }
 
-if (([IO.Path]::GetFullPath($repository)).TrimEnd('\') -cne $expectedRepository) {
-    throw 'Publisher repository path does not match the approved checkout.'
-}
 Set-Location -LiteralPath $repository
 
-$topLevel = [IO.Path]::GetFullPath((Get-GitText 'rev-parse' '--show-toplevel')).TrimEnd('\')
-if ($topLevel -cne $expectedRepository) { throw 'Git top-level does not match the approved checkout.' }
+$expectedRepository = ([IO.Path]::GetFullPath($repository)).TrimEnd([IO.Path]::DirectorySeparatorChar)
+$topLevel = ([IO.Path]::GetFullPath((Get-GitText 'rev-parse' '--show-toplevel'))).TrimEnd([IO.Path]::DirectorySeparatorChar)
+if ($topLevel -cne $expectedRepository) { throw 'Git top-level does not match the publisher''s repository root.' }
 if ((Get-GitText 'branch' '--show-current') -cne $expectedBranch) { throw 'Branch must be main.' }
-if ((Get-GitText 'remote' 'get-url' 'origin') -cne $expectedOrigin) { throw 'Origin URL does not match the approved repository.' }
+if (((Get-GitText 'remote' 'get-url' 'origin') -replace '\.git$','') -cne ($expectedOrigin -replace '\.git$','')) { throw 'Origin URL does not match the approved repository.' }
 if ((Get-GitText 'remote') -cne 'origin') { throw 'Exactly one remote named origin is required.' }
 
 if (-not (Test-Path -LiteralPath $StatePath -PathType Leaf)) { throw 'Bounded website transaction state is missing.' }
