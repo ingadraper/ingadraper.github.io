@@ -319,9 +319,9 @@ export const sourceSets: Record<string, ResearchSource[]> = {
             checked: '2026-09-02',
         },
         {
-            title: 'Huntersville Zoning Maps and Ordinances',
+            title: 'Huntersville Zoning',
             publisher: 'Town of Huntersville',
-            url: 'https://www.huntersville.org/269/Zoning-Maps-Ordinances',
+            url: 'https://www.huntersville.org/3124/Zoning',
             checked: '2026-09-02',
         },
         {

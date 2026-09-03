@@ -72,7 +72,7 @@ const baseAnswerPages: AnswerPage[] = [
                 bullets: [
                     'Cornelius: Land Development Code §5.3.44 requires a Transient Occupancy Permit for each residence, limits operation to one individual tenancy within a seven-consecutive-day period, and requires a local contact available 24 hours a day.',
                     'Davidson: its Planning Ordinance defines residential uses as long-term habitation and expressly excludes leasing or rental of less than one month. Ask Planning how a proposed short-term use is classified and whether it is available in that planning area.',
-                    'Unincorporated Iredell County: the county says its 2023 STR zoning regulations have been under a court order that stopped enforcement pending final adjudication. Proposed amendments were presented in January 2026, so current enforcement status must be confirmed directly.',
+                    'Unincorporated Iredell County: the county says its 2023 STR zoning regulations have been under a court order that stopped enforcement pending final adjudication. Confirm the current enforcement status directly before relying on the regulation or the pause.',
                     'Charlotte, Huntersville, and Mooresville: do not interpret the absence of a simple public FAQ as permission. Request a written answer for the parcel and proposed operating model.',
                 ],
             },
@@ -356,12 +356,12 @@ const baseAnswerPages: AnswerPage[] = [
         ],
         faqs: [
             {
-                question: 'Which Charlotte-area town is best for families?',
-                answer: 'There is no single answer, because school assignment is parcel-level and family priorities differ. The more useful question is which tradeoff you accept: commute time, lot size, walkability, or inventory competitiveness.',
+                question: 'How should I compare Charlotte-area towns?',
+                answer: 'Rank your own criteria—commute route, housing requirements, land-use rules, utilities, school-assignment verification, and access to the places you use—then test each exact address against official records. No town-level label replaces parcel-specific review.',
             },
             {
-                question: 'Is Lake Norman access worth the commute?',
-                answer: 'It depends on how often you would actually use the water and how much your schedule tolerates crossing-dependent traffic. Drive the commute at your real departure time before deciding.',
+                question: 'How should commute affect a Lake Norman search?',
+                answer: 'Use the actual origin, destination, departure time, and route. Test it in both directions and review current NCDOT project information; a town-wide drive-time estimate is not reliable for a specific address.',
             },
         ],
         related: ['relocating-to-charlotte', 'buying-investment-property-lake-norman'],
