@@ -14,5 +14,8 @@
         "postcss": "^8.5.6",
         "tailwindcss": "^3.4.19",
         "typescript": "^5.9.3"
+    },
+    "dependencies": {
+        "@astrojs/sitemap": "^3.7.4"
     }
 }

@@ -5,9 +5,14 @@ import { siteConfig } from '../siteConfig';
 interface Props {
     title: string;
     description: string;
+    /** Canonical path for this page, e.g. "/answers/relocating-to-charlotte/". */
+    path?: string;
+    /** JSON-LD graphs to emit in the head. */
+    schemas?: unknown[];
 }
 
-const { title, description } = Astro.props;
+const { title, description, path = '/', schemas = [] } = Astro.props;
+const canonical = new URL(path, 'https://ingadraper.com').href;
 const chatWidgetId = siteConfig.connectors.goHighLevelChatWidgetId || import.meta.env.PUBLIC_GHL_CHAT_WIDGET_ID;
 const { agent, brand, compliance } = siteConfig;
 const footerLineOne = `${agent.name}, ${agent.designation} | ${brand.brokerageName}`;
@@ -25,8 +30,17 @@ const footerLineThree = `© 2026 ${agent.name} | ${brand.brokerageName}. Equal H
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://ingadraper.com" />
-        <link rel="canonical" href="https://ingadraper.com" />
+        <meta property="og:url" content={canonical} />
+        <meta property="og:site_name" content={agent.name} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="author" content={agent.name} />
+        <link rel="canonical" href={canonical} />
+        <link rel="sitemap" href="/sitemap-index.xml" />
+        {schemas.map((schema) => (
+            <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+        ))}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75' fill='%23B05070'>I</text></svg>" />
     </head>
     <body>
@@ -51,6 +65,7 @@ const footerLineThree = `© 2026 ${agent.name} | ${brand.brokerageName}. Equal H
                             <li><a href="#about" class="transition hover:text-ink">About</a></li>
                             <li><a href="#services" class="transition hover:text-ink">Services</a></li>
                             <li><a href="#strategy" class="transition hover:text-ink">Strategy</a></li>
+                            <li><a href="/answers/" class="transition hover:text-ink">Answers</a></li>
                             <li><a href="#contact" class="transition hover:text-ink">Contact</a></li>
                         </ul>
                     </div>
