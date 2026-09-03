@@ -7,6 +7,41 @@ import { sourceSets } from '../../content/sources';
 import { agentSchema, articleSchema, breadcrumbSchema, faqSchema } from '../../lib/schema';
 import { siteConfig } from '../../siteConfig';
 
+function validateAnswerContent() {
+    const slugs = answerPages.map((page) => page.slug);
+    const slugSet = new Set(slugs);
+    const duplicateSlugs = slugs.filter((slug, index) => slugs.indexOf(slug) !== index);
+    const missingSourceSets = slugs.filter((slug) => !sourceSets[slug]?.length);
+    const orphanedSourceSets = Object.keys(sourceSets).filter((slug) => !slugSet.has(slug));
+    const invalidSourceDates = Object.entries(sourceSets).flatMap(([slug, sources]) =>
+        sources
+            .filter((source) =>
+                !/^\d{4}-\d{2}-\d{2}$/.test(source.checked)
+                || Number.isNaN(Date.parse(`${source.checked}T00:00:00Z`)),
+            )
+            .map((source) => `${slug} -> ${source.checked}`),
+    );
+    const invalidRelated = answerPages.flatMap((page) =>
+        page.related
+            .filter((slug) => !slugSet.has(slug))
+            .map((slug) => `${page.slug} -> ${slug}`),
+    );
+
+    const errors = [
+        duplicateSlugs.length && `duplicate answer slugs: ${duplicateSlugs.join(', ')}`,
+        missingSourceSets.length && `answer slugs without sources: ${missingSourceSets.join(', ')}`,
+        orphanedSourceSets.length && `source sets without answers: ${orphanedSourceSets.join(', ')}`,
+        invalidSourceDates.length && `sources with invalid checked dates: ${invalidSourceDates.join(', ')}`,
+        invalidRelated.length && `invalid related-answer slugs: ${invalidRelated.join(', ')}`,
+    ].filter(Boolean);
+
+    if (errors.length) {
+        throw new Error(`Answer content validation failed: ${errors.join('; ')}`);
+    }
+}
+
+validateAnswerContent();
+
 export function getStaticPaths() {
     const includeUnverified = process.env.INCLUDE_UNVERIFIED_ANSWERS === 'true';
     const visiblePages = includeUnverified
@@ -38,6 +73,17 @@ const schemas = [
 const heroImage = siteConfig.images.about;
 const displayQuestion = page.question.replaceAll('short-term', 'short‑term');
 const sources = sourceSets[page.slug] ?? [];
+const sourceKicker = page.needsVerification ? 'Research inputs' : 'Checked sources';
+const sourceHeading = page.needsVerification ? 'Verification required' : 'Primary-source research';
+const sourceDescription = page.needsVerification
+    ? 'These official sources substantiate specific factual inputs, not every statement on this draft page. This page remains excluded from production until the remaining legal, tax, insurance, market, or business claims receive appropriate review.'
+    : 'These official sources support the factual guidance on this page. Rules and boundaries can change, so each source was checked on the date shown.';
+const formatSourceDate = (date: string) =>
+    new Date(`${date}T12:00:00`).toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+    });
 ---
 
 <BaseLayout title={`${page.title} | Inga Draper`} description={page.metaDescription} path={path} schemas={schemas}>
@@ -117,10 +163,10 @@ const sources = sourceSets[page.slug] ?? [];
             <section class="border-y border-line bg-frosted py-12 sm:py-16">
                 <div class="site-shell grid gap-7 lg:grid-cols-[0.55fr_1.45fr] lg:gap-16">
                     <div>
-                        <p class="eyebrow">Checked sources</p>
-                        <h2 class="mt-3 text-3xl font-extrabold">Primary-source research</h2>
+                        <p class="eyebrow">{sourceKicker}</p>
+                        <h2 class="mt-3 text-3xl font-extrabold">{sourceHeading}</h2>
                         <p class="mt-4 max-w-md text-sm leading-6 text-smoke">
-                            These official sources support the factual guidance on this page. Rules and boundaries can change, so each source was checked on the date shown.
+                            {sourceDescription}
                         </p>
                     </div>
                     <ol class="grid gap-3">
@@ -132,7 +178,7 @@ const sources = sourceSets[page.slug] ?? [];
                                         <strong class="block text-base font-semibold text-ink transition group-hover:text-deep-rose">{source.title}</strong>
                                         <span class="mt-1 block text-sm text-smoke">{source.publisher}</span>
                                     </span>
-                                    <span class="text-xs text-slate">Checked {source.checked}</span>
+                                    <span class="text-xs text-slate">Checked {formatSourceDate(source.checked)}</span>
                                 </a>
                             </li>
                         ))}

@@ -62,9 +62,9 @@ export const researchedAnswerPages: AnswerPage[] = [
         question: 'How do I verify the school assignment for a Charlotte-area address?',
         title: 'How to Verify a School Assignment in Charlotte and Lake Norman',
         metaDescription:
-            'Use current CMS, Iredell-Statesville, or Mooresville Graded address resources to verify school assignment and check announced boundary changes for the relevant year.',
+            'Identify the governing school district first, then use current CMS, Iredell-Statesville, Mooresville Graded, Lincoln County, or Catawba County address resources for the relevant year.',
         answer:
-            'Verify with the governing district for the exact property and school year. CMS and Iredell-Statesville offer address-based tools; Mooresville Graded is separate and domicile-based. Iredell-Statesville is planning 2027–28 zones for two new schools, potentially affecting Lake Norman High and other boundaries. A listing or current assignment is not a future guarantee.',
+            'Lake Norman spans four counties and multiple school districts. First identify the county and governing district for the parcel, then use that district’s official address tool for the relevant school year. CMS, Iredell-Statesville, Mooresville Graded, Lincoln County, and Catawba County use separate resources; a listing or current assignment is not a future guarantee.',
         category: 'Relocation',
         datePublished: '2026-09-02',
         dateModified: '2026-09-02',
@@ -72,7 +72,7 @@ export const researchedAnswerPages: AnswerPage[] = [
         sections: [
             {
                 heading: 'Start with the district, not the listing',
-                body: 'Charlotte-area addresses can fall into different school systems, and a postal city does not necessarily identify the governing district. CMS and Iredell-Statesville publish address tools. Mooresville Graded School District is separate from Iredell-Statesville and generally limits enrollment to students meeting its domicile or residence requirements.',
+                body: 'Lake Norman spans Catawba, Iredell, Lincoln, and Mecklenburg counties, and the county or postal city does not by itself establish the school district. Start with the parcel record, identify the governing district, and then use that district’s official address resource. CMS, Iredell-Statesville, Mooresville Graded, and Lincoln County Schools maintain separate enrollment or locator resources; Catawba County also publishes an official GIS School Locator.',
             },
             {
                 heading: 'Verify the exact address and year',
@@ -176,7 +176,7 @@ export const researchedAnswerPages: AnswerPage[] = [
         sections: [
             {
                 heading: 'First identify the authority',
-                body: 'A Charlotte-area mailing address may sit in a town, city, county, or extraterritorial planning jurisdiction. Start with the parcel record and government map. Huntersville describes zoning as the legal instrument that regulates land use, building dimensions, height, and setbacks; Davidson uses legally equivalent planning areas rather than conventional zoning-district terminology.',
+                body: 'A Charlotte-area mailing address may sit in a town, city, unincorporated county area, or extraterritorial planning jurisdiction. Start with the parcel record and official jurisdiction map; do not assume the postal city is the zoning authority. Mecklenburg, Iredell, Lincoln, and Catawba counties each publish land-development, zoning, or parcel-lookup resources for county-governed property, while incorporated towns and cities maintain their own processes.',
             },
             {
                 heading: 'Ask about the proposed use—not just the color on a map',
