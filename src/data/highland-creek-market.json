@@ -6120,7 +6120,9 @@
         "maxResults": 5,
         "maxDistanceMiles": 5,
         "maxAgeCalendarMonths": 6,
-        "sort": "distance_after_similarity_filter",
+        "sort": "locality_then_similarity_after_eligibility_filter",
+        "localityPriority": ["same_street", "same_verified_village_by_county_and_parcel_roster", "other_mapped_highland_creek"],
+        "withinTierPriority": ["relative_heated_sqft_gap", "bedroom_gap", "full_bath_gap", "year_built_gap", "lot_acreage_gap", "newer_sale_date", "unrounded_distance", "county", "parcel_id"],
         "halfBathrooms": "display_difference_not_hard_filter"
     }
 }

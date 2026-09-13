@@ -34,7 +34,8 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
     <details class="hc-rules">
         <summary>What makes a sale eligible?</summary>
         <p>Similarity first: same single-family home type, heated size within {rules.sqftTolerancePercent}%, bedrooms within {rules.maxBedroomDifference}, and full bathrooms within {rules.maxFullBathroomDifference} of your home. Required facts must be known. Half-bathroom, year-built and lot differences are context, not filters.</p>
-        <p>Then the nearest {rules.maxResults} distinct parcels within {rules.maxDistanceMiles} miles AND mapped Highland Creek, sold within {rules.maxAgeCalendarMonths} calendar months of today (Eastern time), no later than the snapshot date. Latest qualifying transaction per parcel; your parcel is excluded. Limits never widen to fill five.</p>
+        <p>Up to {rules.maxResults} distinct eligible parcels within {rules.maxDistanceMiles} miles AND mapped Highland Creek, sold within {rules.maxAgeCalendarMonths} calendar months of today (Eastern time), no later than the snapshot date. Latest qualifying transaction per parcel; your parcel is excluded. Limits never widen to fill five.</p>
+        <p>Among eligible sales, suitable same-street homes come first, then homes in your verified village, then other mapped Highland Creek homes. Village matches use county and parcel identity in the address roster, not tax-neighborhood names. Within each tier, the closest heated-size match comes first (smallest percentage gap), then smaller bedroom, full-bathroom, year-built and lot-acreage gaps, in that order. Remaining ties use newer sale date, shorter unrounded straight-line distance, then county and parcel ID. Unknown year or lot gaps sort last at that step; they do not exclude a sale. This is a comparison order, not a valuation formula.</p>
         <p>{county.metadata.eligibility} County-flagged, under-review and incomplete transfers are excluded. County records can lag. Distance is approximate straight-line distance, not driving distance. Cabarrus sale records are not included because exact dates, qualification and reuse remain unresolved; this is not complete transaction coverage.</p>
     </details>
     <div id="hc-results" hidden>
@@ -123,6 +124,36 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
             && Math.abs(sale.fullBaths-subject.fullBaths) <= criteria.maxFullBathroomDifference;
     }
     const parcelIdentity = home => JSON.stringify([home.county,home.parcelId]);
+    const propertyRoster = new Map(county.properties.map(home => [parcelIdentity(home),home]));
+    function streetName(address) {
+        const aliases = {DRIVE:'DR',LANE:'LN',COURT:'CT',ROAD:'RD',PLACE:'PL'};
+        return String(address ?? '').toUpperCase().replace(/[^A-Z0-9 ]/g,' ').replace(/^\s*\d+\s+/,'').trim().split(/\s+/).map(word => aliases[word] || word).join(' ');
+    }
+    function localityTier(subject,sale) {
+        if (streetName(subject.address) === streetName(sale.address)) return 0;
+        const village = propertyRoster.get(parcelIdentity(sale))?.village;
+        const subjectVillage = propertyRoster.get(parcelIdentity(subject))?.village;
+        return village && village === subjectVillage ? 1 : 2;
+    }
+    const factGap = (a,b,key) => finite(a[key]) && finite(b[key]) ? Math.abs(a[key]-b[key]) : Infinity;
+    function rankingKey(subject,sale) {
+        return [localityTier(subject,sale),factGap(subject,sale,'heatedSqFt')/subject.heatedSqFt,
+            factGap(subject,sale,'bedrooms'),factGap(subject,sale,'fullBaths'),
+            factGap(subject,sale,'yearBuilt'),factGap(subject,sale,'lotAcres'),
+            -Date.parse(sale.saleDate+'T00:00:00Z'),sale.distanceMiles,sale.county,sale.parcelId];
+    }
+    function compareRank(subject,a,b) {
+        const left = rankingKey(subject,a), right = rankingKey(subject,b);
+        for (let i=0; i<left.length; i++) {
+            if (left[i] < right[i]) return -1;
+            if (left[i] > right[i]) return 1;
+        }
+        return 0;
+    }
+    function rankingReason(subject,sale) {
+        const tier = ['Same street','Same verified village','Other mapped Highland Creek'][localityTier(subject,sale)];
+        return `Ranking: ${tier} · heated-size gap ${number(factGap(subject,sale,'heatedSqFt')/subject.heatedSqFt*100)}%. Locality tier first, then size match; secondary tie-breakers are explained above.`;
+    }
     function nearbySales(subject, sales, asOf, today = easternDate()) {
         const start = calendarStart(today);
         if (!start || !validDate(asOf) || !requiredFacts(subject) || !coordinates(subject)) return [];
@@ -141,7 +172,7 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
                 unique.set(identity,{...sale,distanceMiles:distance});
             }
         }
-        return [...unique.values()].sort((a,b) => a.distanceMiles-b.distanceMiles || (a.parcelId < b.parcelId ? -1 : a.parcelId > b.parcelId ? 1 : 0) || (a.county < b.county ? -1 : a.county > b.county ? 1 : 0)).slice(0,criteria.maxResults);
+        return [...unique.values()].sort((a,b) => compareRank(subject,a,b)).slice(0,criteria.maxResults);
     }
     function safeUrl(value) {
         try {
@@ -229,7 +260,7 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
             node('h3',selected.address),node('p',facts(selected)),sourceLink(selected,'County property source'));
         const summary = !requiredFacts(selected) || !coordinates(selected)
             ? 'Required county facts are missing for this home, so no comparisons can be calculated. Ask Inga for a Home Review.'
-            : sales.length === 5 ? 'Five nearest eligible county-recorded sales in this snapshot. Similarity filters applied before distance; not an appraisal or the five best MLS comps.'
+            : sales.length === 5 ? 'Five eligible county-recorded sales in this snapshot, prioritized by same street, same verified village, then other mapped Highland Creek; closest size match within each tier. Not an appraisal or the five best MLS comps.'
             : sales.length ? `Only ${sales.length} eligible county-recorded sales match in this snapshot. Showing all ${sales.length}; limits have not been widened. A Home Review can explore the gaps.`
             : 'No eligible recorded sales match this home in the current window and snapshot. Limits have not been widened. Ask Inga for a Home Review.';
         get('hc-result-status').textContent = summary;
@@ -246,6 +277,7 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
             const time = node('time',sale.saleDate); time.dateTime = sale.saleDate;
             dateLine.append(time);
             article.append(dateLine,node('p',`Approx. ${sale.distanceMiles.toFixed(2)} miles · straight-line`,'hc-small'),
+                node('p',rankingReason(selected,sale),'hc-ranking hc-small'),
                 node('p',facts(sale),'hc-facts'),node('p',`Compared with your home: ${comparison(sale,selected)}`,'hc-difference'),
                 sourceLink(sale,'View county sale record'));
             item.append(article); cards.append(item);
