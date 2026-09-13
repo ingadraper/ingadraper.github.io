@@ -12,7 +12,8 @@ const formatDate = (value: string) => new Intl.DateTimeFormat('en-US', {
 
 const currentThrough = formatDate(market.currentThrough);
 const lastUpdated = formatDate(market.lastUpdated);
-const homeValueHref = siteConfig.connectors.goHighLevelFormUrl || `mailto:${siteConfig.contact.email}?subject=Highland%20Creek%20home%20value%20conversation`;
+const homeReviewUrl = 'https://ingadraper.com/highland-creek/?utm_source=postcard&utm_medium=direct_mail&utm_campaign=hc_owner5_phase1&utm_content=mailer_1_a#home-review';
+const homeValueHref = siteConfig.connectors.goHighLevelFormUrl || `mailto:${siteConfig.contact.email}?subject=Highland%20Creek%20Home%20Review`;
 ---
 
 <BaseLayout
@@ -31,7 +32,7 @@ const homeValueHref = siteConfig.connectors.goHighLevelFormUrl || `mailto:${site
                     <p class="mt-7 max-w-2xl text-lg leading-8 text-ivory/80 sm:text-xl">A homeowner-first dashboard for neighborhood context, practical next steps, and a clear view of what your home may be worth today.</p>
                 </div>
                 <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-                    <a href={homeValueHref} class="btn-dashboard-primary">Get my home value <span aria-hidden="true">↗</span></a>
+                    <a href={homeReviewUrl} class="btn-dashboard-primary">Request my Home Review <span aria-hidden="true">↗</span></a>
                     <a href="#snapshot" class="btn-dashboard-ghost">See the local snapshot</a>
                 </div>
                 <div class="mt-12 inline-flex flex-wrap items-center gap-x-3 gap-y-2 rounded-full border border-ivory/20 bg-ink/20 px-4 py-2 text-sm text-ivory/90 backdrop-blur-sm">
@@ -81,15 +82,15 @@ const homeValueHref = siteConfig.connectors.goHighLevelFormUrl || `mailto:${site
             </div>
         </section>
 
-        <section class="dashboard-cta section-band">
+        <section id="home-review" class="dashboard-cta section-band">
             <div class="site-shell">
                 <div class="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
                     <div>
                         <p class="eyebrow text-dusty">A smarter next step</p>
-                        <h2 class="mt-4 max-w-3xl text-4xl font-extrabold text-ivory sm:text-5xl">Want the number that is specific to your home?</h2>
-                        <p class="mt-5 max-w-2xl text-lg leading-8 text-ivory/75">Get a thoughtful, no-pressure home-value conversation built around your property—not a generic online estimate.</p>
+                        <h2 class="mt-4 max-w-3xl text-4xl font-extrabold text-ivory sm:text-5xl">Request your complimentary Highland Creek Home Review.</h2>
+                        <p class="mt-5 max-w-2xl text-lg leading-8 text-ivory/75">You’ll get a conversation about recent comparable sales, a likely price range, and practical prep considerations. You do not need to decide about selling first.</p>
                     </div>
-                    <a href={homeValueHref} class="btn-dashboard-primary whitespace-nowrap">Request a home-value review <span aria-hidden="true">↗</span></a>
+                    <a href={homeValueHref} class="btn-dashboard-primary whitespace-nowrap">Start the conversation <span aria-hidden="true">↗</span></a>
                 </div>
             </div>
         </section>
