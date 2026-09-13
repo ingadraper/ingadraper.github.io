@@ -18,6 +18,22 @@ Use this file as the broader reference log for Inga's public profiles, review so
 | Email | ingibjorg.draper@exprealty.com | Live site | Keep in `src/siteConfig.ts`. |
 | Brokerage | eXp Realty LLC | Live site | Licensed firm name shown in compliance output; brand assets use eXp Realty. |
 
+## Highland Creek Homeowner Resource
+
+Reviewed September 13, 2026. See `docs/highland-creek-review.md` for scope, source conflicts, and validation limits.
+
+| Item | URL | Use | Notes |
+| --- | --- | --- | --- |
+| Homeowner guide | https://ingadraper.com/highland-creek/ | Contextual homepage card after services; selling-page pricing card | For Ridgefield and Bell's Mills homeowners in Highland Creek. Normal internal links use `/highland-creek/`, without UTMs; no primary-navigation addition. |
+| Home Review anchor | https://ingadraper.com/highland-creek/#home-review | Internal offer links use `#home-review` | Complimentary review: recent comparable sales, likely price range and practical prep considerations. Email draft only; nothing sends until the visitor sends. |
+| Selected sale examples | https://ingadraper.com/highland-creek/#snapshot | Back-link from Home Review | Two selected single-family examples, not a complete village inventory or a claim of the latest sales. |
+| External postcard destination | https://ingadraper.com/highland-creek/?utm_source=postcard&utm_medium=direct_mail&utm_campaign=hc_owner5_phase1&utm_content=mailer_1_a#home-review | External campaign/QR reference only | Route, query and anchor retained. Not used on ordinary internal links. Physical artwork not scanned; query parameters do not prove analytics, consent or CRM delivery. |
+| 6634 Bells Mill Drive, MLS 4406999 | https://www.terravistarealty.com/sold-single-property-details.cfm?PID=4406999 | Individual sale detail source | Closed September 4, 2026; source identifies Highland Creek, not a proven Bell's Mills parcel assignment. |
+| 6408 Fillian Lane, MLS 4374628 | https://www.terravistarealty.com/sold-single-property-details.cfm?PID=4374628 | Individual sale detail source | Closed June 25, 2026; same provider and subdivision, not independent corroboration. |
+| Official HOA resources | https://www.highlandcreek.com/community-info/ | Homeowner Q&A | Association site navigation includes ARC information and design guidelines; check current project requirements before work. |
+| General architectural approval request | https://www.highlandcreek.com/wp-content/uploads/2026/04/ARC-Form-General-HCCA-Updated-4.23.26.pdf | Official ARC form (PDF) | Linked from the association's ARC menu when checked. Project-specific rules and forms may differ. |
+| Official community maps | https://www.highlandcreek.com/maps | Geographic context | Official map labels Ridgefield and Bell's Mills within Highland Creek; not current parcel-level boundary evidence. |
+
 ## Brand And Design References
 
 | Item | URL | Use | Notes |

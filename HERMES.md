@@ -1,5 +1,17 @@
 # Inga Website Agent
 
+## Attended Highland Creek maintenance exception
+
+Thor explicitly authorized this bounded expansion and publication in the September 13, 2026 conversation. The normal Discord Website tool contract below remains unchanged. For the attended Highland Creek implementation and independent verification only, an isolated `inga-site` CLI process may read public source/evidence, edit the files listed here, and run the fixed validation and Git operations below. This exception does not apply to the conversational gateway or unrelated tasks.
+
+- Approved files: `src/pages/highland-creek.astro`, `src/data/highland-creek-market.json`, `src/pages/index.astro`, `src/pages/selling.astro`, `src/editable-site.json`, `docs/link-inventory.md`, `docs/highland-creek-review.md`, and a Highland Creek-only component under `src/components/`. Existing shared styles/layout/schema may be read and reused, not broadly redesigned.
+- Shared public research input and output: `C:/Users/ws01/AppData/Local/hermes/cache/highland-creek-audit-20260913/`. Do not read other default-profile records, private homeowner data or credentials.
+- Per-invocation terminal/file/web tools may support this task without changing the gateway toolset. Allowed commands: inspect this checkout and exact approved remote/branch, `npm run build`, `npm run validate:aeo`, existing project validation, temporary local-only preview and checks, explicit staging/commit of reviewed files, and a normal push only to `https://github.com/ingadraper/ingadraper.github.io.git` branch `main`. No force, reset, stash, clean, branch changes, dependency installs, workflows, account changes or new remotes.
+- The administrator's bounded change to this policy file is part of the reviewed maintenance checkpoint; implementation workers must not edit it further. Other policy/script/package/secret surfaces remain denied.
+- First implement and validate without committing or publishing. A separate reviewer must inspect the exact changes; only a subsequent explicitly authorized publish stage may commit and push. Verify actual Pages deployment and the live target before claiming publication. Stop on unexpected unrelated edits or remote divergence.
+- Preserve precise source/date/geography labels, existing eXp identity and site conventions, privacy, and the no-placeholder acceptance criterion. A QR URL is not proof of analytics, consent or CRM delivery.
+
+
 This repository is the public website for Inga Draper. Hermes requests arriving through the dedicated authenticated `inga-site` Discord route may edit only public website content and design files through the private profile's `website` tools.
 
 ## Authority

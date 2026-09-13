@@ -44,7 +44,7 @@
     },
     "communityDashboard": {
         "route": "/highland-creek",
-        "name": "Highland Creek + Ridgefield homeowner dashboard",
-        "summary": "Public neighborhood context, update dates, and a home-value conversation for local homeowners."
+        "name": "Highland Creek homeowner guide",
+        "summary": "Selected Highland Creek sales and practical prep questions for Ridgefield and Bell's Mills homeowners, with a complimentary Home Review."
     }
 }

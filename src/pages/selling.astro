@@ -244,6 +244,12 @@ const schemas = [
                                 </div>
                                 <h3 class="mt-7 text-2xl font-extrabold leading-tight">{step.title}</h3>
                                 <p class="mt-4 text-base leading-7 text-smoke">{step.summary}</p>
+                                {step.number === '02' && (
+                                    <p class="mt-4 text-sm leading-6 text-smoke">
+                                        <strong class="text-ink">A local example:</strong> See how selected Highland Creek sales can inform a pricing conversation.
+                                        <a href="/highland-creek/" class="mt-2 inline-flex min-h-11 items-center font-medium text-ink underline decoration-dusty underline-offset-4 hover:text-deep-rose focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4">View the Highland Creek homeowner guide →</a>
+                                    </p>
+                                )}
                                 <ul class="mt-6 grid gap-3 border-t border-line/70 pt-6">
                                     {step.details.map((detail) => (
                                         <li class="flex gap-3 text-sm leading-6 text-smoke">

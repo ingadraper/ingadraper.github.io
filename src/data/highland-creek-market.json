@@ -1,38 +1,40 @@
 {
-    "currentThrough": "2026-09-13",
-    "lastUpdated": "2026-09-13",
-    "status": "verified-public-snapshot",
-    "summary": "Highland Creek single-family home snapshot from the past 12 months, with active listings checked September 13, 2026.",
-    "metrics": [
+    "schemaVersion": 1,
+    "sourcesChecked": "2026-09-13",
+    "scope": "Selected Highland Creek single-family sales; not a comprehensive Ridgefield or Bell's Mills inventory. No parcel-level village assignment established.",
+    "sourceName": "Terra Vista Realty",
+    "sales": [
         {
-            "label": "Sold in 12 months",
-            "value": "261",
-            "detail": "Highland Creek single-family homes"
+            "address": "6634 Bells Mill Drive",
+            "closed": "2026-09-04",
+            "priceUSD": 425000,
+            "beds": 3,
+            "fullBaths": 2,
+            "halfBaths": 1,
+            "sqft": 2124,
+            "cumulativeDOM": 8,
+            "mls": "4406999",
+            "propertyType": "Single Family Home",
+            "subdivision": "Highland Creek",
+            "city": "Charlotte",
+            "county": "Mecklenburg",
+            "sourceUrl": "https://www.terravistarealty.com/sold-single-property-details.cfm?PID=4406999"
         },
         {
-            "label": "Median sale price",
-            "value": "$480K",
-            "detail": "Past 12 months"
-        },
-        {
-            "label": "Median sale price / sq. ft.",
-            "value": "$199",
-            "detail": "Past 12 months"
-        },
-        {
-            "label": "Active homes",
-            "value": "47",
-            "detail": "Checked September 13, 2026"
-        }
-    ],
-    "sources": [
-        {
-            "name": "Terra Vista Realty: Highland Creek sold-home report",
-            "url": "https://www.terravistarealty.com/recently-sold-highland-creek-charlotte.cfm"
-        },
-        {
-            "name": "Highland Creek Community Association",
-            "url": "https://www.highlandcreek.com/community-info/"
+            "address": "6408 Fillian Lane",
+            "closed": "2026-06-25",
+            "priceUSD": 412500,
+            "beds": 4,
+            "fullBaths": 2,
+            "halfBaths": 1,
+            "sqft": 2019,
+            "cumulativeDOM": 25,
+            "mls": "4374628",
+            "propertyType": "Single Family Home",
+            "subdivision": "Highland Creek",
+            "city": "Charlotte",
+            "county": "Mecklenburg",
+            "sourceUrl": "https://www.terravistarealty.com/sold-single-property-details.cfm?PID=4374628"
         }
     ]
 }

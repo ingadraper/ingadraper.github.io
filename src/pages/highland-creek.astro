@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { agentSchema, breadcrumbSchema } from '../lib/schema';
+import { agentSchema, breadcrumbSchema, faqSchema } from '../lib/schema';
 import { siteConfig } from '../siteConfig';
 import market from '../data/highland-creek-market.json';
 
@@ -11,132 +11,178 @@ const formatDate = (value: string) => new Intl.DateTimeFormat('en-US', {
     timeZone: 'UTC',
 }).format(new Date(`${value}T00:00:00Z`));
 
-const currentThrough = formatDate(market.currentThrough);
-const lastUpdated = formatDate(market.lastUpdated);
-const homeReviewUrl = 'https://ingadraper.com/highland-creek/?utm_source=postcard&utm_medium=direct_mail&utm_campaign=hc_owner5_phase1&utm_content=mailer_1_a#home-review';
-const homeValueHref = siteConfig.connectors.goHighLevelFormUrl || `mailto:${siteConfig.contact.email}?subject=Highland%20Creek%20Home%20Review`;
+// Fail the build rather than render malformed dates, incomplete records or aggregate data.
+const validDate = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value)
+    && Number.isFinite(Date.parse(`${value}T00:00:00Z`))
+    && new Date(`${value}T00:00:00Z`).toISOString().slice(0, 10) === value;
+const positiveInteger = (value: number) => Number.isSafeInteger(value) && value > 0;
+const nonnegativeInteger = (value: number) => Number.isSafeInteger(value) && value >= 0;
+if (market.schemaVersion !== 1 || !validDate(market.sourcesChecked) || market.sales.length !== 2
+    || !market.scope || !market.sourceName || new Set(market.sales.map((sale) => sale.mls)).size !== 2
+    || market.sales.some((sale) => !validDate(sale.closed) || sale.closed > market.sourcesChecked
+        || !sale.address.trim() || ![sale.priceUSD, sale.beds, sale.fullBaths, sale.sqft].every(positiveInteger)
+        || ![sale.halfBaths, sale.cumulativeDOM].every(nonnegativeInteger)
+        || !/^\d{7}$/.test(sale.mls)
+        || sale.propertyType !== 'Single Family Home' || sale.subdivision !== 'Highland Creek'
+        || sale.city !== 'Charlotte' || sale.county !== 'Mecklenburg'
+        || sale.sourceUrl !== `https://www.terravistarealty.com/sold-single-property-details.cfm?PID=${sale.mls}`)) {
+    throw new Error('Invalid Highland Creek selected-sale data. Review the dated source records before building.');
+}
+
+const checked = formatDate(market.sourcesChecked);
+const closingDates = market.sales.map((sale) => sale.closed).sort();
+const formatNumber = (value: number) => value.toLocaleString('en-US');
+const formatPrice = (value: number) => new Intl.NumberFormat('en-US', {
+    style: 'currency', currency: 'USD', maximumFractionDigits: 0,
+}).format(value);
+const offer = 'Request your complimentary Highland Creek Home Review';
+const emailBody = [
+    'Hi Inga, I would like a complimentary Highland Creek Home Review.',
+    '',
+    'Property address (optional):',
+    'Updates or maintenance questions:',
+    'What I would like to understand:',
+    '',
+    'Please include recent comparable sales, a likely price range and practical prep considerations.',
+].join(String.fromCharCode(13, 10));
+const homeValueHref = `mailto:${siteConfig.contact.email}?subject=${encodeURIComponent('Highland Creek Home Review')}&body=${encodeURIComponent(emailBody)}`;
+const faqs = [
+    {
+        question: 'Maintenance or cosmetic work first?',
+        answer: 'Start with known maintenance issues and records of past work. Separate necessary repairs from cosmetic changes you would enjoy, then review the home before choosing sale-prep projects.',
+    },
+    {
+        question: 'Which sales make useful comparisons?',
+        answer: 'Look beyond bedroom count and the street name: compare size, layout, condition, lot and sale date. Review updates and concessions too; a public sale record alone does not establish your home’s value.',
+    },
+    {
+        question: 'Does my project need HOA approval?',
+        answer: 'Check the official Highland Creek design guidelines and architectural review (ARC) process before starting work. Confirm the requirements for your specific project with the association rather than relying on a neighbor’s approval.',
+    },
+];
 const path = '/highland-creek/';
 const schemas = [
     agentSchema,
     breadcrumbSchema([
         { name: 'Home', path: '/' },
-        { name: 'Highland Creek Homeowner Dashboard', path },
+        { name: 'Highland Creek Homeowner Guide', path },
     ]),
+    faqSchema(faqs),
 ];
 ---
 
 <BaseLayout
-    title="Highland Creek & Ridgefield Homeowner Dashboard | Inga Draper"
-    description="A clear, public snapshot for Highland Creek and Ridgefield homeowners, including local market context, update dates, and a simple home-value conversation."
+    title="Highland Creek Homeowner Guide | Ridgefield & Bell's Mills | Inga Draper"
+    description="Selected Highland Creek sales and practical prep answers for Ridgefield and Bell's Mills homeowners. Request your complimentary Highland Creek Home Review."
     path={path}
     schemas={schemas}
 >
-    <main class="dashboard-page min-h-screen bg-ivory">
-        <section class="dashboard-hero relative overflow-hidden">
-            <div class="dashboard-hero-glow" aria-hidden="true"></div>
-            <div class="site-shell relative py-20 sm:py-28 lg:py-36">
-                <a href="/" class="eyebrow inline-flex items-center gap-2 text-ivory/80 transition hover:text-white">← Inga Draper Homes</a>
-                <div class="mt-10 max-w-4xl">
-                    <p class="eyebrow text-dusty">Highland Creek + Ridgefield</p>
-                    <h1 class="mt-5 max-w-4xl text-5xl font-extrabold tracking-tight text-ivory sm:text-6xl lg:text-7xl">A calmer read on your corner of Charlotte.</h1>
-                    <p class="mt-7 max-w-2xl text-lg leading-8 text-ivory/80 sm:text-xl">A homeowner-first dashboard for neighborhood context, practical next steps, and a clear view of what your home may be worth today.</p>
-                </div>
-                <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
-                    <a href={homeReviewUrl} class="btn-dashboard-primary">Request my Home Review <span aria-hidden="true">↗</span></a>
-                    <a href="#snapshot" class="btn-dashboard-ghost">See the local snapshot</a>
-                </div>
-                <div class="mt-12 inline-flex flex-wrap items-center gap-x-3 gap-y-2 rounded-full border border-ivory/20 bg-ink/20 px-4 py-2 text-sm text-ivory/90 backdrop-blur-sm">
-                    <span class="h-2 w-2 rounded-full bg-dusty" aria-hidden="true"></span>
-                    <strong>Data current through {currentThrough}</strong>
-                    <span class="text-ivory/50">·</span>
-                    <span>Last updated {lastUpdated}</span>
-                </div>
+    <main class="homeowner-guide bg-ivory">
+        <div class="site-shell">
+            <div class="guide-identity flex flex-wrap items-center justify-between gap-x-6 border-b border-line py-2 text-sm">
+                <a href="/" class="guide-link inline-flex min-h-11 items-center font-medium">← Inga Draper</a>
+                <span>{siteConfig.agent.designation} · {siteConfig.compliance.legalBrokerageName}</span>
             </div>
-        </section>
-
-        <section id="snapshot" class="section-band">
-            <div class="site-shell">
-                <div class="max-w-3xl">
-                    <p class="eyebrow">The neighborhood pulse</p>
-                    <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">Useful context, without the noise.</h2>
-                    <p class="mt-5 text-lg text-smoke">A quick read of Highland Creek’s recent single-family market. The figures below use one consistent public report and are not a valuation of any individual home.</p>
+            <section class="py-6 sm:py-10" aria-labelledby="guide-heading">
+                <p class="eyebrow">For Ridgefield &amp; Bell's Mills homeowners in Highland Creek</p>
+                <h1 id="guide-heading" class="mt-3 max-w-[23ch] text-3xl font-extrabold leading-[1.12] sm:text-5xl">What nearby sales can tell you.</h1>
+                <div class="mt-4 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
+                    <p class="max-w-xl text-base leading-6 sm:text-lg sm:leading-7">Considering an update, a move, or staying put? Start with selected sales, then look at what makes your home different.</p>
+                    <a href="#home-review" class="btn-primary text-center">{offer} <span aria-hidden="true">↓</span></a>
                 </div>
+            </section>
 
-                <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                    {market.metrics.map((metric) => (
-                        <article class="dashboard-card">
-                            <p class="eyebrow">{metric.label}</p>
-                            <p class="mt-5 font-display text-4xl font-semibold text-ink">{metric.value}</p>
-                            <p class="mt-4 text-sm leading-6 text-smoke">{metric.detail}</p>
+            <section id="snapshot" class="pb-10 sm:pb-14" aria-labelledby="sales-heading">
+                <div class="border-t border-line pt-5">
+                    <h2 id="sales-heading" class="text-2xl font-extrabold leading-tight sm:text-3xl">Selected Highland Creek sales</h2>
+                    <p class="mt-2 text-sm">Sources checked <time datetime={market.sourcesChecked}>{checked}</time></p>
+                </div>
+                <div class="mt-4 grid gap-4 md:grid-cols-2">
+                    {market.sales.map((sale) => (
+                        <article class="sale-card rounded-[8px] border border-line bg-frosted p-5 sm:p-6" aria-labelledby={`sale-${sale.mls}`}>
+                            <h3 id={`sale-${sale.mls}`} class="text-xl font-semibold leading-tight sm:text-2xl">{sale.address}</h3>
+                            <p class="mt-2 text-sm">Closed <time datetime={sale.closed}>{formatDate(sale.closed)}</time></p>
+                            <p class="sale-price mt-2 font-display text-3xl font-semibold text-ink sm:text-4xl">{formatPrice(sale.priceUSD)}</p>
+                            <dl class="sale-facts mt-4 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-line pt-3 text-sm">
+                                <div><dt>Bedrooms</dt><dd>{sale.beds}</dd></div>
+                                <div><dt>Bathrooms</dt><dd>{sale.fullBaths} full + {sale.halfBaths} half</dd></div>
+                                <div><dt>Size</dt><dd>{formatNumber(sale.sqft)} sq. ft.</dd></div>
+                                <div><dt>Cumulative days on market</dt><dd>{sale.cumulativeDOM}</dd></div>
+                            </dl>
+                            <a href={sale.sourceUrl} class="guide-link mt-3 inline-flex min-h-11 items-center text-sm">{market.sourceName} sale details · MLS {sale.mls} <span class="ml-1" aria-hidden="true">↗</span></a>
                         </article>
                     ))}
                 </div>
+                <p class="mt-4 max-w-4xl text-sm leading-6" id="source-note">
+                    Source notes: selected single-family examples from {market.sourceName}, not all local sales or a comprehensive Ridgefield/Bell's Mills inventory. Closings span {formatDate(closingDates[0])}–{formatDate(closingDates[closingDates.length - 1])}. The source identifies both as Highland Creek, Charlotte / Mecklenburg County; village boundaries are not established for these addresses. Your home's value depends on its specifics.
+                </p>
+                <aside class="mt-6 rounded-[8px] border border-line bg-blush p-5 sm:p-6" aria-labelledby="takeaway-heading">
+                    <h3 id="takeaway-heading" class="text-xl font-semibold leading-snug">More bedrooms did not mean a higher sale price in these two examples.</h3>
+                    <p class="mt-3 max-w-3xl leading-7">Condition, layout, lot and sale date need review before either home is a useful comparison. These records alone do not explain the price difference or predict your home's price or time on market.</p>
+                    <a href="#home-review" class="guide-link mt-3 inline-flex min-h-11 items-center text-sm font-medium">{offer} <span class="ml-2" aria-hidden="true">↓</span></a>
+                </aside>
+            </section>
+        </div>
 
-                <div class="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-                    <article class="dashboard-note">
-                        <p class="eyebrow">What this means for homeowners</p>
-                        <h3 class="mt-4 text-3xl font-extrabold">Your address is more specific than an average.</h3>
-                        <p class="mt-5 leading-7 text-smoke">Updates here will give you a useful neighborhood starting point. Your home’s condition, updates, lot, floor plan, timing, and the closest comparable sales still matter most. If you are considering a move, refinance, renovation, or simply want a clearer baseline, a tailored conversation is the better next step.</p>
-                    </article>
-                    <aside class="dashboard-source-card">
-                        <p class="eyebrow">Sources + update log</p>
-                        <p class="mt-4 text-sm leading-6 text-smoke">Snapshot status: <strong class="text-ink">Verified public snapshot</strong></p>
-                        <p class="mt-2 text-sm leading-6 text-smoke">Past-12-month sales figures plus active listings checked {lastUpdated}. Public reports can vary by window and property type, so we keep the source and scope visible.</p>
-                        <ul class="mt-5 space-y-3 text-sm">
-                            {market.sources.map((source) => (
-                                <li><a href={source.url} target="_blank" rel="noopener noreferrer" class="source-link">{source.name} ↗</a></li>
-                            ))}
-                        </ul>
-                    </aside>
-                </div>
-            </div>
-        </section>
-
-        <section id="home-review" class="dashboard-cta section-band">
+        <section class="border-y border-line bg-porcelain py-10 sm:py-14" aria-labelledby="questions-heading">
             <div class="site-shell">
-                <div class="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
-                    <div>
-                        <p class="eyebrow text-dusty">A smarter next step</p>
-                        <h2 class="mt-4 max-w-3xl text-4xl font-extrabold text-ivory sm:text-5xl">Request your complimentary Highland Creek Home Review.</h2>
-                        <p class="mt-5 max-w-2xl text-lg leading-8 text-ivory/75">You’ll get a conversation about recent comparable sales, a likely price range, and practical prep considerations. You do not need to decide about selling first.</p>
-                    </div>
-                    <a href={homeValueHref} class="btn-dashboard-primary whitespace-nowrap">Start the conversation <span aria-hidden="true">↗</span></a>
+                <p class="eyebrow">Before you spend on updates</p>
+                <h2 id="questions-heading" class="mt-3 text-3xl font-extrabold sm:text-4xl">A practical starting point.</h2>
+                <div class="mt-6 grid gap-6 lg:grid-cols-3">
+                    {faqs.map((faq) => (
+                        <article class="border-t border-line pt-5">
+                            <h3 class="text-xl font-semibold leading-snug">{faq.question}</h3>
+                            <p class="mt-3 leading-7">{faq.answer}</p>
+                        </article>
+                    ))}
+                </div>
+                <div class="mt-6 flex flex-wrap gap-x-6 gap-y-1 text-sm">
+                    <a href="https://www.highlandcreek.com/community-info/" class="guide-link inline-flex min-h-11 items-center">Official HOA resources &amp; ARC information ↗</a>
+                    <a href="https://www.highlandcreek.com/wp-content/uploads/2026/04/ARC-Form-General-HCCA-Updated-4.23.26.pdf" class="guide-link inline-flex min-h-11 items-center">General architectural approval request (PDF) ↗</a>
+                    <a href="https://www.highlandcreek.com/maps" class="guide-link inline-flex min-h-11 items-center">Official community map: Ridgefield &amp; Bell's Mills ↗</a>
                 </div>
             </div>
         </section>
 
-        <section class="section-band bg-blush/45">
-            <div class="site-shell grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <section id="home-review" class="guide-review py-10 sm:py-14" aria-labelledby="review-heading">
+            <div class="site-shell grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
                 <div>
-                    <p class="eyebrow">Built for the neighborhood</p>
-                    <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">The questions homeowners actually ask.</h2>
+                    <p class="eyebrow">Your home, in context</p>
+                    <h2 id="review-heading" class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl">{offer}</h2>
+                    <p class="mt-5 max-w-2xl text-lg leading-8">Your review includes recent comparable sales, a likely price range and practical prep considerations. You do not need to decide about selling first.</p>
+                    <p class="mt-4 max-w-xl text-sm leading-6">The likely range depends on available information and your home's condition. This review is not an appraisal or a guaranteed sale price.</p>
+                    <a href="#snapshot" class="guide-link mt-4 inline-flex min-h-11 items-center text-sm">↑ Back to the selected sale examples</a>
                 </div>
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div class="question-card"><span>01</span><p>What could my home sell for if I made no updates?</p></div>
-                    <div class="question-card"><span>02</span><p>Which improvements are worth doing before a move?</p></div>
-                    <div class="question-card"><span>03</span><p>How do Highland Creek and Ridgefield compare right now?</p></div>
-                    <div class="question-card"><span>04</span><p>What would my next move look like financially?</p></div>
+                <div class="review-email rounded-[8px] border p-5 sm:p-6">
+                    <h3 class="text-2xl font-semibold">Start with an email draft.</h3>
+                    <p id="email-helper" class="mt-3 leading-7">The button opens your email app with optional prompts for your property address, updates or maintenance questions, and what you would like to understand. Nothing is sent until you send the email.</p>
+                    <a href={homeValueHref} class="review-button mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[6px] px-5 py-3 text-center text-sm font-medium" aria-describedby="email-helper">Open my Home Review email draft <span class="ml-2" aria-hidden="true">↗</span></a>
+                    <p class="mt-5 text-sm leading-6">No email app? Email or call Inga directly:</p>
+                    <a href={`mailto:${siteConfig.contact.email}`} class="guide-link contact-email inline-flex min-h-11 items-center text-sm">{siteConfig.contact.email}</a>
+                    <br />
+                    <a href={siteConfig.contact.phoneHref} class="guide-link inline-flex min-h-11 items-center text-sm">{siteConfig.contact.phone}</a>
                 </div>
             </div>
         </section>
     </main>
 
     <style>
-        .dashboard-hero { background: #2c2c2c; }
-        .dashboard-hero-glow { position: absolute; inset: auto -10% -45% auto; width: 42rem; height: 42rem; border-radius: 999px; background: radial-gradient(circle, rgba(196,128,142,.42), transparent 68%); }
-        .btn-dashboard-primary { display: inline-flex; min-height: 3.25rem; align-items: center; justify-content: center; gap: .65rem; border-radius: 6px; background: #f0ddd8; padding: .8rem 1.35rem; color: #2c2c2c; font-size: .9rem; font-weight: 600; transition: transform .2s ease, background .2s ease; }
-        .btn-dashboard-primary:hover { background: #fffdf8; transform: translateY(-2px); }
-        .btn-dashboard-ghost { display: inline-flex; min-height: 3.25rem; align-items: center; justify-content: center; border: 1px solid rgba(253,250,245,.35); border-radius: 6px; padding: .8rem 1.35rem; color: #fdfaf5; font-size: .9rem; transition: border-color .2s ease, background .2s ease; }
-        .btn-dashboard-ghost:hover { border-color: #f0ddd8; background: rgba(240,221,216,.1); }
-        .dashboard-card { min-height: 14rem; border: 1px solid #e1c4be; border-radius: 8px; background: #fffdf8; padding: 1.5rem; box-shadow: 0 18px 46px rgba(122,46,72,.06); }
-        .dashboard-note { border-radius: 8px; background: #f0ddd8; padding: 2rem; }
-        .dashboard-source-card { border: 1px solid #e1c4be; border-radius: 8px; background: #fffdf8; padding: 2rem; }
-        .source-link { color: #7a2e48; text-decoration: underline; text-decoration-color: #c4808e; text-underline-offset: 3px; }
-        .source-link:hover { color: #2c2c2c; }
-        .dashboard-cta { background: #7a2e48; }
-        .question-card { display: flex; gap: 1rem; border-top: 1px solid #e1c4be; padding: 1.25rem 0; }
-        .question-card span { color: #b06878; font-size: .8rem; font-weight: 600; letter-spacing: .12em; }
-        .question-card p { margin: 0; font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; line-height: 1.2; color: #2c2c2c; }
-        @media (max-width: 640px) { .dashboard-card { min-height: auto; } .dashboard-note, .dashboard-source-card { padding: 1.5rem; } }
+        .homeowner-guide { font-weight: 400; }
+        .homeowner-guide .eyebrow { color: #7a2e48; }
+        .homeowner-guide .guide-link { color: #7a2e48; text-decoration: underline; text-underline-offset: 4px; }
+        .homeowner-guide .guide-link:hover { color: #2c2c2c; }
+        .homeowner-guide a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+        .homeowner-guide section[id] { scroll-margin-top: 1.5rem; }
+        .sale-card { box-shadow: 0 12px 32px rgba(122, 46, 72, .05); }
+        .sale-facts dt { font-size: .8125rem; }
+        .sale-facts dd { color: #2c2c2c; font-weight: 500; }
+        .guide-review { background: #7a2e48; color: #fdfaf5; }
+        .guide-review h2, .guide-review h3, .guide-review .eyebrow,
+        .guide-review .guide-link { color: #fdfaf5; }
+        .guide-review .guide-link:hover { color: #f0ddd8; }
+        .review-email { border-color: #e1c4be; }
+        .review-button { color: #2c2c2c; background: #f0ddd8; }
+        .review-button:hover { background: #fffdf8; }
+        .contact-email { overflow-wrap: anywhere; }
     </style>
 </BaseLayout>
