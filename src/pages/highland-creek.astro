@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { agentSchema, breadcrumbSchema } from '../lib/schema';
 import { siteConfig } from '../siteConfig';
 import market from '../data/highland-creek-market.json';
 
@@ -14,12 +15,21 @@ const currentThrough = formatDate(market.currentThrough);
 const lastUpdated = formatDate(market.lastUpdated);
 const homeReviewUrl = 'https://ingadraper.com/highland-creek/?utm_source=postcard&utm_medium=direct_mail&utm_campaign=hc_owner5_phase1&utm_content=mailer_1_a#home-review';
 const homeValueHref = siteConfig.connectors.goHighLevelFormUrl || `mailto:${siteConfig.contact.email}?subject=Highland%20Creek%20Home%20Review`;
+const path = '/highland-creek/';
+const schemas = [
+    agentSchema,
+    breadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Highland Creek Homeowner Dashboard', path },
+    ]),
+];
 ---
 
 <BaseLayout
     title="Highland Creek & Ridgefield Homeowner Dashboard | Inga Draper"
     description="A clear, public snapshot for Highland Creek and Ridgefield homeowners, including local market context, update dates, and a simple home-value conversation."
-    path="/highland-creek/"
+    path={path}
+    schemas={schemas}
 >
     <main class="dashboard-page min-h-screen bg-ivory">
         <section class="dashboard-hero relative overflow-hidden">
