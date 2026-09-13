@@ -50,15 +50,15 @@ const homeValueHref = `mailto:${siteConfig.contact.email}?subject=${encodeURICom
 const faqs = [
     {
         question: 'Maintenance or cosmetic work first?',
-        answer: 'Start with known maintenance issues and records of past work. Separate necessary repairs from cosmetic changes you would enjoy, then review the home before choosing sale-prep projects.',
+        answer: 'Start with known repairs and records of past work. Talk with Inga before spending on cosmetic changes for a sale.',
     },
     {
         question: 'Which sales make useful comparisons?',
-        answer: 'Look beyond bedroom count and the street name: compare size, layout, condition, lot and sale date. Review updates and concessions too; a public sale record alone does not establish your home’s value.',
+        answer: 'Compare size, layout, condition, lot and sale date. Updates and seller concessions matter too. Sale prices alone cannot tell you what your home is worth.',
     },
     {
         question: 'Does my project need HOA approval?',
-        answer: 'Check the official Highland Creek design guidelines and architectural review (ARC) process before starting work. Confirm the requirements for your specific project with the association rather than relying on a neighbor’s approval.',
+        answer: 'Check Highland Creek’s design guidelines and architectural review (ARC) process before work begins. Confirm your project’s requirements with the association.',
     },
 ];
 const path = '/highland-creek/';
@@ -74,7 +74,7 @@ const schemas = [
 
 <BaseLayout
     title="Highland Creek Homeowner Guide | Ridgefield & Bell's Mills | Inga Draper"
-    description="Selected Highland Creek sales and practical prep answers for Ridgefield and Bell's Mills homeowners. Request your complimentary Highland Creek Home Review."
+    description="Check nearby recorded sale prices for your Ridgefield or Bell's Mills home in Highland Creek. Ask Inga Draper for a complimentary Home Review and practical prep advice."
     path={path}
     schemas={schemas}
 >
@@ -86,18 +86,19 @@ const schemas = [
             </div>
             <section class="py-6 sm:py-10" aria-labelledby="guide-heading">
                 <p class="eyebrow">For Ridgefield &amp; Bell's Mills homeowners in Highland Creek</p>
-                <h1 id="guide-heading" class="mt-3 max-w-[23ch] text-3xl font-extrabold leading-[1.12] sm:text-5xl">What nearby sales can tell you.</h1>
+                <h1 id="guide-heading" class="mt-3 max-w-[23ch] text-3xl font-extrabold leading-[1.12] sm:text-5xl">What are nearby homes selling for?</h1>
                 <div class="mt-4 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
-                    <p class="max-w-xl text-base leading-6 sm:text-lg sm:leading-7">Considering an update, a move, or staying put? Check similar recorded sales, then look at what makes your home different.</p>
-                    <a href="#home-review" class="btn-primary text-center">{offer} <span aria-hidden="true">↓</span></a>
+                    <p class="max-w-xl text-base leading-6 sm:text-lg sm:leading-7">Start with nearby sale prices. Then talk with Inga about your home's updates, condition and next steps.</p>
+                    <a href="#home-review" class="btn-primary text-center">Get a complimentary Home Review <span aria-hidden="true">↓</span></a>
                 </div>
             </section>
 
             <HighlandCreekComps />
 
             <section id="snapshot" class="pb-10 sm:pb-14" aria-labelledby="sales-heading">
+                <details class="guide-examples">
+                    <summary id="sales-heading" class="guide-link min-h-11 cursor-pointer py-3 text-xl font-semibold">Two more Highland Creek sale examples</summary>
                 <div class="border-t border-line pt-5">
-                    <h2 id="sales-heading" class="text-2xl font-extrabold leading-tight sm:text-3xl">Selected Highland Creek sales</h2>
                     <p class="mt-2 text-sm">Sources checked <time datetime={market.sourcesChecked}>{checked}</time></p>
                 </div>
                 <div class="mt-4 grid gap-4 md:grid-cols-2">
@@ -117,20 +118,15 @@ const schemas = [
                     ))}
                 </div>
                 <p class="mt-4 max-w-4xl text-sm leading-6" id="source-note">
-                    Source notes: selected single-family examples from {market.sourceName}, not all local sales or a comprehensive Ridgefield/Bell's Mills inventory. Closings span {formatDate(closingDates[0])}–{formatDate(closingDates[closingDates.length - 1])}. The source identifies both as Highland Creek, Charlotte / Mecklenburg County; village boundaries are not established for these addresses. Your home's value depends on its specifics.
+                    Two single-family examples from {market.sourceName}, not a complete Ridgefield/Bell's Mills inventory or a price estimate. Closings: {formatDate(closingDates[0])}–{formatDate(closingDates[closingDates.length - 1])}. Both are listed as Highland Creek, Charlotte / Mecklenburg County; village boundaries are unverified. These examples are separate from the county comparisons above.
                 </p>
-                <aside class="mt-6 rounded-[8px] border border-line bg-blush p-5 sm:p-6" aria-labelledby="takeaway-heading">
-                    <h3 id="takeaway-heading" class="text-xl font-semibold leading-snug">More bedrooms did not mean a higher sale price in these two examples.</h3>
-                    <p class="mt-3 max-w-3xl leading-7">Condition, layout, lot and sale date need review before either home is a useful comparison. These records alone do not explain the price difference or predict your home's price or time on market.</p>
-                    <a href="#home-review" class="guide-link mt-3 inline-flex min-h-11 items-center text-sm font-medium">{offer} <span class="ml-2" aria-hidden="true">↓</span></a>
-                </aside>
+                </details>
             </section>
         </div>
 
         <section class="border-y border-line bg-porcelain py-10 sm:py-14" aria-labelledby="questions-heading">
             <div class="site-shell">
-                <p class="eyebrow">Before you spend on updates</p>
-                <h2 id="questions-heading" class="mt-3 text-3xl font-extrabold sm:text-4xl">A practical starting point.</h2>
+                <h2 id="questions-heading" class="mt-3 text-3xl font-extrabold sm:text-4xl">Before you spend on updates</h2>
                 <div class="mt-6 grid gap-6 lg:grid-cols-3">
                     {faqs.map((faq) => (
                         <article class="border-t border-line pt-5">
@@ -150,17 +146,16 @@ const schemas = [
         <section id="home-review" class="guide-review py-10 sm:py-14" aria-labelledby="review-heading">
             <div class="site-shell grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
                 <div>
-                    <p class="eyebrow">Your home, in context</p>
                     <h2 id="review-heading" class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl">{offer}</h2>
-                    <p class="mt-5 max-w-2xl text-lg leading-8">Your review includes recent comparable sales, a likely price range and practical prep considerations. You do not need to decide about selling first.</p>
-                    <p class="mt-4 max-w-xl text-sm leading-6">The likely range depends on available information and your home's condition. This review is not an appraisal or a guaranteed sale price.</p>
-                    <a href="#snapshot" class="guide-link mt-4 inline-flex min-h-11 items-center text-sm">↑ Back to the selected sale examples</a>
+                    <p class="mt-5 max-w-2xl text-lg leading-8">Review comparable sales, a likely price range and which prep projects make sense with Inga. Just exploring? That's welcome too.</p>
+                    <p class="mt-4 max-w-xl text-sm leading-6">The range depends on your home's condition and available information. A Home Review is not an appraisal or a guaranteed sale price.</p>
+                    <a href="#snapshot" class="guide-link mt-4 inline-flex min-h-11 items-center text-sm">↑ More sale examples</a>
                 </div>
                 <div class="review-email rounded-[8px] border p-5 sm:p-6">
-                    <h3 class="text-2xl font-semibold">Start with an email draft.</h3>
-                    <p id="email-helper" class="mt-3 leading-7">The button opens your email app with optional prompts for your property address, updates or maintenance questions, and what you would like to understand. Nothing is sent until you send the email.</p>
+                    <h3 class="text-2xl font-semibold">What would you like to know?</h3>
+                    <p id="email-helper" class="mt-3 leading-7">Open your email app, add your questions and send when ready. Your address is optional. Nothing is sent automatically.</p>
                     <a href={homeValueHref} class="review-button mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[6px] px-5 py-3 text-center text-sm font-medium" aria-describedby="email-helper">Open my Home Review email draft <span class="ml-2" aria-hidden="true">↗</span></a>
-                    <p class="mt-5 text-sm leading-6">No email app? Email or call Inga directly:</p>
+                    <p class="mt-5 text-sm leading-6">Or contact Inga directly:</p>
                     <a href={`mailto:${siteConfig.contact.email}`} class="guide-link contact-email inline-flex min-h-11 items-center text-sm">{siteConfig.contact.email}</a>
                     <br />
                     <a href={siteConfig.contact.phoneHref} class="guide-link inline-flex min-h-11 items-center text-sm">{siteConfig.contact.phone}</a>
@@ -174,7 +169,7 @@ const schemas = [
         .homeowner-guide .eyebrow { color: #7a2e48; }
         .homeowner-guide .guide-link { color: #7a2e48; text-decoration: underline; text-underline-offset: 4px; }
         .homeowner-guide .guide-link:hover { color: #2c2c2c; }
-        .homeowner-guide a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+        .homeowner-guide :is(a, summary):focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
         .homeowner-guide section[id] { scroll-margin-top: 1.5rem; }
         .sale-card { box-shadow: 0 12px 32px rgba(122, 46, 72, .05); }
         .sale-facts dt { font-size: .8125rem; }

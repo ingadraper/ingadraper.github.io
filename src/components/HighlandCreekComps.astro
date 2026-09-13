@@ -10,16 +10,15 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
 ---
 <section id="check-comps" class="hc-comps" aria-labelledby="comps-heading" data-email={siteConfig.contact.email}>
     <div class="hc-opening">
-        <p class="eyebrow">Your home is the starting point</p>
         <h2 id="comps-heading">Check your comps</h2>
-        <p>Find similar nearby recorded sales, then explore what the numbers cannot tell you about condition, layout and updates.</p>
+        <p>Enter your address to see up to five similar sold homes.</p>
     </div>
     <p id="hc-coverage" class="hc-small">{county.metadata.coverage} County snapshot: <time datetime={county.metadata.asOf}>{county.metadata.asOf}</time>.</p>
-    <p id="hc-window" class="hc-small">Snapshot sale window: {county.metadata.windowStart} through {county.metadata.asOf}, inclusive. With JavaScript, the window uses today’s Eastern date; older sales age out.</p>
+    <p id="hc-window" class="hc-small">Recorded sales: {county.metadata.windowStart} through {county.metadata.asOf}. This snapshot is not a live feed.</p>
     <p id="hc-stale" class="hc-notice" hidden></p>
     <form id="hc-search" hidden novalidate>
         <label for="hc-address">Your property address</label>
-        <p id="hc-search-help" class="hc-small">Start with a street number. Choose a suggestion or enter an exact address. Lookup stays in this browser; nothing is tracked or sent.</p>
+        <p id="hc-search-help" class="hc-small">Start with your street number and choose your address. Your lookup stays in this browser; nothing is tracked or sent.</p>
         <div class="hc-search-row">
             <div class="hc-input-wrap">
                 <input id="hc-address" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="hc-options" aria-describedby="hc-search-help hc-match-status" autocomplete="off" autocapitalize="words" spellcheck="false" maxlength="150" />
@@ -29,46 +28,47 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
         </div>
         <p id="hc-match-status" class="hc-small" role="status" aria-live="polite"></p>
     </form>
-    <noscript><p class="hc-notice">Address comparisons need JavaScript to run privately in your browser. You can still <a href="#home-review">request your complimentary Highland Creek Home Review</a> by email or phone below. No live lookup or automated value is provided.</p></noscript>
+    <noscript><p class="hc-notice">Turn on JavaScript to check your address, or <a href="#home-review">ask Inga for a complimentary Home Review</a> by email or phone.</p></noscript>
     <p id="hc-load-fallback" class="hc-small">If address lookup is unavailable, <a href="#home-review">ask Inga for a Home Review</a>.</p>
     <details class="hc-rules">
-        <summary>What makes a sale eligible?</summary>
-        <p>Similarity first: same single-family home type, heated size within {rules.sqftTolerancePercent}%, bedrooms within {rules.maxBedroomDifference}, and full bathrooms within {rules.maxFullBathroomDifference} of your home. Required facts must be known. Half-bathroom, year-built and lot differences are context, not filters.</p>
-        <p>Up to {rules.maxResults} distinct eligible parcels within {rules.maxDistanceMiles} miles AND mapped Highland Creek, sold within {rules.maxAgeCalendarMonths} calendar months of today (Eastern time), no later than the snapshot date. Latest qualifying transaction per parcel; your parcel is excluded. Limits never widen to fill five.</p>
-        <p>Among eligible sales, suitable same-street homes come first, then homes in your verified village, then other mapped Highland Creek homes. Village matches use county and parcel identity in the address roster, not tax-neighborhood names. Within each tier, the closest heated-size match comes first (smallest percentage gap), then smaller bedroom, full-bathroom, year-built and lot-acreage gaps, in that order. Remaining ties use newer sale date, shorter unrounded straight-line distance, then county and parcel ID. Unknown year or lot gaps sort last at that step; they do not exclude a sale. This is a comparison order, not a valuation formula.</p>
-        <p>{county.metadata.eligibility} County-flagged, under-review and incomplete transfers are excluded. County records can lag. Distance is approximate straight-line distance, not driving distance. Cabarrus sale records are not included because exact dates, qualification and reuse remain unresolved; this is not complete transaction coverage.</p>
+        <summary>How these sales are chosen</summary>
+        <p>Single-family homes must be within {rules.maxDistanceMiles} miles and mapped Highland Creek, with heated size within {rules.sqftTolerancePercent}%, bedrooms within {rules.maxBedroomDifference} and full baths within {rules.maxFullBathroomDifference} of yours. Missing required facts rule out a match.</p>
+        <p>Sales must fall within {rules.maxAgeCalendarMonths} calendar months of today (Eastern time), through the snapshot date. Both date limits are inclusive; older sales age out. Only the latest qualifying sale per county and parcel is used, excluding your own. We never relax these limits to fill {rules.maxResults} spots.</p>
+        <p>Matching homes on your street come first, then your verified village, then elsewhere in Highland Creek. Village matches use the address roster's county and parcel, not tax-neighborhood names. Within each group, the order is closest size (percentage difference), bedroom count, full-bath count, year built and lot size; then newer sale, shorter straight-line distance, county and parcel ID. Missing year or lot facts sort last at that step. Half baths, year and lot size do not rule out a match.</p>
+        <p>{county.metadata.eligibility} Flagged, under-review and incomplete transfers are excluded. County records can lag and differ from MLS measurements. Cabarrus sale dates, qualification and reuse remain unresolved, so those sales are excluded.</p>
     </details>
     <div id="hc-results" hidden>
         <div id="hc-subject" class="hc-subject"></div>
         <h3 id="hc-results-heading" tabindex="-1">Nearby recorded sales</h3>
         <p id="hc-result-status" role="status" aria-live="polite"></p>
+        <p class="hc-small">These automated comparisons are not an appraisal or a price estimate. Inga has not reviewed these homes' condition or selected them personally.</p>
         <ol id="hc-cards" class="hc-cards"></ol>
         <div class="hc-next">
-            <h3>Turn starting comparisons into a Home Review.</h3>
-            <p>Inga can assess condition, layout, updates and relevant MLS sale context to refine these automated comparisons. These records are not personally selected by Inga, and their conditions have not been reviewed here. No automated price estimate or price adjustment is provided.</p>
+            <h3>What do these sales mean for your home?</h3>
+            <p>Ask Inga to review your home's condition, layout and updates alongside these sales and MLS context.</p>
             <label for="hc-question">What would you like to understand? <span class="hc-small">(optional)</span></label>
             <textarea id="hc-question" rows="2" maxlength="1000" autocomplete="off"></textarea>
-            <a id="hc-draft" class="hc-button" href="#home-review">Open my Home Review email draft</a>
-            <p class="hc-small">The draft includes your selected address and optional question. Nothing is sent until you send the email. No marketing consent or automatic CRM enrollment.</p>
-            <a href="#home-review">Request your complimentary Highland Creek Home Review</a>
+            <p id="hc-draft-help" class="hc-small">Opens your email app with this address and your question. Nothing is sent until you send the email.</p>
+            <a id="hc-draft" class="hc-button" href="#home-review" aria-describedby="hc-draft-help">Open my Home Review email draft</a>
+            <a href="#home-review">About your complimentary Home Review</a>
         </div>
     </div>
     <aside class="hc-mls" aria-labelledby="hc-mls-heading">
         <h3 id="hc-mls-heading">MLS market context</h3>
-        <p class="hc-small">Separate dated aggregate report · {mls.source} · Source checked {mls.checkedAt.slice(0, 10)} · {mls.periodStart} through {mls.periodEnd}</p>
+        <p class="hc-small">{mls.source} · Checked {mls.checkedAt.slice(0, 10)} · {mls.periodStart} through {mls.periodEnd}</p>
         <dl class="hc-metrics">
             <div><dt>Closed listings</dt><dd>{mls.closedCount}</dd></div>
             <div><dt>Median closed price</dt><dd>{money(mls.medianClosedPrice)}</dd></div>
             <div><dt>Median / average cumulative days on market</dt><dd>{mls.medianCumulativeDaysOnMarket} / {mls.averageCumulativeDaysOnMarket} days</dd></div>
             <div><dt>Median closed / list price</dt><dd>{mls.medianClosedToListPercent}%</dd></div>
         </dl>
-        <p>{mls.interpretation} The median price describes this neighborhood report, not your home’s value. No trend is inferred without prior-period data.</p>
+        <p>A dated neighborhood summary, not your home's value or a prediction of how quickly it will sell.</p>
         <details><summary>Report scope &amp; attribution</summary><p>{mls.scope}</p><p>{mls.disclaimer}</p><a href={mls.sourceUrl}>Canopy Matrix report platform</a></details>
     </aside>
     <details class="hc-data-use">
         <summary>How we use the data</summary>
-        <p>The nearby individual cards use independent Mecklenburg County public records, not MLS measurements. MLS figures above are a dated aggregate report, not IDX or a live MLS search. Confidential MLS remarks, photos and access details are not published. Neither Canopy endorsement nor a new signed data license is claimed.</p>
-        <p>County sources checked {county.metadata.sourceCheckedAt.slice(0, 10)}. This snapshot does not auto-refresh. Existing selected sale examples below have their own separate attribution; they are not used to calculate these county comparisons.</p>
+        <p>Individual comparisons use Mecklenburg County public records. MLS figures are a separate dated summary, not a live MLS search or IDX feed. No confidential remarks, photos or access details are published; no Canopy endorsement or new data license is claimed.</p>
+        <p>County sources checked {county.metadata.sourceCheckedAt.slice(0, 10)}. This snapshot does not auto-refresh. The two additional sale examples below have separate sources and are not used in the address comparisons. The lookup creates no marketing signup or automatic CRM enrollment.</p>
         <p><a href="https://brokerrelations.canopyrealtors.com/mls-compliance-training/rules-regulations/">Canopy rules &amp; regulations</a> · <a href="https://gis.mecknc.gov/data-center">Mecklenburg County open-data policy</a></p>
     </details>
     <script id="hc-public-data" type="application/json" set:html={publicData} />
@@ -151,8 +151,7 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
         return 0;
     }
     function rankingReason(subject,sale) {
-        const tier = ['Same street','Same verified village','Other mapped Highland Creek'][localityTier(subject,sale)];
-        return `Ranking: ${tier} · heated-size gap ${number(factGap(subject,sale,'heatedSqFt')/subject.heatedSqFt*100)}%. Locality tier first, then size match; secondary tie-breakers are explained above.`;
+        return ['Same street','Same village','Elsewhere in Highland Creek'][localityTier(subject,sale)];
     }
     function nearbySales(subject, sales, asOf, today = easternDate()) {
         const start = calendarStart(today);
@@ -209,7 +208,7 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
             const acres = Math.abs(gap).toLocaleString('en-US',{maximumSignificantDigits:12});
             parts.push(gap === 0 ? 'Same recorded lot size (0 lot acres difference)' : `${acres} lot acres ${gap>0?'larger':'smaller'}`);
         } else parts.push('Lot comparison unavailable: lot size missing or invalid for one or both homes');
-        return parts.join(' · ') + '. Differences are context, not price adjustments.';
+        return parts.join(' · ');
     }
     function snapshotStale(asOf,today) {
         return validDate(asOf) && validDate(today) && (Date.parse(today+'T00:00:00Z')-Date.parse(asOf+'T00:00:00Z'))/86400000 > 30;
@@ -260,9 +259,9 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
             node('h3',selected.address),node('p',facts(selected)),sourceLink(selected,'County property source'));
         const summary = !requiredFacts(selected) || !coordinates(selected)
             ? 'Required county facts are missing for this home, so no comparisons can be calculated. Ask Inga for a Home Review.'
-            : sales.length === 5 ? 'Five eligible county-recorded sales in this snapshot, prioritized by same street, same verified village, then other mapped Highland Creek; closest size match within each tier. Not an appraisal or the five best MLS comps.'
-            : sales.length ? `Only ${sales.length} eligible county-recorded sales match in this snapshot. Showing all ${sales.length}; limits have not been widened. A Home Review can explore the gaps.`
-            : 'No eligible recorded sales match this home in the current window and snapshot. Limits have not been widened. Ask Inga for a Home Review.';
+            : sales.length === 5 ? 'Five matching county-recorded sales, starting with similar homes on your street or in your village when available.'
+            : sales.length ? `Only ${sales.length} county-recorded sales match. All are shown; the matching limits stay the same.`
+            : 'No eligible recorded sales match this home in the current snapshot and date window. Ask Inga for a Home Review.';
         get('hc-result-status').textContent = summary;
         cards.replaceChildren();
         sales.forEach((sale,index) => {
@@ -276,9 +275,12 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
             const dateLine = node('p','County-recorded sale: ','hc-small');
             const time = node('time',sale.saleDate); time.dateTime = sale.saleDate;
             dateLine.append(time);
+            const differences = comparison(sale,selected);
+            const detail = node('details');
+            detail.append(node('summary','Compare with your home'),node('p',differences,'hc-difference'));
             article.append(dateLine,node('p',`Approx. ${sale.distanceMiles.toFixed(2)} miles · straight-line`,'hc-small'),
                 node('p',rankingReason(selected,sale),'hc-ranking hc-small'),
-                node('p',facts(sale),'hc-facts'),node('p',`Compared with your home: ${comparison(sale,selected)}`,'hc-difference'),
+                node('p',facts(sale),'hc-facts'),node('p',differences.split(' · ')[0],'hc-small'),detail,
                 sourceLink(sale,'View county sale record'));
             item.append(article); cards.append(item);
         });
@@ -288,10 +290,10 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
     }
     function updateWindow() {
         today = easternDate();
-        get('hc-window').textContent = `Eligible sale window: ${calendarStart(today)} through ${today} (Eastern), inclusive; no sales after snapshot ${county.metadata.asOf}. Up to ${criteria.maxResults} results, within ${criteria.maxDistanceMiles} miles AND mapped Highland Creek. Similarity: same home type, size ±${criteria.sqftTolerancePercent}%, bedrooms ±${criteria.maxBedroomDifference}, full baths ±${criteria.maxFullBathroomDifference}.`;
+        get('hc-window').textContent = `Sale window: ${calendarStart(today)} through ${today} (Eastern). Records stop at ${county.metadata.asOf}; this is not a live feed.`;
         const stale = get('hc-stale');
         stale.hidden = !snapshotStale(county.metadata.asOf,today);
-        stale.textContent = stale.hidden ? '' : 'This county snapshot is more than 30 days old. It does not auto-refresh; newer sales may be missing and older records age out. Ask Inga for current MLS-informed context.';
+        stale.textContent = stale.hidden ? '' : 'This county snapshot is more than 30 days old and does not auto-refresh. Newer sales may be missing. Ask Inga for current MLS context.';
     }
     function choose(home) {
         input.value = home.address;
