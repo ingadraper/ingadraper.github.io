@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../siteConfig';
+import market from '../data/highland-creek-market.json';
+
+const formatDate = (value: string) => new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+}).format(new Date(`${value}T00:00:00Z`));
+
+const currentThrough = formatDate(market.currentThrough);
+const lastUpdated = formatDate(market.lastUpdated);
+const homeValueHref = siteConfig.connectors.goHighLevelFormUrl || `mailto:${siteConfig.contact.email}?subject=Highland%20Creek%20home%20value%20conversation`;
+---
+
+<BaseLayout
+    title="Highland Creek & Ridgefield Homeowner Dashboard | Inga Draper"
+    description="A clear, public snapshot for Highland Creek and Ridgefield homeowners, including local market context, update dates, and a simple home-value conversation."
+    path="/highland-creek/"
+>
+    <main class="dashboard-page min-h-screen bg-ivory">
+        <section class="dashboard-hero relative overflow-hidden">
+            <div class="dashboard-hero-glow" aria-hidden="true"></div>
+            <div class="site-shell relative py-20 sm:py-28 lg:py-36">
+                <a href="/" class="eyebrow inline-flex items-center gap-2 text-ivory/80 transition hover:text-white">← Inga Draper Homes</a>
+                <div class="mt-10 max-w-4xl">
+                    <p class="eyebrow text-dusty">Highland Creek + Ridgefield</p>
+                    <h1 class="mt-5 max-w-4xl text-5xl font-extrabold tracking-tight text-ivory sm:text-6xl lg:text-7xl">A calmer read on your corner of Charlotte.</h1>
+                    <p class="mt-7 max-w-2xl text-lg leading-8 text-ivory/80 sm:text-xl">A homeowner-first dashboard for neighborhood context, practical next steps, and a clear view of what your home may be worth today.</p>
+                </div>
+                <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <a href={homeValueHref} class="btn-dashboard-primary">Get my home value <span aria-hidden="true">↗</span></a>
+                    <a href="#snapshot" class="btn-dashboard-ghost">See the local snapshot</a>
+                </div>
+                <div class="mt-12 inline-flex flex-wrap items-center gap-x-3 gap-y-2 rounded-full border border-ivory/20 bg-ink/20 px-4 py-2 text-sm text-ivory/90 backdrop-blur-sm">
+                    <span class="h-2 w-2 rounded-full bg-dusty" aria-hidden="true"></span>
+                    <strong>Data current through {currentThrough}</strong>
+                    <span class="text-ivory/50">·</span>
+                    <span>Last updated {lastUpdated}</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="snapshot" class="section-band">
+            <div class="site-shell">
+                <div class="max-w-3xl">
+                    <p class="eyebrow">The neighborhood pulse</p>
+                    <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">Useful context, without the noise.</h2>
+                    <p class="mt-5 text-lg text-smoke">This page is intentionally public and lightweight. It is designed to help Highland Creek and Ridgefield homeowners start with the right questions—not to replace a property-specific valuation.</p>
+                </div>
+
+                <div class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {market.metrics.map((metric) => (
+                        <article class="dashboard-card">
+                            <p class="eyebrow">{metric.label}</p>
+                            <p class="mt-5 font-display text-4xl font-semibold text-ink">{metric.value}</p>
+                            <p class="mt-4 text-sm leading-6 text-smoke">{metric.detail}</p>
+                        </article>
+                    ))}
+                </div>
+
+                <div class="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+                    <article class="dashboard-note">
+                        <p class="eyebrow">What this means for homeowners</p>
+                        <h3 class="mt-4 text-3xl font-extrabold">Your address is more specific than an average.</h3>
+                        <p class="mt-5 leading-7 text-smoke">Updates here will give you a useful neighborhood starting point. Your home’s condition, updates, lot, floor plan, timing, and the closest comparable sales still matter most. If you are considering a move, refinance, renovation, or simply want a clearer baseline, a tailored conversation is the better next step.</p>
+                    </article>
+                    <aside class="dashboard-source-card">
+                        <p class="eyebrow">Sources + update log</p>
+                        <p class="mt-4 text-sm leading-6 text-smoke">Snapshot status: <strong class="text-ink">{market.status === 'placeholder' ? 'Public-data placeholders' : 'Verified public data'}</strong></p>
+                        <p class="mt-2 text-sm leading-6 text-smoke">Last reviewed {lastUpdated}. The scheduled site update can replace the placeholders in the market data file while preserving this date label.</p>
+                        <ul class="mt-5 space-y-3 text-sm">
+                            {market.sources.map((source) => (
+                                <li><a href={source.url} target="_blank" rel="noopener noreferrer" class="source-link">{source.name} ↗</a></li>
+                            ))}
+                        </ul>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-cta section-band">
+            <div class="site-shell">
+                <div class="grid items-center gap-10 lg:grid-cols-[1fr_auto]">
+                    <div>
+                        <p class="eyebrow text-dusty">A smarter next step</p>
+                        <h2 class="mt-4 max-w-3xl text-4xl font-extrabold text-ivory sm:text-5xl">Want the number that is specific to your home?</h2>
+                        <p class="mt-5 max-w-2xl text-lg leading-8 text-ivory/75">Get a thoughtful, no-pressure home-value conversation built around your property—not a generic online estimate.</p>
+                    </div>
+                    <a href={homeValueHref} class="btn-dashboard-primary whitespace-nowrap">Request a home-value review <span aria-hidden="true">↗</span></a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-band bg-blush/45">
+            <div class="site-shell grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+                <div>
+                    <p class="eyebrow">Built for the neighborhood</p>
+                    <h2 class="mt-4 text-4xl font-extrabold sm:text-5xl">The questions homeowners actually ask.</h2>
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="question-card"><span>01</span><p>What could my home sell for if I made no updates?</p></div>
+                    <div class="question-card"><span>02</span><p>Which improvements are worth doing before a move?</p></div>
+                    <div class="question-card"><span>03</span><p>How do Highland Creek and Ridgefield compare right now?</p></div>
+                    <div class="question-card"><span>04</span><p>What would my next move look like financially?</p></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <style>
+        .dashboard-hero { background: #2c2c2c; }
+        .dashboard-hero-glow { position: absolute; inset: auto -10% -45% auto; width: 42rem; height: 42rem; border-radius: 999px; background: radial-gradient(circle, rgba(196,128,142,.42), transparent 68%); }
+        .btn-dashboard-primary { display: inline-flex; min-height: 3.25rem; align-items: center; justify-content: center; gap: .65rem; border-radius: 6px; background: #f0ddd8; padding: .8rem 1.35rem; color: #2c2c2c; font-size: .9rem; font-weight: 600; transition: transform .2s ease, background .2s ease; }
+        .btn-dashboard-primary:hover { background: #fffdf8; transform: translateY(-2px); }
+        .btn-dashboard-ghost { display: inline-flex; min-height: 3.25rem; align-items: center; justify-content: center; border: 1px solid rgba(253,250,245,.35); border-radius: 6px; padding: .8rem 1.35rem; color: #fdfaf5; font-size: .9rem; transition: border-color .2s ease, background .2s ease; }
+        .btn-dashboard-ghost:hover { border-color: #f0ddd8; background: rgba(240,221,216,.1); }
+        .dashboard-card { min-height: 14rem; border: 1px solid #e1c4be; border-radius: 8px; background: #fffdf8; padding: 1.5rem; box-shadow: 0 18px 46px rgba(122,46,72,.06); }
+        .dashboard-note { border-radius: 8px; background: #f0ddd8; padding: 2rem; }
+        .dashboard-source-card { border: 1px solid #e1c4be; border-radius: 8px; background: #fffdf8; padding: 2rem; }
+        .source-link { color: #7a2e48; text-decoration: underline; text-decoration-color: #c4808e; text-underline-offset: 3px; }
+        .source-link:hover { color: #2c2c2c; }
+        .dashboard-cta { background: #7a2e48; }
+        .question-card { display: flex; gap: 1rem; border-top: 1px solid #e1c4be; padding: 1.25rem 0; }
+        .question-card span { color: #b06878; font-size: .8rem; font-weight: 600; letter-spacing: .12em; }
+        .question-card p { margin: 0; font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; line-height: 1.2; color: #2c2c2c; }
+        @media (max-width: 640px) { .dashboard-card { min-height: auto; } .dashboard-note, .dashboard-source-card { padding: 1.5rem; } }
+    </style>
+</BaseLayout>

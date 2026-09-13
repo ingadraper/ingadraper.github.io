@@ -1,0 +1,42 @@
+{
+    "currentThrough": "2026-08-31",
+    "lastUpdated": "2026-09-13",
+    "status": "placeholder",
+    "summary": "A lightweight community snapshot is being prepared from public sources. Use the home-value conversation for a property-specific read.",
+    "metrics": [
+        {
+            "label": "Typical sale price",
+            "value": "Coming soon",
+            "detail": "Neighborhood-level public data will be added here."
+        },
+        {
+            "label": "Homes for sale",
+            "value": "Coming soon",
+            "detail": "A current count will be published after source review."
+        },
+        {
+            "label": "Median days on market",
+            "value": "Coming soon",
+            "detail": "Updated from the latest available public report."
+        },
+        {
+            "label": "Sale-to-list ratio",
+            "value": "Coming soon",
+            "detail": "A verified neighborhood snapshot is on the way."
+        }
+    ],
+    "sources": [
+        {
+            "name": "Canopy Realtor® Association market reports",
+            "url": "https://www.canopyrealtors.com/market-data/"
+        },
+        {
+            "name": "Mecklenburg County open data",
+            "url": "https://data.charlottenc.gov/"
+        },
+        {
+            "name": "Town of Harrisburg community information",
+            "url": "https://www.harrisburgnc.gov/"
+        }
+    ]
+}

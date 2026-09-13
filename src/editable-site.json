@@ -41,5 +41,10 @@
                 "description": "Decide whether renting fits your plans by asking about the rules, costs, insurance, upkeep, and day-to-day work before you count on the income."
             }
         ]
+    },
+    "communityDashboard": {
+        "route": "/highland-creek",
+        "name": "Highland Creek + Ridgefield homeowner dashboard",
+        "summary": "Public neighborhood context, update dates, and a home-value conversation for local homeowners."
     }
 }
