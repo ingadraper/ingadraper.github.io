@@ -1,0 +1,365 @@
+---
+import market from '../data/highland-creek-market.json';
+import { siteConfig } from '../siteConfig';
+const county = market.countyComps;
+const rules = market.comparisonCriteria;
+const mls = market.mlsContext;
+// Only audited public property data is serialized. Escaping prevents HTML script termination.
+const publicData = JSON.stringify({ county, criteria: rules }).replace(/</g, '\\u003c');
+const money = (value: number) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+---
+<section id="check-comps" class="hc-comps" aria-labelledby="comps-heading" data-email={siteConfig.contact.email}>
+    <div class="hc-opening">
+        <p class="eyebrow">Your home is the starting point</p>
+        <h2 id="comps-heading">Check your comps</h2>
+        <p>Find similar nearby recorded sales, then explore what the numbers cannot tell you about condition, layout and updates.</p>
+    </div>
+    <p id="hc-coverage" class="hc-small">{county.metadata.coverage} County snapshot: <time datetime={county.metadata.asOf}>{county.metadata.asOf}</time>.</p>
+    <p id="hc-window" class="hc-small">Snapshot sale window: {county.metadata.windowStart} through {county.metadata.asOf}, inclusive. With JavaScript, the window uses today’s Eastern date; older sales age out.</p>
+    <p id="hc-stale" class="hc-notice" hidden></p>
+    <form id="hc-search" hidden novalidate>
+        <label for="hc-address">Your property address</label>
+        <p id="hc-search-help" class="hc-small">Start with a street number. Choose a suggestion or enter an exact address. Lookup stays in this browser; nothing is tracked or sent.</p>
+        <div class="hc-search-row">
+            <div class="hc-input-wrap">
+                <input id="hc-address" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="hc-options" aria-describedby="hc-search-help hc-match-status" autocomplete="off" autocapitalize="words" spellcheck="false" maxlength="150" />
+                <ul id="hc-options" role="listbox" aria-label="Matching property addresses" hidden></ul>
+            </div>
+            <button type="submit">Check your comps</button>
+        </div>
+        <p id="hc-match-status" class="hc-small" role="status" aria-live="polite"></p>
+    </form>
+    <noscript><p class="hc-notice">Address comparisons need JavaScript to run privately in your browser. You can still <a href="#home-review">request your complimentary Highland Creek Home Review</a> by email or phone below. No live lookup or automated value is provided.</p></noscript>
+    <p id="hc-load-fallback" class="hc-small">If address lookup is unavailable, <a href="#home-review">ask Inga for a Home Review</a>.</p>
+    <details class="hc-rules">
+        <summary>What makes a sale eligible?</summary>
+        <p>Similarity first: same single-family home type, heated size within {rules.sqftTolerancePercent}%, bedrooms within {rules.maxBedroomDifference}, and full bathrooms within {rules.maxFullBathroomDifference} of your home. Required facts must be known. Half-bathroom, year-built and lot differences are context, not filters.</p>
+        <p>Then the nearest {rules.maxResults} distinct parcels within {rules.maxDistanceMiles} miles AND mapped Highland Creek, sold within {rules.maxAgeCalendarMonths} calendar months of today (Eastern time), no later than the snapshot date. Latest qualifying transaction per parcel; your parcel is excluded. Limits never widen to fill five.</p>
+        <p>{county.metadata.eligibility} County-flagged, under-review and incomplete transfers are excluded. County records can lag. Distance is approximate straight-line distance, not driving distance. Cabarrus sale records are not included because exact dates, qualification and reuse remain unresolved; this is not complete transaction coverage.</p>
+    </details>
+    <div id="hc-results" hidden>
+        <div id="hc-subject" class="hc-subject"></div>
+        <h3 id="hc-results-heading" tabindex="-1">Nearby recorded sales</h3>
+        <p id="hc-result-status" role="status" aria-live="polite"></p>
+        <ol id="hc-cards" class="hc-cards"></ol>
+        <div class="hc-next">
+            <h3>Turn starting comparisons into a Home Review.</h3>
+            <p>Inga can assess condition, layout, updates and relevant MLS sale context to refine these automated comparisons. These records are not personally selected by Inga, and their conditions have not been reviewed here. No automated price estimate or price adjustment is provided.</p>
+            <label for="hc-question">What would you like to understand? <span class="hc-small">(optional)</span></label>
+            <textarea id="hc-question" rows="2" maxlength="1000" autocomplete="off"></textarea>
+            <a id="hc-draft" class="hc-button" href="#home-review">Open my Home Review email draft</a>
+            <p class="hc-small">The draft includes your selected address and optional question. Nothing is sent until you send the email. No marketing consent or automatic CRM enrollment.</p>
+            <a href="#home-review">Request your complimentary Highland Creek Home Review</a>
+        </div>
+    </div>
+    <aside class="hc-mls" aria-labelledby="hc-mls-heading">
+        <h3 id="hc-mls-heading">MLS market context</h3>
+        <p class="hc-small">Separate dated aggregate report · {mls.source} · Source checked {mls.checkedAt.slice(0, 10)} · {mls.periodStart} through {mls.periodEnd}</p>
+        <dl class="hc-metrics">
+            <div><dt>Closed listings</dt><dd>{mls.closedCount}</dd></div>
+            <div><dt>Median closed price</dt><dd>{money(mls.medianClosedPrice)}</dd></div>
+            <div><dt>Median / average cumulative days on market</dt><dd>{mls.medianCumulativeDaysOnMarket} / {mls.averageCumulativeDaysOnMarket} days</dd></div>
+            <div><dt>Median closed / list price</dt><dd>{mls.medianClosedToListPercent}%</dd></div>
+        </dl>
+        <p>{mls.interpretation} The median price describes this neighborhood report, not your home’s value. No trend is inferred without prior-period data.</p>
+        <details><summary>Report scope &amp; attribution</summary><p>{mls.scope}</p><p>{mls.disclaimer}</p><a href={mls.sourceUrl}>Canopy Matrix report platform</a></details>
+    </aside>
+    <details class="hc-data-use">
+        <summary>How we use the data</summary>
+        <p>The nearby individual cards use independent Mecklenburg County public records, not MLS measurements. MLS figures above are a dated aggregate report, not IDX or a live MLS search. Confidential MLS remarks, photos and access details are not published. Neither Canopy endorsement nor a new signed data license is claimed.</p>
+        <p>County sources checked {county.metadata.sourceCheckedAt.slice(0, 10)}. This snapshot does not auto-refresh. Existing selected sale examples below have their own separate attribution; they are not used to calculate these county comparisons.</p>
+        <p><a href="https://brokerrelations.canopyrealtors.com/mls-compliance-training/rules-regulations/">Canopy rules &amp; regulations</a> · <a href="https://gis.mecknc.gov/data-center">Mecklenburg County open-data policy</a></p>
+    </details>
+    <script id="hc-public-data" type="application/json" set:html={publicData} />
+</section>
+<script is:inline type="module">
+    const { county, criteria } = JSON.parse(document.getElementById('hc-public-data').textContent);
+    // COMPS CORE START
+    function normalizeAddress(value) {
+        return String(value ?? '').toLowerCase().replace(/['’]/g, '').replace(/[^\p{L}\p{N}\s]/gu, ' ').replace(/\b(drive|lane|court)\b/g, word => ({drive:'dr',lane:'ln',court:'ct'}[word])).replace(/\s+/g, ' ').trim();
+    }
+    function matchAddress(value, properties) {
+        const normalized = normalizeAddress(value);
+        if (!normalized) return null;
+        const matches = properties.filter(p => normalizeAddress(p.address) === normalized);
+        return matches.length === 1 ? matches[0] : null;
+    }
+    function validDate(value) {
+        return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value+'T00:00:00Z')) && new Date(value+'T00:00:00Z').toISOString().slice(0,10) === value;
+    }
+    function easternDate(now = new Date()) {
+        const parts = new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(now);
+        const get = type => parts.find(part => part.type === type).value;
+        return `${get('year')}-${get('month')}-${get('day')}`;
+    }
+    function calendarStart(today) {
+        if (!validDate(today)) return null;
+        const [year,month,day] = today.split('-').map(Number);
+        const target = new Date(Date.UTC(year,month-1-criteria.maxAgeCalendarMonths,1));
+        const last = new Date(Date.UTC(target.getUTCFullYear(),target.getUTCMonth()+1,0)).getUTCDate();
+        target.setUTCDate(Math.min(day,last));
+        return target.toISOString().slice(0,10);
+    }
+    const finite = value => typeof value === 'number' && Number.isFinite(value);
+    const knownCount = value => finite(value) && Number.isInteger(value) && value >= 0;
+    const knownSize = value => finite(value) && value > 0;
+    function requiredFacts(home) {
+        return home && home.propertyType === 'single-family' && knownSize(home.heatedSqFt) && knownCount(home.bedrooms) && knownCount(home.fullBaths);
+    }
+    function coordinates(home) {
+        return home && finite(home.latitude) && finite(home.longitude) && Math.abs(home.latitude) <= 90 && Math.abs(home.longitude) <= 180;
+    }
+    function distanceMiles(a,b) {
+        const radians = n => n * Math.PI / 180;
+        const lat = radians(b.latitude-a.latitude), lon = radians(b.longitude-a.longitude);
+        const h = Math.sin(lat/2)**2 + Math.cos(radians(a.latitude))*Math.cos(radians(b.latitude))*Math.sin(lon/2)**2;
+        return 3958.7613 * 2 * Math.asin(Math.sqrt(Math.min(1,Math.max(0,h))));
+    }
+    function similar(sale, subject) {
+        return requiredFacts(sale) && sale.propertyType === subject.propertyType
+            && sale.heatedSqFt >= subject.heatedSqFt * (1-criteria.sqftTolerancePercent/100)
+            && sale.heatedSqFt <= subject.heatedSqFt * (1+criteria.sqftTolerancePercent/100)
+            && Math.abs(sale.bedrooms-subject.bedrooms) <= criteria.maxBedroomDifference
+            && Math.abs(sale.fullBaths-subject.fullBaths) <= criteria.maxFullBathroomDifference;
+    }
+    const parcelIdentity = home => JSON.stringify([home.county,home.parcelId]);
+    function nearbySales(subject, sales, asOf, today = easternDate()) {
+        const start = calendarStart(today);
+        if (!start || !validDate(asOf) || !requiredFacts(subject) || !coordinates(subject)) return [];
+        const subjectIdentity = parcelIdentity(subject);
+        const unique = new Map();
+        for (const sale of sales) {
+            const identity = parcelIdentity(sale);
+            if (!sale.parcelId || identity === subjectIdentity || sale.withinHighlandCreek !== true
+                || sale.countySaleFlag !== '' || !knownSize(sale.salePrice) || !validDate(sale.saleDate)
+                || sale.saleDate < start || sale.saleDate > today || sale.saleDate > asOf
+                || !similar(sale,subject) || !coordinates(sale)) continue;
+            const distance = distanceMiles(subject,sale);
+            if (!finite(distance) || distance > criteria.maxDistanceMiles) continue;
+            const previous = unique.get(identity);
+            if (!previous || sale.saleDate > previous.saleDate || (sale.saleDate === previous.saleDate && String(sale.transactionId) < String(previous.transactionId))) {
+                unique.set(identity,{...sale,distanceMiles:distance});
+            }
+        }
+        return [...unique.values()].sort((a,b) => a.distanceMiles-b.distanceMiles || (a.parcelId < b.parcelId ? -1 : a.parcelId > b.parcelId ? 1 : 0) || (a.county < b.county ? -1 : a.county > b.county ? 1 : 0)).slice(0,criteria.maxResults);
+    }
+    function safeUrl(value) {
+        try {
+            const url = new URL(value);
+            return url.protocol === 'https:' && !url.username && !url.password && url.hostname === 'meckgis.mecklenburgcountync.gov' ? url.href : null;
+        } catch { return null; }
+    }
+    const number = value => value.toLocaleString('en-US',{maximumFractionDigits:2});
+    function facts(home) {
+        return [knownSize(home.heatedSqFt) ? `${number(home.heatedSqFt)} sq. ft.` : 'Size not available',
+            knownCount(home.bedrooms) ? `${home.bedrooms} bedrooms` : 'Bedrooms not available',
+            knownCount(home.fullBaths) ? `${home.fullBaths} full baths` : 'Full baths not available',
+            knownCount(home.halfBaths) ? `${home.halfBaths} half baths` : 'Half baths not available',
+            knownSize(home.yearBuilt) ? `Built ${home.yearBuilt}` : 'Year built not available',
+            knownSize(home.lotAcres) ? `${number(home.lotAcres)} lot acres` : 'Lot size not available'].join(' · ');
+    }
+    function comparison(home,subject) {
+        const parts = [];
+        if (knownSize(home.heatedSqFt) && knownSize(subject.heatedSqFt)) {
+            const gap = home.heatedSqFt-subject.heatedSqFt;
+            parts.push(gap === 0 ? 'Same recorded size' : `${number(Math.abs(gap))} sq. ft. ${gap>0?'larger':'smaller'} (${number(Math.abs(gap)/subject.heatedSqFt*100)}%)`);
+        } else parts.push('Size comparison unavailable');
+        for (const [key,label] of [['bedrooms','bedroom'],['fullBaths','full bath'],['halfBaths','half bath']]) {
+            if (!knownCount(home[key]) || !knownCount(subject[key])) { parts.push(`${label} comparison unavailable`); continue; }
+            const gap = home[key]-subject[key];
+            parts.push(gap === 0 ? `Same ${label} count` : `${Math.abs(gap)} ${gap>0?'more':'fewer'} ${label}${Math.abs(gap)===1?'':'s'}`);
+        }
+        if (knownSize(home.yearBuilt) && knownSize(subject.yearBuilt)) {
+            const gap = home.yearBuilt-subject.yearBuilt;
+            parts.push(gap === 0 ? 'Same year built' : `Built ${Math.abs(gap)} year${Math.abs(gap)===1?'':'s'} ${gap>0?'later':'earlier'}`);
+        } else parts.push('Year comparison unavailable');
+        if (knownSize(home.lotAcres) && knownSize(subject.lotAcres)) {
+            const gap = home.lotAcres-subject.lotAcres;
+            const acres = Math.abs(gap).toLocaleString('en-US',{maximumSignificantDigits:12});
+            parts.push(gap === 0 ? 'Same recorded lot size (0 lot acres difference)' : `${acres} lot acres ${gap>0?'larger':'smaller'}`);
+        } else parts.push('Lot comparison unavailable: lot size missing or invalid for one or both homes');
+        return parts.join(' · ') + '. Differences are context, not price adjustments.';
+    }
+    function snapshotStale(asOf,today) {
+        return validDate(asOf) && validDate(today) && (Date.parse(today+'T00:00:00Z')-Date.parse(asOf+'T00:00:00Z'))/86400000 > 30;
+    }
+    // COMPS CORE END
+    const root = document.getElementById('check-comps');
+    const get = id => document.getElementById(id);
+    const input = get('hc-address'), options = get('hc-options'), form = get('hc-search');
+    const status = get('hc-match-status'), results = get('hc-results'), cards = get('hc-cards');
+    let selected = null, suggestions = [], active = -1, today = easternDate();
+    function node(tag, text, className) {
+        const element = document.createElement(tag);
+        if (text !== undefined) element.textContent = text;
+        if (className) element.className = className;
+        return element;
+    }
+    function closeOptions() {
+        options.hidden = true;
+        input.setAttribute('aria-expanded','false');
+        input.removeAttribute('aria-activedescendant');
+        active = -1;
+    }
+    function clearResults() {
+        selected = null;
+        results.hidden = true;
+        cards.replaceChildren();
+        get('hc-subject').replaceChildren();
+        get('hc-draft').setAttribute('href','#home-review');
+    }
+    function updateDraft() {
+        if (!selected) return;
+        const body = ['Hi Inga, I would like a complimentary Highland Creek Home Review.','',
+            `Property address: ${selected.address}`,`What I would like to understand: ${get('hc-question').value.trim()}`,'',
+            'Please include recent comparable sales, a likely price range and practical prep considerations.'].join('\r\n');
+        get('hc-draft').href = `mailto:${root.dataset.email}?subject=${encodeURIComponent('Highland Creek Home Review')}&body=${encodeURIComponent(body)}`;
+    }
+    function sourceLink(home, label) {
+        const url = safeUrl(home.recordUrl) || safeUrl(home.sourceUrl);
+        if (!url) return node('p','County source link unavailable.','hc-small');
+        const link = node('a',label);
+        link.href = url;
+        return link;
+    }
+    function renderResults(focus = false) {
+        if (!selected) return;
+        const sales = nearbySales(selected,county.sales,county.metadata.asOf,today);
+        get('hc-subject').replaceChildren(node('p','Your selected home · Mecklenburg County property facts','hc-small'),
+            node('h3',selected.address),node('p',facts(selected)),sourceLink(selected,'County property source'));
+        const summary = !requiredFacts(selected) || !coordinates(selected)
+            ? 'Required county facts are missing for this home, so no comparisons can be calculated. Ask Inga for a Home Review.'
+            : sales.length === 5 ? 'Five nearest eligible county-recorded sales in this snapshot. Similarity filters applied before distance; not an appraisal or the five best MLS comps.'
+            : sales.length ? `Only ${sales.length} eligible county-recorded sales match in this snapshot. Showing all ${sales.length}; limits have not been widened. A Home Review can explore the gaps.`
+            : 'No eligible recorded sales match this home in the current window and snapshot. Limits have not been widened. Ask Inga for a Home Review.';
+        get('hc-result-status').textContent = summary;
+        cards.replaceChildren();
+        sales.forEach((sale,index) => {
+            const item = node('li');
+            item.dataset.parcel = sale.parcelId;
+            const article = node('article');
+            const heading = node('h4',sale.address);
+            heading.id = `hc-sale-${index}`;
+            article.setAttribute('aria-labelledby',heading.id);
+            article.append(heading,node('p',sale.salePrice.toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}),'hc-price'));
+            const dateLine = node('p','County-recorded sale: ','hc-small');
+            const time = node('time',sale.saleDate); time.dateTime = sale.saleDate;
+            dateLine.append(time);
+            article.append(dateLine,node('p',`Approx. ${sale.distanceMiles.toFixed(2)} miles · straight-line`,'hc-small'),
+                node('p',facts(sale),'hc-facts'),node('p',`Compared with your home: ${comparison(sale,selected)}`,'hc-difference'),
+                sourceLink(sale,'View county sale record'));
+            item.append(article); cards.append(item);
+        });
+        results.hidden = false;
+        updateDraft();
+        if (focus) get('hc-results-heading').focus({preventScroll:true});
+    }
+    function updateWindow() {
+        today = easternDate();
+        get('hc-window').textContent = `Eligible sale window: ${calendarStart(today)} through ${today} (Eastern), inclusive; no sales after snapshot ${county.metadata.asOf}. Up to ${criteria.maxResults} results, within ${criteria.maxDistanceMiles} miles AND mapped Highland Creek. Similarity: same home type, size ±${criteria.sqftTolerancePercent}%, bedrooms ±${criteria.maxBedroomDifference}, full baths ±${criteria.maxFullBathroomDifference}.`;
+        const stale = get('hc-stale');
+        stale.hidden = !snapshotStale(county.metadata.asOf,today);
+        stale.textContent = stale.hidden ? '' : 'This county snapshot is more than 30 days old. It does not auto-refresh; newer sales may be missing and older records age out. Ask Inga for current MLS-informed context.';
+    }
+    function choose(home) {
+        input.value = home.address;
+        selected = matchAddress(input.value,county.properties);
+        closeOptions();
+        input.removeAttribute('aria-invalid');
+        status.textContent = selected ? `Selected ${selected.address}.` : 'This address is not a unique match. Please ask Inga for help.';
+        updateWindow(); renderResults(true);
+    }
+    function showOptions() {
+        clearResults(); closeOptions(); options.replaceChildren();
+        input.removeAttribute('aria-invalid');
+        const query = normalizeAddress(input.value);
+        if (!query) { status.textContent = 'Enter your address to begin. No home is selected.'; return; }
+        const all = county.properties.filter(home => normalizeAddress(home.address).startsWith(query));
+        suggestions = all.slice(0,8);
+        status.textContent = all.length ? `${all.length} matching addresses${all.length>8?'; first 8 shown. Keep typing to narrow the list':''}. Use Up or Down, then Enter to select.` : 'No matching address. Lookup covers Ridgefield and Bell’s Mills only; ask Inga for a Home Review.';
+        suggestions.forEach((home,index) => {
+            const item = node('li',home.address);
+            item.id = `hc-option-${index}`;
+            item.setAttribute('role','option'); item.setAttribute('aria-selected','false');
+            item.addEventListener('mousedown',event => event.preventDefault());
+            item.addEventListener('click',() => choose(home));
+            options.append(item);
+        });
+        options.hidden = suggestions.length === 0;
+        input.setAttribute('aria-expanded',String(!options.hidden));
+    }
+    input.addEventListener('input',showOptions);
+    input.addEventListener('keydown',event => {
+        if (event.key === 'Escape') { closeOptions(); return; }
+        if (event.key === 'Tab') { closeOptions(); return; }
+        if (event.key === 'Enter' && active >= 0 && !options.hidden) {
+            event.preventDefault(); choose(suggestions[active]); return;
+        }
+        if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+        event.preventDefault();
+        if (options.hidden) showOptions();
+        if (!suggestions.length || options.hidden) return;
+        active = event.key === 'ArrowDown' ? (active+1)%suggestions.length : (active<=0?suggestions.length-1:active-1);
+        [...options.children].forEach((item,index) => item.setAttribute('aria-selected',String(index===active)));
+        input.setAttribute('aria-activedescendant',`hc-option-${active}`);
+        options.children[active].scrollIntoView({block:'nearest'});
+    });
+    input.addEventListener('blur',event => { if (!form.contains(event.relatedTarget)) closeOptions(); });
+    form.addEventListener('submit',event => {
+        event.preventDefault(); closeOptions();
+        const home = matchAddress(input.value,county.properties);
+        if (home) { choose(home); return; }
+        clearResults(); input.setAttribute('aria-invalid','true');
+        status.textContent = 'No unique exact address match. Choose a listed address; we never guess a different home. You can also request a Home Review below.';
+        input.focus();
+    });
+    get('hc-question').addEventListener('input',updateDraft);
+    function refreshDate() {
+        if (easternDate() !== today) { updateWindow(); renderResults(); }
+    }
+    window.addEventListener('focus',refreshDate);
+    document.addEventListener('visibilitychange',refreshDate);
+    setInterval(refreshDate,60000);
+    updateWindow(); form.hidden = false;
+    get('hc-load-fallback').hidden = true;
+    status.textContent = 'Enter your address to begin. No home is selected.';
+</script>
+
+<!-- Selectors are Highland Creek namespaced so dynamically created cards share the same styles. -->
+<style is:global>
+    .hc-comps { margin-bottom: 3rem; padding: 1.25rem; border: 1px solid #cbb9b4; border-radius: 8px; background: #fffdf8; color: #5a4a4a; font-weight: 400; }
+    .hc-comps [hidden] { display: none !important; }
+    .hc-comps h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin: .5rem 0 .8rem; }
+    .hc-comps h3 { font-size: 1.4rem; line-height: 1.3; }
+    .hc-comps p { margin: .6rem 0; }
+    .hc-comps .hc-small { font-size: .875rem; line-height: 1.55; }
+    .hc-comps .eyebrow, .hc-comps a { color: #7a2e48; }
+    .hc-comps a { text-decoration: underline; text-underline-offset: 4px; display: inline-flex; align-items: center; min-height: 44px; }
+    .hc-comps :is(a, button, input, textarea, summary, [tabindex]):focus-visible { outline: 2px solid #7a2e48; outline-offset: 4px; }
+    .hc-comps label { display: block; color: #2c2c2c; font-weight: 500; margin-top: .8rem; }
+    .hc-search-row { display: flex; gap: .75rem; align-items: flex-start; }
+    .hc-input-wrap { position: relative; flex: 1; min-width: 0; }
+    .hc-comps input, .hc-comps textarea { width: 100%; border: 1px solid #7a2e48; background: #fffdf8; color: #2c2c2c; padding: .7rem; border-radius: 4px; min-height: 48px; font-size: 1rem; }
+    .hc-comps textarea { resize: vertical; }
+    .hc-comps button, .hc-comps .hc-button { background: #7a2e48; color: #fffdf8; padding: .75rem 1rem; border-radius: 4px; min-height: 48px; text-align: center; text-decoration: none; line-height: 1.5; }
+    .hc-comps button:hover, .hc-comps .hc-button:hover { background: #2c2c2c; }
+    #hc-options { position: absolute; inset: 100% 0 auto; margin: 4px 0 0; z-index: 2; background: #fffdf8; border: 1px solid #7a2e48; border-radius: 4px; max-height: 260px; overflow-y: auto; box-shadow: 0 8px 20px #2c2c2c20; }
+    #hc-options li { padding: .65rem .75rem; min-height: 44px; cursor: pointer; overflow-wrap: anywhere; }
+    #hc-options li[aria-selected='true'], #hc-options li:hover { background: #f0ddd8; color: #2c2c2c; }
+    .hc-comps summary { cursor: pointer; min-height: 44px; padding: .6rem 0; color: #7a2e48; font-weight: 500; }
+    .hc-comps details { border-top: 1px solid #cbb9b4; margin-top: .75rem; }
+    .hc-subject, .hc-notice, .hc-next { border-radius: 6px; background: #f0ddd8; padding: 1rem; margin: 1.25rem 0; }
+    .hc-cards { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; margin-top: 1rem; list-style: none; padding: 0; }
+    .hc-cards li { min-width: 0; border: 1px solid #cbb9b4; border-radius: 6px; padding: 1rem; }
+    .hc-cards h4 { font-family: 'Playfair Display',serif; font-weight: 600; color: #2c2c2c; font-size: 1.15rem; line-height: 1.4; }
+    .hc-price { font-family: 'Cormorant Garamond',serif; font-size: 2rem; color: #2c2c2c; font-weight: 600; }
+    .hc-facts, .hc-difference { border-top: 1px solid #cbb9b4; padding-top: .65rem; font-size: .9rem; }
+    .hc-mls { border-top: 1px solid #cbb9b4; margin-top: 1.25rem; padding-top: 1.25rem; }
+    .hc-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 1rem; margin: 1rem 0; }
+    .hc-metrics dt { font-size: .85rem; }
+    .hc-metrics dd { font-size: 1.4rem; color: #2c2c2c; font-weight: 500; }
+    .hc-comps :is(p,h3,h4,a,dd) { overflow-wrap: anywhere; }
+    @media (min-width: 640px) { .hc-comps { padding: 1.5rem; } }
+    @media (max-width: 639px) { .hc-search-row { flex-direction: column; } .hc-input-wrap, .hc-search-row button { width: 100%; } #hc-options { position: static; } .hc-cards { grid-template-columns: minmax(0,1fr); } .hc-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+    @media (prefers-reduced-motion: reduce) { .hc-comps { scroll-behavior: auto; } }
+</style>
