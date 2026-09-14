@@ -68,8 +68,8 @@ export const siteConfig = {
             src: '/images/property/inga-draper-charlotte-750.webp',
             srcset: '/images/property/inga-draper-charlotte-500.webp 500w, /images/property/inga-draper-charlotte-750.webp 750w, /images/property/inga-draper-charlotte-1000.webp 1000w',
             width: 1000,
-            height: 1440,
-            alt: 'Inga Draper, Charlotte real estate advisor, with the Charlotte skyline',
+            height: 1000,
+            alt: 'Inga Draper, Charlotte real estate advisor',
         },
     },
     connectors: {
