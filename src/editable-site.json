@@ -9,10 +9,12 @@
     },
     "about": {
         "workingStyle": "Real advice. Smart guidance. No pressure.",
-        "headline": "Finding the right fit starts with feeling understood.",
+        "headline": "I’m not here to talk you into a house.",
         "paragraphs": [
-            "The right move looks different for everyone. My first job is to listen: where you are now, what matters to you, and what you want daily life to feel like after the boxes are unpacked.",
-            "I work with clients across Charlotte and the surrounding areas. You should never feel like you need to speak real estate to understand what is happening. My job is to explain the terms, lay out the choices, and help you find the home, neighborhood, or next step that fits."
+            "I’m here to help you make a good decision about one.",
+            "I’m Inga Draper, a Charlotte-area Realtor licensed in North and South Carolina. I work with buyers, sellers, and people relocating to the area who want more than someone to simply open doors and write contracts.",
+            "We’ll talk about the house, of course. But we’ll also talk about the payment, the commute, how the location works for your everyday life, what may become expensive later, and whether the decision still makes sense once the excitement wears off.",
+            "Sometimes the right answer is “write the offer.” Sometimes it’s “this is not the one.” Both are part of the job."
         ],
         "stats": [
             { "label": "Charlotte + Lake Norman", "value": "Local" },
@@ -26,11 +28,11 @@
         "items": [
             {
                 "title": "Buying a home",
-                "description": "Find a home and neighborhood that fit your budget, routines, and plans, then understand the offer, inspections, and deadlines before you sign."
+                "description": "We’ll figure out what you can comfortably buy, where your life works, and which homes actually deserve an offer. Then I’ll help you understand the numbers, risks, and contract before your money is on the line."
             },
             {
                 "title": "Selling a home",
-                "description": "Make a selling plan that fits your timing and priorities: what to fix, what to skip, how to price, and how to compare offers without the jargon."
+                "description": "Before you spend money getting your home ready to sell, let’s decide what buyers are actually likely to care about. We’ll prioritize the updates worth doing, skip the ones that aren’t, and build a pricing and marketing plan around your home and your next move."
             },
             {
                 "title": "Moving to Charlotte",
