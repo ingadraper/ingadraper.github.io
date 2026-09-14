@@ -2,6 +2,10 @@
 import { ArrowUpRight, Star } from '@lucide/astro';
 import { siteConfig } from '../siteConfig';
 
+// Observed Google Maps listing supplied with the verified review excerpts.
+// Kept local to Reviews; this is not a synchronized third-party widget.
+const googleReviewsUrl = 'https://www.google.com/maps/place/Inga+Draper-+Realtor/@35.3444724,-80.8426284,10z/data=!3m1!4b1!4m6!3m5!1s0x4f4ac1c34021069f:0x1e56c01cf9dee8cd!8m2!3d35.3444724!4d-80.8426284!16s%2Fg%2F11x6w7j53j';
+
 const reviews = [
     {
         name: 'Nicole Rodzen',
@@ -19,6 +23,18 @@ const reviews = [
         source: 'Zillow',
         sourceUrl: siteConfig.links.zillow,
     },
+    {
+        name: 'Natasha Rowe',
+        text: '“We truly couldn’t have asked for a better realtor than Inga! From start to finish, she was patient, knowledgeable, supportive, and always there to answer every question we had.”',
+        source: 'Google',
+        sourceUrl: googleReviewsUrl,
+    },
+    {
+        name: 'Megan Moulton',
+        text: '“Inga helped us purchase our first home and I am so happy she was our realtor! She was incredibly communicative and thorough, answered our endless questions, and truly held our hands through the entire purchase.”',
+        source: 'Google',
+        sourceUrl: googleReviewsUrl,
+    },
 ];
 ---
 
@@ -35,7 +51,7 @@ const reviews = [
                 </p>
 
                 <div class="mt-9 flex flex-wrap gap-3">
-                    <a href={siteConfig.links.googleBusiness} target="_blank" rel="noopener noreferrer" aria-label="View Inga Draper's Google Business Profile" class="btn-secondary">
+                    <a href={googleReviewsUrl} target="_blank" rel="noopener noreferrer" aria-label="View Inga Draper's Google Business Profile" class="btn-secondary">
                         View Google profile
                         <ArrowUpRight class="h-4 w-4" />
                     </a>
@@ -46,7 +62,14 @@ const reviews = [
                 </div>
             </div>
 
-            <div class="grid gap-4 md:grid-cols-2">
+            <div class="review-carousel min-w-0" data-review-carousel>
+                <div class="review-controls mb-4 flex flex-wrap items-center gap-3" data-review-controls hidden>
+                    <button type="button" class="btn-secondary" data-review-rotation aria-controls="review-slides">Pause automatic reviews</button>
+                    <button type="button" class="btn-secondary" data-review-previous aria-controls="review-slides" aria-label="Previous review">Previous</button>
+                    <button type="button" class="btn-secondary" data-review-next aria-controls="review-slides" aria-label="Next review">Next</button>
+                    <p class="w-full text-sm text-smoke" data-review-status aria-live="off" aria-atomic="true">Review 1 of {reviews.length}</p>
+                </div>
+                <div id="review-slides" class="review-slides grid gap-4 md:grid-cols-2" data-review-slides>
                 {reviews.map((review) => (
                     <article class="soft-card p-7">
                         <div class="flex gap-1 text-slate" role="img" aria-label="5 out of 5 stars">
@@ -55,15 +78,160 @@ const reviews = [
                         <p class="mt-6 text-lg text-ink">{review.text}</p>
                         <div class="mt-8 border-t border-line pt-5">
                             <p class="font-medium text-ink">{review.name}</p>
-                            <p class="mt-1 text-sm text-smoke">{review.transaction}</p>
-                            <p class="mt-1 text-xs uppercase tracking-[0.18em] text-smoke">{review.date}</p>
+                            {review.transaction && <p class="mt-1 text-sm text-smoke">{review.transaction}</p>}
+                            {review.date && <p class="mt-1 text-xs uppercase tracking-[0.18em] text-smoke">{review.date}</p>}
                             <a href={review.sourceUrl} target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex items-center gap-1 text-xs font-medium uppercase tracking-[0.14em] text-deep-rose underline underline-offset-2">
                                 Source: {review.source} <ArrowUpRight class="h-3.5 w-3.5" aria-hidden="true" />
                             </a>
                         </div>
                     </article>
                 ))}
+                </div>
+                <p class="mt-4 text-sm text-smoke">Selected review excerpts. Read more at the linked sources.</p>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+    .review-controls[hidden] {
+        display: none;
+    }
+
+    .review-slides > article {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    /* All cards size the same grid cell, including inactive cards. This keeps
+       height stable at every width and font size without clipping any quote. */
+    .review-carousel[data-enhanced] .review-slides {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .review-carousel[data-enhanced] article {
+        grid-area: 1 / 1;
+    }
+
+    .review-carousel[data-enhanced] article[aria-hidden='true'] {
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .review-carousel a:focus-visible {
+        outline: 2px solid #91485e;
+        outline-offset: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .review-carousel * {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+</style>
+
+<script>
+    document.querySelectorAll<HTMLElement>('[data-review-carousel]').forEach((carousel) => {
+        const slides = Array.from(carousel.querySelectorAll<HTMLElement>('article'));
+        const controls = carousel.querySelector<HTMLElement>('[data-review-controls]');
+        const rotation = carousel.querySelector<HTMLButtonElement>('[data-review-rotation]');
+        const previous = carousel.querySelector<HTMLButtonElement>('[data-review-previous]');
+        const next = carousel.querySelector<HTMLButtonElement>('[data-review-next]');
+        const status = carousel.querySelector<HTMLElement>('[data-review-status]');
+        const viewport = carousel.querySelector<HTMLElement>('[data-review-slides]');
+        if (!controls || !rotation || !previous || !next || !status || !viewport || slides.length < 2) return;
+
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let current = 0;
+        let paused = reducedMotion.matches;
+        let hovered = carousel.matches(':hover');
+        let visible = false;
+        let timer: ReturnType<typeof setTimeout> | undefined;
+        let pointerPause: boolean | undefined;
+
+        function updateRotation() {
+            clearTimeout(timer);
+            const running = !paused && !reducedMotion.matches && !hovered && visible
+                && !document.hidden && !carousel.contains(document.activeElement);
+            rotation!.disabled = reducedMotion.matches;
+            rotation!.textContent = reducedMotion.matches
+                ? 'Automatic reviews off: reduced motion'
+                : paused ? 'Resume automatic reviews' : 'Pause automatic reviews';
+            status!.setAttribute('aria-live', running ? 'off' : 'polite');
+            if (running) timer = setTimeout(() => show(current + 1), 6000);
+        }
+
+        function show(index: number) {
+            current = (index + slides.length) % slides.length;
+            slides.forEach((slide, i) => {
+                const inactive = i !== current;
+                slide.inert = inactive;
+                slide.setAttribute('aria-hidden', String(inactive));
+            });
+            status!.textContent = `Review ${current + 1} of ${slides.length}`;
+            updateRotation();
+        }
+
+        carousel.setAttribute('role', 'region');
+        carousel.setAttribute('aria-roledescription', 'carousel');
+        carousel.setAttribute('aria-label', 'Client reviews');
+        slides.forEach((slide, index) => {
+            slide.setAttribute('role', 'group');
+            slide.setAttribute('aria-roledescription', 'slide');
+            slide.setAttribute('aria-label', `${index + 1} of ${slides.length}`);
+        });
+        carousel.dataset.enhanced = '';
+        controls.hidden = false;
+        show(0);
+
+        previous.addEventListener('click', () => {
+            paused = true;
+            show(current - 1);
+        });
+        next.addEventListener('click', () => {
+            paused = true;
+            show(current + 1);
+        });
+        // Capture pointer intent before focusin changes the label/state. A click
+        // on Pause must still pause, even when it first focuses the button.
+        rotation.addEventListener('pointerdown', () => {
+            pointerPause = !paused;
+        });
+        rotation.addEventListener('pointercancel', () => { pointerPause = undefined; });
+        rotation.addEventListener('blur', () => { pointerPause = undefined; });
+        rotation.addEventListener('click', (event) => {
+            paused = event.detail > 0 ? pointerPause ?? !paused : !paused;
+            pointerPause = undefined;
+            updateRotation();
+        });
+        carousel.addEventListener('mouseenter', () => {
+            hovered = true;
+            updateRotation();
+        });
+        carousel.addEventListener('mouseleave', () => {
+            hovered = false;
+            updateRotation();
+        });
+        // Focus stops rotation until explicitly resumed. Even after Resume,
+        // wait until focus leaves so a focused source link is never hidden.
+        carousel.addEventListener('focusin', () => {
+            paused = true;
+            updateRotation();
+        });
+        carousel.addEventListener('focusout', () => queueMicrotask(updateRotation));
+        document.addEventListener('visibilitychange', updateRotation);
+        window.addEventListener('pagehide', () => clearTimeout(timer));
+        window.addEventListener('pageshow', updateRotation);
+        reducedMotion.addEventListener('change', () => {
+            paused = true;
+            updateRotation();
+        });
+        // Observe the cards, not the entire tall mobile section. Start a fresh
+        // interval on return; never catch up missed slides in the background.
+        new IntersectionObserver(([entry]) => {
+            visible = entry.isIntersecting && entry.intersectionRatio >= 0.25;
+            updateRotation();
+        }, { threshold: [0, 0.25] }).observe(viewport);
+    });
+</script>
