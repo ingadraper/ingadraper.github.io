@@ -1,6 +1,8 @@
 ---
 import market from '../data/highland-creek-market.json';
 import { siteConfig } from '../siteConfig';
+interface Props { section?: 'lookup' | 'market' | 'methodology'; }
+const { section = 'lookup' } = Astro.props;
 const county = market.countyComps;
 const rules = market.comparisonCriteria;
 const mls = market.mlsContext;
@@ -8,13 +10,14 @@ const mls = market.mlsContext;
 const publicData = JSON.stringify({ county, criteria: rules }).replace(/</g, '\\u003c');
 const money = (value: number) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 ---
+{section === 'lookup' && <>
 <section id="check-comps" class="hc-comps" aria-labelledby="comps-heading" data-email={siteConfig.contact.email}>
     <div class="hc-opening">
-        <h2 id="comps-heading">Check your comps</h2>
+        <h2 id="comps-heading">SO WHERE DOES YOURS FIT?</h2>
         <p>Enter your address to see up to five similar sold homes.</p>
     </div>
-    <p id="hc-coverage" class="hc-small">{county.metadata.coverage} County snapshot: <time datetime={county.metadata.asOf}>{county.metadata.asOf}</time>.</p>
-    <p id="hc-window" class="hc-small">Recorded sales: {county.metadata.windowStart} through {county.metadata.asOf}. This snapshot is not a live feed.</p>
+    <p id="hc-coverage" class="hc-small hc-source-note">{county.metadata.coverage} County snapshot: <time datetime={county.metadata.asOf}>{county.metadata.asOf}</time>.</p>
+    <p id="hc-window" class="hc-small hc-source-note">Recorded sales: {county.metadata.windowStart} through {county.metadata.asOf}. This snapshot is not a live feed.</p>
     <p id="hc-stale" class="hc-notice" hidden></p>
     <form id="hc-search" hidden novalidate>
         <label for="hc-address">Your property address</label>
@@ -24,22 +27,16 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
                 <input id="hc-address" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="hc-options" aria-describedby="hc-search-help hc-match-status" autocomplete="off" autocapitalize="words" spellcheck="false" maxlength="150" />
                 <ul id="hc-options" role="listbox" aria-label="Matching property addresses" hidden></ul>
             </div>
-            <button type="submit">Check your comps</button>
+            <button type="submit">CHECK MY HOME</button>
         </div>
         <p id="hc-match-status" class="hc-small" role="status" aria-live="polite"></p>
     </form>
     <noscript><p class="hc-notice">Turn on JavaScript to check your address, or <a href="#home-review">ask Inga for a complimentary Home Review</a> by email or phone.</p></noscript>
     <p id="hc-load-fallback" class="hc-small">If address lookup is unavailable, <a href="#home-review">ask Inga for a Home Review</a>.</p>
-    <details class="hc-rules">
-        <summary>How these sales are chosen</summary>
-        <p>Single-family homes must be within {rules.maxDistanceMiles} miles and mapped Highland Creek, with heated size within {rules.sqftTolerancePercent}%, bedrooms within {rules.maxBedroomDifference} and full baths within {rules.maxFullBathroomDifference} of yours. Missing required facts rule out a match.</p>
-        <p>Sales must fall within {rules.maxAgeCalendarMonths} calendar months of today (Eastern time), through the snapshot date. Both date limits are inclusive; older sales age out. Only the latest qualifying sale per county and parcel is used, excluding your own. We never relax these limits to fill {rules.maxResults} spots.</p>
-        <p>Matching homes on your street come first, then your verified village, then elsewhere in Highland Creek. Village matches use the address roster's county and parcel, not tax-neighborhood names. Within each group, the order is closest size (percentage difference), bedroom count, full-bath count, year built and lot size; then newer sale, shorter straight-line distance, county and parcel ID. Missing year or lot facts sort last at that step. Half baths, year and lot size do not rule out a match.</p>
-        <p>{county.metadata.eligibility} Flagged, under-review and incomplete transfers are excluded. County records can lag and differ from MLS measurements. Cabarrus sale dates, qualification and reuse remain unresolved, so those sales are excluded.</p>
-    </details>
     <div id="hc-results" hidden>
         <div id="hc-subject" class="hc-subject"></div>
-        <h3 id="hc-results-heading" tabindex="-1">Nearby recorded sales</h3>
+        <h3 id="hc-results-heading" tabindex="-1">HERE’S WHAT THE NUMBERS SAY.</h3>
+        <p>Nearby sales are a useful starting point, but they are only part of the picture.</p>
         <p id="hc-result-status" role="status" aria-live="polite"></p>
         <p class="hc-small">These automated comparisons are not an appraisal or a price estimate. Inga has not reviewed these homes' condition or selected them personally.</p>
         <ol id="hc-cards" class="hc-cards"></ol>
@@ -53,24 +50,6 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
             <a href="#home-review">About your complimentary Home Review</a>
         </div>
     </div>
-    <aside class="hc-mls" aria-labelledby="hc-mls-heading">
-        <h3 id="hc-mls-heading">MLS market context</h3>
-        <p class="hc-small">{mls.source} · Checked {mls.checkedAt.slice(0, 10)} · {mls.periodStart} through {mls.periodEnd}</p>
-        <dl class="hc-metrics">
-            <div><dt>Closed listings</dt><dd>{mls.closedCount}</dd></div>
-            <div><dt>Median closed price</dt><dd>{money(mls.medianClosedPrice)}</dd></div>
-            <div><dt>Median / average cumulative days on market</dt><dd>{mls.medianCumulativeDaysOnMarket} / {mls.averageCumulativeDaysOnMarket} days</dd></div>
-            <div><dt>Median closed / list price</dt><dd>{mls.medianClosedToListPercent}%</dd></div>
-        </dl>
-        <p>A dated neighborhood summary, not your home's value or a prediction of how quickly it will sell.</p>
-        <details><summary>Report scope &amp; attribution</summary><p>{mls.scope}</p><p>{mls.disclaimer}</p><a href={mls.sourceUrl}>Canopy Matrix report platform</a></details>
-    </aside>
-    <details class="hc-data-use">
-        <summary>How we use the data</summary>
-        <p>Individual comparisons use Mecklenburg County public records. MLS figures are a separate dated summary, not a live MLS search or IDX feed. No confidential remarks, photos or access details are published; no Canopy endorsement or new data license is claimed.</p>
-        <p>County sources checked {county.metadata.sourceCheckedAt.slice(0, 10)}. This snapshot does not auto-refresh. The two additional sale examples below have separate sources and are not used in the address comparisons. The lookup creates no marketing signup or automatic CRM enrollment.</p>
-        <p><a href="https://brokerrelations.canopyrealtors.com/mls-compliance-training/rules-regulations/">Canopy rules &amp; regulations</a> · <a href="https://gis.mecknc.gov/data-center">Mecklenburg County open-data policy</a></p>
-    </details>
     <script id="hc-public-data" type="application/json" set:html={publicData} />
 </section>
 <script is:inline type="module">
@@ -358,6 +337,39 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
     get('hc-load-fallback').hidden = true;
     status.textContent = 'Enter your address to begin. No home is selected.';
 </script>
+</>}
+
+{section === 'market' && <div class="hc-comps">
+    <aside class="hc-mls" aria-labelledby="hc-mls-heading">
+        <h3 id="hc-mls-heading">MLS market context</h3>
+        <p class="hc-small hc-source-note">{mls.source} · Checked {mls.checkedAt.slice(0, 10)} · {mls.periodStart} through {mls.periodEnd}</p>
+        <dl class="hc-metrics">
+            <div><dt>Closed listings</dt><dd>{mls.closedCount}</dd></div>
+            <div><dt>Median closed price</dt><dd>{money(mls.medianClosedPrice)}</dd></div>
+            <div><dt>Median / average cumulative days on market</dt><dd>{mls.medianCumulativeDaysOnMarket} / {mls.averageCumulativeDaysOnMarket} days</dd></div>
+            <div><dt>Median closed / list price</dt><dd>{mls.medianClosedToListPercent}%</dd></div>
+        </dl>
+        <p>A dated neighborhood summary, not your home's value or a prediction of how quickly it will sell.</p>
+        <details><summary>Report scope &amp; attribution</summary><p>{mls.scope}</p><p>{mls.disclaimer}</p><a href={mls.sourceUrl}>Canopy Matrix report platform</a></details>
+    </aside>
+</div>}
+
+{section === 'methodology' && <section class="hc-comps" aria-labelledby="method-heading">
+    <h2 id="method-heading">HOW THE HOME COMPARISON WORKS</h2>
+    <details class="hc-rules">
+        <summary>How these sales are chosen</summary>
+        <p>Single-family homes must be within {rules.maxDistanceMiles} miles and mapped Highland Creek, with heated size within {rules.sqftTolerancePercent}%, bedrooms within {rules.maxBedroomDifference} and full baths within {rules.maxFullBathroomDifference} of yours. Missing required facts rule out a match.</p>
+        <p>Sales must fall within {rules.maxAgeCalendarMonths} calendar months of today (Eastern time), through the snapshot date. Both date limits are inclusive; older sales age out. Only the latest qualifying sale per county and parcel is used, excluding your own. We never relax these limits to fill {rules.maxResults} spots.</p>
+        <p>Matching homes on your street come first, then your verified village, then elsewhere in Highland Creek. Village matches use the address roster's county and parcel, not tax-neighborhood names. Within each group, the order is closest size (percentage difference), bedroom count, full-bath count, year built and lot size; then newer sale, shorter straight-line distance, county and parcel ID. Missing year or lot facts sort last at that step. Half baths, year and lot size do not rule out a match.</p>
+        <p>{county.metadata.eligibility} Flagged, under-review and incomplete transfers are excluded. County records can lag and differ from MLS measurements. Cabarrus sale dates, qualification and reuse remain unresolved, so those sales are excluded.</p>
+    </details>
+    <details class="hc-data-use">
+        <summary>How we use the data</summary>
+        <p>Individual comparisons use Mecklenburg County public records. MLS figures are a separate dated summary, not a live MLS search or IDX feed. No confidential remarks, photos or access details are published; no Canopy endorsement or new data license is claimed.</p>
+        <p>County sources checked {county.metadata.sourceCheckedAt.slice(0, 10)}. This snapshot does not auto-refresh. The two additional sale examples above have separate sources and are not used in the address comparisons. The lookup creates no marketing signup or automatic CRM enrollment.</p>
+        <p><a href="https://brokerrelations.canopyrealtors.com/mls-compliance-training/rules-regulations/">Canopy rules &amp; regulations</a> · <a href="https://gis.mecknc.gov/data-center">Mecklenburg County open-data policy</a></p>
+    </details>
+</section>}
 
 <!-- Selectors are Highland Creek namespaced so dynamically created cards share the same styles. -->
 <style is:global>
@@ -366,7 +378,11 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
     .hc-comps h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin: .5rem 0 .8rem; }
     .hc-comps h3 { font-size: 1.4rem; line-height: 1.3; }
     .hc-comps p { margin: .6rem 0; }
-    .hc-comps .hc-small { font-size: .875rem; line-height: 1.55; }
+    .hc-comps .hc-small { font-size: .8125rem; line-height: 1.5; }
+    .hc-comps .hc-source-note, .hc-cards .hc-small, .hc-subject .hc-small,
+    .hc-cards article > a, .hc-subject > a { font-size: .75rem; line-height: 1.5; }
+    .hc-comps .hc-source-note, .hc-cards .hc-small { margin: .375rem 0; }
+    .hc-rules, .hc-data-use, .hc-mls details { font-size: .8125rem; line-height: 1.5; }
     .hc-comps .eyebrow, .hc-comps a { color: #7a2e48; }
     .hc-comps a { text-decoration: underline; text-underline-offset: 4px; display: inline-flex; align-items: center; min-height: 44px; }
     .hc-comps :is(a, button, input, textarea, summary, [tabindex]):focus-visible { outline: 2px solid #7a2e48; outline-offset: 4px; }
@@ -380,7 +396,7 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
     #hc-options { position: absolute; inset: 100% 0 auto; margin: 4px 0 0; z-index: 2; background: #fffdf8; border: 1px solid #7a2e48; border-radius: 4px; max-height: 260px; overflow-y: auto; box-shadow: 0 8px 20px #2c2c2c20; }
     #hc-options li { padding: .65rem .75rem; min-height: 44px; cursor: pointer; overflow-wrap: anywhere; }
     #hc-options li[aria-selected='true'], #hc-options li:hover { background: #f0ddd8; color: #2c2c2c; }
-    .hc-comps summary { cursor: pointer; min-height: 44px; padding: .6rem 0; color: #7a2e48; font-weight: 500; }
+    .hc-comps summary { cursor: pointer; min-height: 44px; padding: .6rem 0; color: #7a2e48; font-size: .8125rem; line-height: 1.5; font-weight: 500; }
     .hc-comps details { border-top: 1px solid #cbb9b4; margin-top: .75rem; }
     .hc-subject, .hc-notice, .hc-next { border-radius: 6px; background: #f0ddd8; padding: 1rem; margin: 1.25rem 0; }
     .hc-cards { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; margin-top: 1rem; list-style: none; padding: 0; }
@@ -388,6 +404,7 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
     .hc-cards h4 { font-family: 'Playfair Display',serif; font-weight: 600; color: #2c2c2c; font-size: 1.15rem; line-height: 1.4; }
     .hc-price { font-family: 'Cormorant Garamond',serif; font-size: 2rem; color: #2c2c2c; font-weight: 600; }
     .hc-facts, .hc-difference { border-top: 1px solid #cbb9b4; padding-top: .65rem; font-size: .9rem; }
+    .hc-difference { font-size: .8125rem; line-height: 1.5; }
     .hc-mls { border-top: 1px solid #cbb9b4; margin-top: 1.25rem; padding-top: 1.25rem; }
     .hc-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 1rem; margin: 1rem 0; }
     .hc-metrics dt { font-size: .85rem; }

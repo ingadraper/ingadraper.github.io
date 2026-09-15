@@ -238,7 +238,7 @@ export const sourceSets: Record<string, ResearchSource[]> = {
     'north-carolina-due-diligence-fee': [
         {
             title: 'July 2026 Changes to Offer to Purchase and Contract',
-            publisher: 'NC REALTORS',
+            publisher: 'NC REALTORS®',
             url: 'https://www.ncrealtors.org/wp-content/uploads/markedup0726-2-T.pdf',
             checked: '2026-09-02',
         },

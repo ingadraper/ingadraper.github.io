@@ -31,6 +31,7 @@ if (market.schemaVersion !== 1 || !validDate(market.sourcesChecked) || market.sa
 }
 
 const checked = formatDate(market.sourcesChecked);
+const mls = market.mlsContext;
 const closingDates = market.sales.map((sale) => sale.closed).sort();
 const formatNumber = (value: number) => value.toLocaleString('en-US');
 const formatPrice = (value: number) => new Intl.NumberFormat('en-US', {
@@ -85,27 +86,65 @@ const schemas = [
                 <span>{siteConfig.agent.designation} · {siteConfig.compliance.legalBrokerageName}</span>
             </div>
             <section class="py-6 sm:py-10" aria-labelledby="guide-heading">
-                <p class="eyebrow">For Ridgefield &amp; Bell's Mills homeowners in Highland Creek</p>
-                <h1 id="guide-heading" class="mt-3 max-w-[23ch] text-3xl font-extrabold leading-[1.12] sm:text-5xl">What are nearby homes selling for?</h1>
-                <div class="mt-4 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
-                    <p class="max-w-xl text-base leading-6 sm:text-lg sm:leading-7">Start with nearby sale prices. Then talk with Inga about your home's updates, condition and next steps.</p>
-                    <a href="#home-review" class="btn-primary text-center">Get a complimentary Home Review <span aria-hidden="true">↓</span></a>
-                </div>
+                <p class="eyebrow">For Highland Creek Homeowners</p>
+                <h1 id="guide-heading" class="mt-3 max-w-[23ch] text-3xl font-extrabold leading-[1.12] sm:text-5xl">SO... WHAT DO YOUR NEIGHBORS KNOW?</h1>
+                <p class="mt-4 max-w-2xl text-base leading-6 sm:text-lg sm:leading-7">Highland Creek homeowners have had a lot to watch lately.</p>
+                <dl class="campaign-stats mt-6 grid grid-cols-3 gap-3 sm:gap-6">
+                    <div><dt>Closed listings</dt><dd>{formatNumber(mls.closedCount)}</dd></div>
+                    <div><dt>Median closed price</dt><dd>{formatPrice(mls.medianClosedPrice)}</dd></div>
+                    <div><dt>Median cumulative days on market</dt><dd>{mls.medianCumulativeDaysOnMarket} days</dd></div>
+                </dl>
+                <p class="guide-source-note mt-3">{mls.source} · {formatDate(mls.periodStart)}–{formatDate(mls.periodEnd)} · Checked {formatDate(mls.checkedAt.slice(0, 10))}. Charlotte single-family closed listings reported as Highland Creek, not a parcel-verified Ridgefield/Bell's Mills inventory. A dated snapshot, not a live feed.</p>
+                <details class="guide-attribution mt-1">
+                    <summary class="guide-link min-h-11 cursor-pointer py-2">MLS scope &amp; attribution</summary>
+                    <p>{mls.scope}</p>
+                    <p class="mt-2">{mls.disclaimer}</p>
+                </details>
+                <h2 class="mt-8 max-w-3xl text-2xl font-extrabold leading-tight sm:text-3xl">BUT THAT’S NOT REALLY THE INTERESTING PART.</h2>
+                <p class="mt-4 max-w-3xl text-lg leading-7">Your neighbor’s sale doesn’t automatically tell you what your home is worth.</p>
+                <p class="mt-3 max-w-3xl leading-7">Two homes in the same neighborhood can sell for very different prices based on condition, updates, layout, lot, location, timing, and buyer demand.</p>
             </section>
 
             <HighlandCreekComps />
+        </div>
 
-            <section id="snapshot" class="pb-10 sm:pb-14" aria-labelledby="sales-heading">
+        <section id="home-review" class="guide-review bg-charcoal py-10 sm:py-14" aria-labelledby="review-heading">
+            <div class="site-shell grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+                <div>
+                    <h2 id="review-heading" class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl">THE NUMBERS ARE USEFUL. THE CONTEXT MATTERS MORE.</h2>
+                    <p class="mt-5 max-w-2xl text-lg leading-8">An automated comparison can’t see your kitchen, your renovations, your lot, your floor plan, your maintenance, or the details that make one Highland Creek home sell differently from another.</p>
+                    <p class="mt-4 text-lg leading-8">That’s where I come in.</p>
+                    <p class="mt-4 max-w-2xl text-lg leading-8">If you want, I’ll take a look at your home and tell you where I think it fits in the current market.</p>
+                    <p class="guide-review-note mt-4 max-w-xl">Your complimentary Home Review includes comparable sales, a likely price range and practical prep considerations. The range depends on your home's condition and available information. A Home Review is not an appraisal or a guaranteed sale price.</p>
+                    <a href="#snapshot" class="guide-link mt-4 inline-flex min-h-11 items-center text-sm">↓ More sale examples</a>
+                </div>
+                <div class="review-email rounded-[8px] border p-5 sm:p-6">
+                    <h3 class="text-2xl font-semibold">{offer}</h3>
+                    <p id="email-helper" class="mt-3 leading-7">Open your email app, add your questions and send when ready. Your address is optional. Nothing is sent automatically.</p>
+                    <a href={homeValueHref} class="review-button mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[6px] px-5 py-3 text-center text-sm font-medium" aria-describedby="email-helper">WANT INGA’S TAKE? <span class="ml-2" aria-hidden="true">↗</span></a>
+                    <p class="mt-5 text-sm leading-6">Or contact Inga directly:</p>
+                    <a href={`mailto:${siteConfig.contact.email}`} class="guide-link contact-email inline-flex min-h-11 items-center text-sm">{siteConfig.contact.email}</a>
+                    <br />
+                    <a href={siteConfig.contact.phoneHref} class="guide-link inline-flex min-h-11 items-center text-sm">{siteConfig.contact.phone}</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="site-shell">
+            <section id="snapshot" class="py-10 sm:py-14" aria-labelledby="market-heading">
+                <h2 id="market-heading" class="mb-5 max-w-3xl text-3xl font-extrabold leading-tight sm:text-4xl">WHAT’S HAPPENING IN HIGHLAND CREEK RIGHT NOW?</h2>
+                <p class="mb-5 max-w-3xl leading-7">Start with the dated snapshot below, then ask Inga about current conditions. These figures do not auto-refresh.</p>
+                <HighlandCreekComps section="market" />
                 <details class="guide-examples">
                     <summary id="sales-heading" class="guide-link min-h-11 cursor-pointer py-3 text-xl font-semibold">Two more Highland Creek sale examples</summary>
                 <div class="border-t border-line pt-5">
-                    <p class="mt-2 text-sm">Sources checked <time datetime={market.sourcesChecked}>{checked}</time></p>
+                    <p class="guide-source-note mt-2">Sources checked <time datetime={market.sourcesChecked}>{checked}</time></p>
                 </div>
                 <div class="mt-4 grid gap-4 md:grid-cols-2">
                     {market.sales.map((sale) => (
                         <article class="sale-card rounded-[8px] border border-line bg-frosted p-5 sm:p-6" aria-labelledby={`sale-${sale.mls}`}>
                             <h3 id={`sale-${sale.mls}`} class="text-xl font-semibold leading-tight sm:text-2xl">{sale.address}</h3>
-                            <p class="mt-2 text-sm">Closed <time datetime={sale.closed}>{formatDate(sale.closed)}</time></p>
+                            <p class="guide-source-note mt-2">Closed <time datetime={sale.closed}>{formatDate(sale.closed)}</time></p>
                             <p class="sale-price mt-2 font-display text-3xl font-semibold text-ink sm:text-4xl">{formatPrice(sale.priceUSD)}</p>
                             <dl class="sale-facts mt-4 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-line pt-3 text-sm">
                                 <div><dt>Bedrooms</dt><dd>{sale.beds}</dd></div>
@@ -113,11 +152,11 @@ const schemas = [
                                 <div><dt>Size</dt><dd>{formatNumber(sale.sqft)} sq. ft.</dd></div>
                                 <div><dt>Cumulative days on market</dt><dd>{sale.cumulativeDOM}</dd></div>
                             </dl>
-                            <a href={sale.sourceUrl} class="guide-link mt-3 inline-flex min-h-11 items-center text-sm">{market.sourceName} sale details · MLS {sale.mls} <span class="ml-1" aria-hidden="true">↗</span></a>
+                            <a href={sale.sourceUrl} class="guide-link guide-source-note mt-2 inline-flex min-h-11 items-center">{market.sourceName} sale details · MLS {sale.mls} <span class="ml-1" aria-hidden="true">↗</span></a>
                         </article>
                     ))}
                 </div>
-                <p class="mt-4 max-w-4xl text-sm leading-6" id="source-note">
+                <p class="guide-source-note mt-3 max-w-4xl" id="source-note">
                     Two single-family examples from {market.sourceName}, not a complete Ridgefield/Bell's Mills inventory or a price estimate. Closings: {formatDate(closingDates[0])}–{formatDate(closingDates[closingDates.length - 1])}. Both are listed as Highland Creek, Charlotte / Mecklenburg County; village boundaries are unverified. These examples are separate from the county comparisons above.
                 </p>
                 </details>
@@ -126,7 +165,8 @@ const schemas = [
 
         <section class="border-y border-line bg-porcelain py-10 sm:py-14" aria-labelledby="questions-heading">
             <div class="site-shell">
-                <h2 id="questions-heading" class="mt-3 text-3xl font-extrabold sm:text-4xl">Before you spend on updates</h2>
+                <h2 id="questions-heading" class="mt-3 text-3xl font-extrabold sm:text-4xl">THINKING ABOUT SELLING SOMEDAY?</h2>
+                <p class="mt-4 max-w-2xl leading-7">Before you spend on updates, start with the questions that matter for your home.</p>
                 <div class="mt-6 grid gap-6 lg:grid-cols-3">
                     {faqs.map((faq) => (
                         <article class="border-t border-line pt-5">
@@ -135,37 +175,43 @@ const schemas = [
                         </article>
                     ))}
                 </div>
-                <div class="mt-6 flex flex-wrap gap-x-6 gap-y-1 text-sm">
-                    <a href="https://www.highlandcreek.com/community-info/" class="guide-link inline-flex min-h-11 items-center">Official HOA resources &amp; ARC information ↗</a>
-                    <a href="https://www.highlandcreek.com/wp-content/uploads/2026/04/ARC-Form-General-HCCA-Updated-4.23.26.pdf" class="guide-link inline-flex min-h-11 items-center">General architectural approval request (PDF) ↗</a>
-                    <a href="https://www.highlandcreek.com/maps" class="guide-link inline-flex min-h-11 items-center">Official community map: Ridgefield &amp; Bell's Mills ↗</a>
-                </div>
+
             </div>
         </section>
 
-        <section id="home-review" class="guide-review py-10 sm:py-14" aria-labelledby="review-heading">
-            <div class="site-shell grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
-                <div>
-                    <h2 id="review-heading" class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl">{offer}</h2>
-                    <p class="mt-5 max-w-2xl text-lg leading-8">Review comparable sales, a likely price range and which prep projects make sense with Inga. Just exploring? That's welcome too.</p>
-                    <p class="mt-4 max-w-xl text-sm leading-6">The range depends on your home's condition and available information. A Home Review is not an appraisal or a guaranteed sale price.</p>
-                    <a href="#snapshot" class="guide-link mt-4 inline-flex min-h-11 items-center text-sm">↑ More sale examples</a>
+        <div class="site-shell pt-10 sm:pt-14">
+            <HighlandCreekComps section="methodology" />
+            <section class="pb-10 sm:pb-14" aria-labelledby="resources-heading">
+                <h2 id="resources-heading" class="text-3xl font-extrabold leading-tight sm:text-4xl">HIGHLAND CREEK HOMEOWNER RESOURCES</h2>
+                <div class="mt-6 grid gap-6 sm:grid-cols-2">
+                    <div>
+                        <h3 class="text-xl font-semibold">Community &amp; home projects</h3>
+                        <ul class="mt-3 text-sm">
+                            <li><a href="https://www.highlandcreek.com/community-info/" class="guide-link inline-flex min-h-11 items-center">Official HOA resources &amp; ARC information ↗</a></li>
+                            <li><a href="https://www.highlandcreek.com/wp-content/uploads/2026/04/ARC-Form-General-HCCA-Updated-4.23.26.pdf" class="guide-link inline-flex min-h-11 items-center">General architectural approval request (PDF) ↗</a></li>
+                            <li><a href="https://www.highlandcreek.com/maps" class="guide-link inline-flex min-h-11 items-center">Official community map: Ridgefield &amp; Bell's Mills ↗</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold">Selling &amp; your next steps</h3>
+                        <ul class="mt-3 text-sm">
+                            <li><a href="/selling/" class="guide-link inline-flex min-h-11 items-center">Inga's seller guide</a></li>
+                            <li><a href="#home-review" class="guide-link inline-flex min-h-11 items-center">Get a complimentary Home Review <span class="ml-1" aria-hidden="true">↑</span></a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="review-email rounded-[8px] border p-5 sm:p-6">
-                    <h3 class="text-2xl font-semibold">What would you like to know?</h3>
-                    <p id="email-helper" class="mt-3 leading-7">Open your email app, add your questions and send when ready. Your address is optional. Nothing is sent automatically.</p>
-                    <a href={homeValueHref} class="review-button mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-[6px] px-5 py-3 text-center text-sm font-medium" aria-describedby="email-helper">Open my Home Review email draft <span class="ml-2" aria-hidden="true">↗</span></a>
-                    <p class="mt-5 text-sm leading-6">Or contact Inga directly:</p>
-                    <a href={`mailto:${siteConfig.contact.email}`} class="guide-link contact-email inline-flex min-h-11 items-center text-sm">{siteConfig.contact.email}</a>
-                    <br />
-                    <a href={siteConfig.contact.phoneHref} class="guide-link inline-flex min-h-11 items-center text-sm">{siteConfig.contact.phone}</a>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </main>
 
     <style>
         .homeowner-guide { font-weight: 400; }
+        .guide-source-note { font-size: .75rem; line-height: 1.5; }
+        .guide-attribution, .guide-review-note { font-size: .8125rem; line-height: 1.5; }
+        .campaign-stats > div { display: flex; flex-direction: column; gap: .35rem; border-top: 2px solid #cbb9b4; padding-top: .75rem; min-width: 0; }
+        .campaign-stats dt { font-size: .8125rem; line-height: 1.4; }
+        .campaign-stats dd { order: -1; color: #2c2c2c; font-size: clamp(1.17rem, 4.8vw, 2.75rem); font-weight: 600; line-height: 1.2; }
+        @media (max-width: 359px) { .campaign-stats { gap: .375rem; } }
         .homeowner-guide .eyebrow { color: #7a2e48; }
         .homeowner-guide .guide-link { color: #7a2e48; text-decoration: underline; text-underline-offset: 4px; }
         .homeowner-guide .guide-link:hover { color: #2c2c2c; }
@@ -174,13 +220,72 @@ const schemas = [
         .sale-card { box-shadow: 0 12px 32px rgba(122, 46, 72, .05); }
         .sale-facts dt { font-size: .8125rem; }
         .sale-facts dd { color: #2c2c2c; font-weight: 500; }
-        .guide-review { background: #7a2e48; color: #fdfaf5; }
+        .guide-review { color: #fdfaf5; }
         .guide-review h2, .guide-review h3, .guide-review .eyebrow,
         .guide-review .guide-link { color: #fdfaf5; }
         .guide-review .guide-link:hover { color: #f0ddd8; }
         .review-email { border-color: #e1c4be; }
         .review-button { color: #2c2c2c; background: #f0ddd8; }
         .review-button:hover { background: #fffdf8; }
+        .guide-review .review-button:focus-visible { outline-color: #fdfaf5; }
         .contact-email { overflow-wrap: anywhere; }
+        /* Highland Creek only: preserve the shared footer markup and its disclosures.
+           Official NAR black artwork, proportionately resized from 600px to 192px:
+           https://www.nar.realtor/sites/default/files/2025-07/nar_membershipmark_black.png
+           The 108px canvas plus 26px padding (18px left) preserves at least half a block-R
+           of clear space on every side. Existing REALTOR® text names this decoration. */
+        .homeowner-guide + :global(footer .site-shell > div:has(> img[alt="Equal Housing Opportunity"])) {
+            display: grid;
+            grid-template-columns: 96px 152px;
+            align-items: center;
+            justify-content: start;
+            row-gap: 24px;
+            column-gap: 0;
+        }
+        .homeowner-guide + :global(footer .site-shell > div:has(> img[alt="Equal Housing Opportunity"]) > div) {
+            grid-column: 1 / -1;
+            min-width: 0;
+        }
+        .homeowner-guide + :global(footer .site-shell > div:has(> img[alt="Equal Housing Opportunity"])::after) {
+            --hc-realtor-artwork: url("data:image/png;base64,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");
+            content: "";
+            background-image: var(--hc-realtor-artwork);
+            background-size: 108px 108px;
+            background-position: center;
+            background-origin: content-box;
+            background-repeat: no-repeat;
+            display: block;
+            box-sizing: content-box;
+            width: 108px;
+            height: 108px;
+            padding: 26px 26px 26px 18px;
+            grid-column: 2;
+            grid-row: 2;
+        }
+        .homeowner-guide + :global(footer img[alt="Equal Housing Opportunity"]) {
+            width: 92px;
+            height: 92px;
+            object-fit: contain;
+            mix-blend-mode: multiply;
+            justify-self: center;
+            grid-column: 1;
+            grid-row: 2;
+        }
+        @media (min-width: 768px) {
+            .homeowner-guide + :global(footer .site-shell > div:has(> img[alt="Equal Housing Opportunity"])) {
+                grid-template-columns: minmax(0, 1fr) 96px 152px;
+            }
+            .homeowner-guide + :global(footer .site-shell > div:has(> img[alt="Equal Housing Opportunity"]) > div) {
+                grid-column: 1;
+            }
+            .homeowner-guide + :global(footer .site-shell > div:has(> img[alt="Equal Housing Opportunity"])::after) {
+                grid-column: 3;
+                grid-row: 1;
+            }
+            .homeowner-guide + :global(footer img[alt="Equal Housing Opportunity"]) {
+                grid-column: 2;
+                grid-row: 1;
+            }
+        }
     </style>
 </BaseLayout>

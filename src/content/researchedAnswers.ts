@@ -20,7 +20,7 @@ export const researchedAnswerPages: AnswerPage[] = [
         sections: [
             {
                 heading: 'What you are paying for',
-                body: 'The standard NC REALTORS/NC Bar contract says the fee pays for your right to cancel for any reason during the agreed due diligence period. State law does not require this fee or earnest money, which is a separate deposit usually held in a trust account. The seller can ask for either payment, and your signed contract controls what happens to the money.',
+                body: 'The standard NC REALTORS®/NC Bar contract says the fee pays for your right to cancel for any reason during the agreed due diligence period. State law does not require this fee or earnest money, which is a separate deposit usually held in a trust account. The seller can ask for either payment, and your signed contract controls what happens to the money.',
             },
             {
                 heading: 'When you get credit for the fee and when you lose it',
