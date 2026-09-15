@@ -26,7 +26,7 @@ const services = editableSite.services.items.map((service, index) => ({
         </div>
 
         <div class="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {services.map((service) => {
+            {services.map((service, index) => {
                 const Icon = service.icon;
 
                 return (
@@ -37,7 +37,7 @@ const services = editableSite.services.items.map((service, index) => ({
                         <h3 class="mt-6 text-xl font-extrabold">{service.title}</h3>
                         <p class="mt-3 text-sm text-smoke">{service.description}</p>
                         <a href={service.url} class="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-medium text-deep-rose transition hover:text-ink">
-                            {service.url === '/buying/' ? 'Help Me Buy Smarter' : `Explore ${service.title.toLowerCase()}`}
+                            {['Help Me Buy Smarter', 'Talk Through My Sale', 'Help Me Figure Out Where to Live', 'Think Through the Options'][index]}
                             <ArrowUpRight class="h-4 w-4" aria-hidden="true" />
                         </a>
                     </article>

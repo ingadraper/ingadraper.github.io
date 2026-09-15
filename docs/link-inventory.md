@@ -62,6 +62,16 @@ Reviewed September 13, 2026. See `docs/highland-creek-review.md` for scope, sour
 
 ## Connector And CRM References
 
+### Parts 1 and 3 placeholder pass
+
+The homepage and `/buying/` show “Take the Homebuyer Readiness Quiz” with a non-submitting “Quiz coming soon” notice. No public quiz destination has been supplied or verified; no URL was invented. Existing contact anchors and the YouTube channel destination remain unchanged.
+
+The shared contact section on `/`, `/buying/`, `/selling/`, and `/relocating/` labels online capture “Online form coming soon.” Its existing `mailto:ingibjorg.draper@exprealty.com` action and email-draft script remain unchanged. The fields prepare a draft in the visitor’s email application, not a CRM submission; the visitor must send it. Phone and direct-email alternatives remain available. Answers pages continue to link to `/#contact`; they do not collect information.
+
+Missing resources: public Homebuyer Readiness Quiz URL, public GoHighLevel form/embed URL, public scheduling URL, and chat widget ID. The latter two existing optional connectors remain unconfigured and unchanged. The Highland Creek Home Review remains its separate existing email-draft mechanism; its page and component were not changed by this pass.
+
+GHL connection: NOT IMPLEMENTED. End-to-end CRM delivery: NOT TESTED. No outbound contact test or account/API work was performed. The existing default CRM requirement record remains the owner of future integration work; this is only the public-site link inventory, not a new CRM registry.
+
 | Item | URL or Value | Use | Notes |
 | --- | --- | --- | --- |
 | GoHighLevel form URL | Pending | Live site when available | Must be a public embed URL, not a private webhook or API endpoint. |

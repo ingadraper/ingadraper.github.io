@@ -170,11 +170,12 @@ const schemas = [
                         Selling in Charlotte + Lake Norman
                     </p>
                     <h1 class="mt-5 max-w-[15ch] text-5xl font-extrabold leading-[1.03] text-ivory sm:text-6xl lg:text-7xl">
-                        A clear plan for selling your home.
+                        Selling well doesn’t mean renovating everything.
                     </h1>
                     <p class="mt-7 max-w-2xl text-lg font-normal leading-8 text-ivory/90 sm:text-xl sm:leading-9">
-                        Inga helps you decide what to prepare, understand the evidence behind pricing choices, present the home clearly, and compare every offer beyond the headline price. You get plain-English guidance shaped around your home, timing, budget, and next move—without promises about price or how quickly the home will sell.
+                        Sometimes the smartest thing you can do before listing is paint. Sometimes it’s staging. Sometimes it’s fixing something buyers will immediately question. And sometimes the answer is: don’t spend another dollar.
                     </p>
+                    <p class="mt-7 max-w-2xl text-lg font-normal leading-8 text-ivory/90 sm:text-xl sm:leading-9">We’ll walk through the property together, decide what deserves your time and money, build a pricing strategy from the market, and prepare the home so buyers understand what makes it worth seeing.</p>
                     <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                         <a href="#contact" class="btn-primary w-full bg-ivory text-ink hover:bg-blush sm:w-auto">
                             Talk through your sale
@@ -202,15 +203,15 @@ const schemas = [
                 <div class="grid gap-4 sm:grid-cols-3">
                     <div class="flex items-start gap-3">
                         <Home class="mt-1 h-5 w-5 flex-none text-dusty" aria-hidden="true" />
-                        <p class="text-sm leading-6 text-smoke"><strong class="block text-ink">Your situation</strong>Start with why you are moving, your timing, and what the sale needs to support.</p>
+                        <p class="text-sm leading-6 text-smoke"><strong class="block text-ink">Your situation</strong>Start with why you’re selling, your timing, what happens next, and what the sale needs to accomplish.</p>
                     </div>
                     <div class="flex items-start gap-3">
                         <FileSearch class="mt-1 h-5 w-5 flex-none text-dusty" aria-hidden="true" />
-                        <p class="text-sm leading-6 text-smoke"><strong class="block text-ink">The evidence</strong>Use relevant sales, competing homes, property details, and buyer feedback.</p>
+                        <p class="text-sm leading-6 text-smoke"><strong class="block text-ink">The evidence</strong>Look at relevant sales, competing homes, buyer behavior, property details, and current market conditions before setting the strategy.</p>
                     </div>
                     <div class="flex items-start gap-3">
                         <Scale class="mt-1 h-5 w-5 flex-none text-dusty" aria-hidden="true" />
-                        <p class="text-sm leading-6 text-smoke"><strong class="block text-ink">The tradeoffs</strong>Understand what each pricing, preparation, and offer choice asks of you.</p>
+                        <p class="text-sm leading-6 text-smoke"><strong class="block text-ink">The tradeoffs</strong>Decide what is worth repairing, updating, staging, negotiating, or simply leaving alone. Not every dollar spent before listing comes back at closing.</p>
                     </div>
                 </div>
             </div>
@@ -244,6 +245,9 @@ const schemas = [
                                 </div>
                                 <h3 class="mt-7 text-2xl font-extrabold leading-tight">{step.title}</h3>
                                 <p class="mt-4 text-base leading-7 text-smoke">{step.summary}</p>
+                                {step.number === '02' && (
+                                    <p class="mt-4 text-base leading-7 text-smoke">Pricing is a strategy, not a compliment to the house.</p>
+                                )}
                                 {step.number === '02' && (
                                     <p class="mt-4 text-sm leading-6 text-smoke">
                                         <strong class="text-ink">A local example:</strong> See how selected Highland Creek sales can inform a pricing conversation.
@@ -350,7 +354,7 @@ const schemas = [
                                 <span>{faq.question}</span>
                                 <span class="mt-0.5 text-2xl font-light text-dusty transition group-open:rotate-45" aria-hidden="true">+</span>
                             </summary>
-                            <p class="max-w-3xl pt-4 text-base leading-7 text-smoke">{faq.answer}</p>
+                            <p class="max-w-3xl pt-4 text-base leading-7 text-smoke">{faq.answer.replace('in plain English', 'clearly')}</p>
                         </details>
                     ))}
                 </div>

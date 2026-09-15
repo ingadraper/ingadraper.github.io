@@ -1,52 +1,61 @@
 {
-    "hero": {
-        "location": "Charlotte + Lake Norman real estate",
-        "headline": "Helping you find your fit in Charlotte",
-        "summary": "Buying, selling, or relocating in the Charlotte area comes with a lot of decisions. As a real estate agent licensed in North Carolina and South Carolina, I’ll help you make sense of the options, ask the questions you may not know to ask yet, and figure out what actually makes sense for your life.",
-        "primaryAction": "Start a conversation",
-        "serviceArea": "Charlotte, Huntersville, Cornelius",
-        "specialty": "Buying, selling + finding your fit"
-    },
-    "about": {
-        "workingStyle": "Real advice. Smart guidance. No pressure.",
-        "headline": "I’m not here to talk you into a house.",
-        "paragraphs": [
-            "I’m here to help you make a good decision about one.",
-            "I’m Inga Draper, a Charlotte-area real estate agent licensed in North and South Carolina. I work with buyers, sellers, and people relocating to the area who want more than someone to simply open doors and write contracts.",
-            "We’ll talk about the house, of course. But we’ll also talk about the payment, the commute, how the location works for your everyday life, what may become expensive later, and whether the decision still makes sense once the excitement wears off.",
-            "Sometimes the right answer is “write the offer.” Sometimes it’s “this is not the one.” Both are part of the job."
-        ],
-        "stats": [
-            { "label": "Charlotte + Lake Norman", "value": "Local" },
-            { "label": "2 Zillow reviews · Sep 2026", "value": "5.0" },
-            { "label": "Licensed in both states", "value": "NC & SC" }
-        ]
-    },
-    "services": {
-        "headline": "Find the move that fits where you are now.",
-        "summary": "Whether you are buying, selling, moving to Charlotte, or thinking about a rental, Inga starts with what matters to you and makes the process easier to understand.",
-        "items": [
-            {
-                "title": "Buying a home",
-                "description": "We’ll figure out what you can comfortably buy, where your life works, and which homes actually deserve an offer. Then I’ll help you understand the numbers, risks, and contract before your money is on the line."
-            },
-            {
-                "title": "Selling a home",
-                "description": "Before you spend money getting your home ready to sell, let’s decide what buyers are actually likely to care about. We’ll prioritize the updates worth doing, skip the ones that aren’t, and build a pricing and marketing plan around your home and your next move."
-            },
-            {
-                "title": "Moving to Charlotte",
-                "description": "Find the part of the Charlotte area that fits your daily life by comparing commutes, school assignments, routines, and the feel of each community."
-            },
-            {
-                "title": "Thinking about a rental",
-                "description": "Decide whether renting fits your plans by asking about the rules, costs, insurance, upkeep, and day-to-day work before you count on the income."
-            }
-        ]
-    },
-    "communityDashboard": {
-        "route": "/highland-creek",
-        "name": "Highland Creek homeowner guide",
-        "summary": "Selected Highland Creek sales and practical prep questions for Ridgefield and Bell's Mills homeowners, with a complimentary Home Review."
-    }
+  "hero": {
+    "location": "Charlotte + Lake Norman real estate",
+    "headline": "Helping you find your fit in Charlotte.",
+    "summary": "Buying, selling, or relocating in the Charlotte area comes with a lot of decisions. As a REALTOR® licensed in North and South Carolina, I’ll help you make sense of the options, ask the questions you may not know to ask, and figure out what actually makes sense for your life.",
+    "primaryAction": "Start a conversation",
+    "serviceArea": "Charlotte, Huntersville, Cornelius",
+    "specialty": "Buying, selling + finding your fit"
+  },
+  "about": {
+    "workingStyle": "Real advice. Smart guidance. No pressure.",
+    "headline": "I’m not here to talk you into a house.",
+    "paragraphs": [
+      "I’m here to help you make a good decision about one.",
+      "I’m Inga Draper, a Charlotte based REALTOR® licensed in North and South Carolina. I work with first time home buyers, sellers, and anyone relocating to the area, who want more than someone to just simply open doors.",
+      "We’ll talk about the house, of course. But we’ll also talk about the payment, the commute, how the location works for your everyday life, what may become expensive later, and whether the decision still makes sense once the excitement wears off.",
+      "Sometimes the right answer is “write the offer.” Sometimes it’s “this is not the one.” Both are part of the job."
+    ],
+    "stats": [
+      {
+        "label": "Charlotte + Lake Norman, and the surrounding Charlotte suburbs",
+        "value": "Local"
+      },
+      {
+        "label": "2 Zillow reviews · Sep 2026",
+        "value": "5.0"
+      },
+      {
+        "label": "Licensed in both states",
+        "value": "NC & SC"
+      }
+    ]
+  },
+  "services": {
+    "headline": "Real estate decisions should make sense beyond closing day.",
+    "summary": "Whether you’re buying, selling, relocating, or thinking about what a property could become later, we’ll start with what matters to you and work forward from there.",
+    "items": [
+      {
+        "title": "Buying a home",
+        "description": "We’ll figure out what you can comfortably buy, where your life works, and which homes actually deserve an offer. Then I’ll help you understand the numbers, risks, and contract before your money is on the line."
+      },
+      {
+        "title": "Selling a home",
+        "description": "Before you spend money getting your home ready to sell, let’s decide what buyers are actually likely to care about. We’ll prioritize the updates worth doing, skip the ones that aren’t, and build a pricing and marketing plan around your home and your next move."
+      },
+      {
+        "title": "Moving to Charlotte",
+        "description": "Charlotte is not one lifestyle. We’ll compare the homes, locations, commutes, routines, and tradeoffs that matter to you so you can narrow down where your life actually works."
+      },
+      {
+        "title": "Thinking beyond the purchase",
+        "description": "Could this home work as a future rental? Should you keep your current house instead of selling it? Does the property support a bigger long-term plan? I can help you think through the questions worth answering before you make the move."
+      }
+    ]
+  },
+  "communityDashboard": {
+    "route": "/highland-creek",
+    "name": "Highland Creek homeowner guide",
+    "summary": "Selected Highland Creek sales and practical prep questions for Ridgefield and Bell's Mills homeowners, with a complimentary Home Review."
+  }
 }
