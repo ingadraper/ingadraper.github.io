@@ -1,3 +1,16 @@
+## Standing scheduled Highland Creek market-data refresh
+
+Thor approved this standing exception on 2026-10-03 for one scheduled job: WS-01 cron `89105828e09c` ("Highland Creek dashboard bi-weekly refresh"). It is the only scheduled trigger allowed to edit or publish this website.
+
+- Checkout: only the dedicated clone `C:/Users/ws01/src/ingadraper-hc-refresh`, with one `origin` remote, `https://github.com/ingadraper/ingadraper.github.io.git`, on branch `main`. Never use the shared `C:/Users/ws01/ingadraper.github.io` checkout.
+- Before editing: the worktree must be clean. `git fetch origin` and a fast-forward-only `git merge --ff-only origin/main` are allowed. Stop if the branch cannot fast-forward.
+- Editable files: `src/data/highland-creek-market.json`, plus only the "Data current through" or "Sources checked" date text in `src/pages/highland-creek.astro`. Nothing else.
+- Data: verified public sources only. Never invent statistics. Dates must reflect the data, not the run date. If nothing can be verified, stop without committing.
+- Gates: `npm ci` (only when `node_modules` is missing or the lockfile changed), `npm run build`, `npm run validate:aeo`, and `git diff --check` must all pass. The staged diff must contain only the editable files above.
+- Publish: one focused commit, then a normal `git push origin main:main`. No force, amend, rebase, reset, stash, clean, branch or remote changes.
+- Verify: confirm the commit with `git ls-remote`, confirm the Pages deployment succeeded for that SHA, and confirm the live https://ingadraper.com/highland-creek/ page shows the new date. Report the commit, sources and dates.
+- This exception does not cover lead capture, valuation logic, GHL, privacy text, policy files or any other scheduled job.
+
 ## One-time attended service-area and services-label follow-up
 
 The local desktop operator explicitly approved “Approve; update the shared service-area line” for this follow-up and normal publication. This new, bounded task permits only the existing Contact.astro service-area text `Charlotte, Huntersville, Cornelius, Lake Norman & surrounding areas` to become `Charlotte, Huntersville, Cornelius, Lake Norman, Gastonia, Denver & surrounding areas`, wherever the shared contact component appears, and the Services.astro eyebrow `How Inga helps` to become `Finding your fit in Charlotte.`. Do not alter the adjacent main heading. This does not reopen the completed Parts 1/3 or Highland Creek tasks.
