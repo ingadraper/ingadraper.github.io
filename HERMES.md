@@ -1,3 +1,7 @@
+## Highland Creek data refresh now runs as a GitHub Actions workflow (supersedes the WS-01 cron exception below)
+
+Thor approved on 2026-10-20 replacing the agent cron job with a deterministic workflow: `.github/workflows/highland-creek-refresh.yml` running `scripts/refresh_highland_creek.py` on the 1st and 15th. It may change only `src/data/highland-creek-market.json` (county `sales`, `asOf`/`windowStart`/`sourceCheckedAt`, `sourcesChecked`), builds and runs `npm run validate:aeo` before committing, dispatches the existing deploy workflow, verifies the live page shows the new date, and alerts Discord #site-updates only on failure or a stale live page. WS-01 cron `89105828e09c` is disabled. The exception below no longer authorizes any agent run.
+
 ## Standing scheduled Highland Creek market-data refresh
 
 Thor approved this standing exception on 2026-10-03 for one scheduled job: WS-01 cron `89105828e09c` ("Highland Creek dashboard bi-weekly refresh"). It is the only scheduled trigger allowed to edit or publish this website.

@@ -1,0 +1,66 @@
+name: Highland Creek data refresh
+
+# Deterministic county-sales refresh. No agent, no judgement: scripts/refresh_highland_creek.py
+# pulls Mecklenburg County GIS records, the normal build + AEO validation gate the result,
+# and Discord (#site-updates) is notified ONLY when the refresh fails or the live page
+# does not reflect the refreshed data.
+on:
+  schedule:
+    - cron: '0 13 1,15 * *'   # 09:00 EDT / 08:00 EST on the 1st and 15th
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: highland-creek-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Fetch county data
+        id: fetch
+        run: python3 scripts/refresh_highland_creek.py | tee fetch.log && cat fetch.log | grep -E '^(CHANGED|ASOF)=' >> "$GITHUB_OUTPUT"
+      - name: Build and validate
+        if: steps.fetch.outputs.CHANGED == 'true'
+        run: |
+          npm ci
+          npm run build
+          npm run validate:aeo
+          git diff --check -- src/data/highland-creek-market.json || true
+      - name: Commit and publish
+        if: steps.fetch.outputs.CHANGED == 'true'
+        run: |
+          git config user.name "highland-creek-refresh"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/data/highland-creek-market.json
+          git diff --cached --name-only | grep -vx 'src/data/highland-creek-market.json' && { echo "unexpected staged file"; exit 1; } || true
+          git commit -m "Refresh Highland Creek county sales through ${{ steps.fetch.outputs.ASOF }}"
+          git push origin HEAD:main
+          gh workflow run deploy.yml --ref main
+      - name: Verify the live page reflects the data
+        run: |
+          ASOF='${{ steps.fetch.outputs.ASOF }}'
+          for i in $(seq 1 30); do
+            if curl -fsS "https://ingadraper.com/highland-creek/?cb=$(date +%s)" | grep -q "$ASOF"; then echo "live page shows $ASOF"; exit 0; fi
+            sleep 30
+          done
+          echo "live page does not show $ASOF after 15 minutes"; exit 1
+      - name: Alert Discord (#site-updates)
+        if: failure()
+        env:
+          HOOK: ${{ secrets.SITE_UPDATES_WEBHOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "SITE_UPDATES_WEBHOOK not set; relying on GitHub failure notification"; exit 0; fi
+          MSG="Highland Creek data refresh needs attention: the run failed or the live page does not show the refreshed data. ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          curl -fsS -H 'Content-Type: application/json' -d "$(python3 -c 'import json,sys;print(json.dumps({"content":sys.argv[1]}))' "$MSG")" "$HOOK"
