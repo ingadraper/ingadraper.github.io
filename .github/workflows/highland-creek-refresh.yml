@@ -12,6 +12,7 @@ on:
 permissions:
   contents: write
   actions: write
+  deployments: read
 
 concurrency:
   group: highland-creek-refresh
@@ -19,7 +20,12 @@ concurrency:
 
 jobs:
   refresh:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash --noprofile --norc -e -o pipefail {0}
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
@@ -28,39 +34,73 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+      - name: Check baseline and county contracts
+        run: |
+          test "$(git branch --show-current)" = main
+          test "$(git remote)" = origin
+          case "$(git remote get-url origin)" in
+            https://github.com/ingadraper/ingadraper.github.io|https://github.com/ingadraper/ingadraper.github.io.git) ;;
+            *) echo 'HC_UNEXPECTED_ORIGIN'; exit 1 ;;
+          esac
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse HEAD)" = "$(git ls-remote origin refs/heads/main | cut -f1)"
+          python3 -m unittest discover -s scripts -p test_refresh_highland_creek.py -v
       - name: Fetch county data
         id: fetch
-        run: python3 scripts/refresh_highland_creek.py | tee fetch.log && cat fetch.log | grep -E '^(CHANGED|ASOF)=' >> "$GITHUB_OUTPUT"
+        run: |
+          python3 scripts/refresh_highland_creek.py | tee "$RUNNER_TEMP/hc-fetch.log"
+          grep -E '^(CHANGED|ASOF)=' "$RUNNER_TEMP/hc-fetch.log" >> "$GITHUB_OUTPUT"
       - name: Build and validate
-        if: steps.fetch.outputs.CHANGED == 'true'
         run: |
           npm ci
           npm run build
           npm run validate:aeo
-          git diff --check -- src/data/highland-creek-market.json || true
+          python3 scripts/refresh_highland_creek.py --verify-html dist/highland-creek/index.html
+          git diff --check
       - name: Commit and publish
         if: steps.fetch.outputs.CHANGED == 'true'
         run: |
           git config user.name "highland-creek-refresh"
           git config user.email "actions@users.noreply.github.com"
+          test "$(git diff --name-only)" = src/data/highland-creek-market.json
+          test -z "$(git ls-files --others --exclude-standard)"
+          test -z "$(git diff --cached --name-only)"
           git add src/data/highland-creek-market.json
-          git diff --cached --name-only | grep -vx 'src/data/highland-creek-market.json' && { echo "unexpected staged file"; exit 1; } || true
+          test "$(git diff --cached --name-only)" = src/data/highland-creek-market.json
+          git diff --cached --check
+          test "$(git rev-parse HEAD)" = "$(git ls-remote origin refs/heads/main | cut -f1)"
           git commit -m "Refresh Highland Creek county sales through ${{ steps.fetch.outputs.ASOF }}"
           git push origin HEAD:main
-          gh workflow run deploy.yml --ref main
-      - name: Verify the live page reflects the data
+      - name: Deploy exact main and wait for its run
         run: |
-          ASOF='${{ steps.fetch.outputs.ASOF }}'
-          for i in $(seq 1 30); do
-            if curl -fsS "https://ingadraper.com/highland-creek/?cb=$(date +%s)" | grep -q "$ASOF"; then echo "live page shows $ASOF"; exit 0; fi
-            sleep 30
+          test -z "$(git status --porcelain)"
+          SHA=$(git rev-parse HEAD)
+          test "$SHA" = "$(git ls-remote origin refs/heads/main | cut -f1)"
+          SINCE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          gh workflow run deploy.yml --ref main
+          RUN_ID=''
+          for attempt in 1 2; do
+            sleep 10
+            RUN_ID=$(gh run list --workflow deploy.yml --event workflow_dispatch --commit "$SHA" --limit 10 --json databaseId,createdAt --jq "[.[] | select(.createdAt >= \"$SINCE\")][0].databaseId // empty")
+            if [ -n "$RUN_ID" ]; then break; fi
           done
-          echo "live page does not show $ASOF after 15 minutes"; exit 1
+          test -n "$RUN_ID" || { echo 'HC_DEPLOY_RUN_NOT_FOUND'; exit 1; }
+          timeout 15m gh run watch "$RUN_ID" --exit-status
+          test "$SHA" = "$(gh run view "$RUN_ID" --json headSha --jq .headSha)"
+          echo "HC_CANDIDATE_SHA=$SHA" >> "$GITHUB_ENV"
+      - name: Verify exact deployment and complete live county payload
+        run: |
+          test "$HC_CANDIDATE_SHA" = "$(git ls-remote origin refs/heads/main | cut -f1)"
+          for attempt in 1 2; do
+            if python3 scripts/refresh_highland_creek.py --verify-live --sha "$HC_CANDIDATE_SHA"; then exit 0; fi
+            if [ "$attempt" = 1 ]; then sleep 30; fi
+          done
+          echo 'HC_EXACT_LIVE_VERIFICATION_FAILED'; exit 1
       - name: Alert Discord (#site-updates)
         if: failure()
         env:
           HOOK: ${{ secrets.SITE_UPDATES_WEBHOOK }}
         run: |
           if [ -z "$HOOK" ]; then echo "SITE_UPDATES_WEBHOOK not set; relying on GitHub failure notification"; exit 0; fi
-          MSG="Highland Creek data refresh needs attention: the run failed or the live page does not show the refreshed data. ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          MSG="Highland Creek county refresh failed: inspect the named failing step (source, build, publish, deployment or exact live payload). ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
           curl -fsS -H 'Content-Type: application/json' -d "$(python3 -c 'import json,sys;print(json.dumps({"content":sys.argv[1]}))' "$MSG")" "$HOOK"
