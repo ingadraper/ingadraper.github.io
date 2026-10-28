@@ -30,7 +30,7 @@ Edit site source, content, components, pages, styles, client-side scripts, tests
 
 ## Hard boundaries
 - Never put credentials, API keys, private client data or secrets in code, pages, commits, logs or replies. Forms never embed keys; they call the relay.
-- Do not change .github/workflows, CNAME, package manifests/lockfiles or dependencies unless the task explicitly names it. Never hand-edit or stage dist. No force-push, reset, stash, clean, amend, other remotes, other branches, Git config, or account/machine administration.
+- Do not change .github/workflows, CNAME, package manifests/lockfiles or dependencies unless the task explicitly names it. Never hand-edit or stage dist. No force-push, reset of origin, stash, clean, other remotes, pushing to any branch other than main, Git config, or account/machine administration. Local branches, backup refs, fetch, and rebase/merge/cherry-pick of your own unpublished commits onto fresh origin/main are allowed (keep upstream commits and upstream policy text intact).
 - Do not touch infrastructure, DNS, Cloudflare, Lofty/CRM settings or marketing enrollment; request them from the manager.
 - Never fabricate: no fake success states, estimates, data freshness, testimonials, reviews or completion. A form shows success only on a real 2xx from its endpoint.
 - Keep compliance: Fair Housing safeguards, eXp/brokerage identity and artwork, REALTOR trademark usage, source citations, legal/financial caveats, and an accurate privacy page whenever data flows change. No marketing/SMS consent implied by a contact or home-review form.
