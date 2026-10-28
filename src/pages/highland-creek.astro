@@ -27,31 +27,35 @@ const schemas = [
                 <a href="/" class="guide-link inline-flex min-h-11 items-center font-medium">← Inga Draper</a>
                 <span>{siteConfig.agent.designation} · {siteConfig.compliance.legalBrokerageName}</span>
             </div>
-            <section class="py-6 sm:py-10" aria-labelledby="guide-heading">
+            <section class="guide-intro" aria-labelledby="guide-heading">
+                <div>
                 <p class="eyebrow">For Highland Creek Homeowners</p>
-                <h1 id="guide-heading" class="mt-3 max-w-[23ch] text-3xl font-extrabold leading-[1.12] sm:text-5xl">Recent Highland Creek home sales</h1>
+                <h1 id="guide-heading" class="mt-3 max-w-[23ch] text-3xl font-extrabold leading-[1.12] sm:text-5xl">What sold near your Highland Creek home?</h1>
                 <p class="mt-4 max-w-2xl text-base leading-6 sm:text-lg sm:leading-7">Look up your Ridgefield or Bell's Mills address to compare up to five similar Highland Creek homes with county-recorded sales.</p>
+                </div>
+                <aside class="guide-note" aria-label="About this guide">
+                    <p class="eyebrow">Your neighborhood, in context</p>
+                    <p>Start with the recorded sales. Then consider what makes your home different.</p>
+                    <span>No signup needed to explore.</span>
+                </aside>
             </section>
 
             <HighlandCreekComps />
         </div>
 
-        <div class="site-shell">
-            <HighlandCreekComps section="methodology" />
-            <section class="pb-10 sm:pb-14" aria-labelledby="resources-heading">
-                <h2 id="resources-heading" class="text-xl font-semibold">Highland Creek HOA resources</h2>
-                        <ul class="mt-3 text-sm">
-                            <li><a href="https://www.highlandcreek.com/community-info/" class="guide-link inline-flex min-h-11 items-center">Official HOA resources &amp; ARC information ↗</a></li>
-                            <li><a href="https://www.highlandcreek.com/wp-content/uploads/2026/04/ARC-Form-General-HCCA-Updated-4.23.26.pdf" class="guide-link inline-flex min-h-11 items-center">General architectural approval request (PDF) ↗</a></li>
-                            <li><a href="https://www.highlandcreek.com/maps" class="guide-link inline-flex min-h-11 items-center">Official community map: Ridgefield &amp; Bell's Mills ↗</a></li>
-                        </ul>
 
-            </section>
-        </div>
     </main>
 
     <style>
         .homeowner-guide { font-weight: 400; }
+        .guide-intro { display: grid; gap: 1.5rem; padding: 2rem 0; align-items: end; }
+        .guide-note { border-left: 2px solid #cbb9b4; padding-left: 1.25rem; max-width: 32ch; }
+        .guide-note > p:not(.eyebrow) { font-family: 'Cormorant Garamond', serif; font-size: 1.65rem; line-height: 1.2; color: #2c2c2c; margin: .75rem 0; }
+        .guide-note span { font-size: .875rem; }
+
+        @media (min-width: 960px) { .guide-intro { grid-template-columns: minmax(0, 1fr) 18rem; gap: 4rem; padding: 3rem 0; } }
+        @media (max-width: 639px) { .guide-note { max-width: none; } .guide-note > p:not(.eyebrow) { font-size: 1.3rem; } }
+        @media (prefers-reduced-motion: reduce) { :global(html:has(.homeowner-guide)) { scroll-behavior: auto; } }
 
         .homeowner-guide .eyebrow { color: #7a2e48; }
         .homeowner-guide .guide-link { color: #7a2e48; text-decoration: underline; text-underline-offset: 4px; }

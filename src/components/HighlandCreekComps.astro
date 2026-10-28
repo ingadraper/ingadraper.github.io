@@ -1,8 +1,7 @@
 ---
 import market from '../data/highland-creek-market.json';
 import { siteConfig } from '../siteConfig';
-interface Props { section?: 'lookup' | 'methodology'; }
-const { section = 'lookup' } = Astro.props;
+
 const county = market.countyComps;
 const rules = market.comparisonCriteria;
 const emailBody = ['Hi Inga, I would like a complimentary Highland Creek Home Review.', '',
@@ -13,13 +12,15 @@ const homeValueHref = `mailto:${siteConfig.contact.email}?subject=${encodeURICom
 const publicData = JSON.stringify({ county, criteria: rules }).replace(/</g, '\\u003c');
 
 ---
-{section === 'lookup' && <>
+
 <section id="check-comps" class="hc-comps" aria-labelledby="comps-heading" data-email={siteConfig.contact.email} data-review-href={homeValueHref}>
     <div class="hc-opening">
+        <p class="eyebrow">Explore the sales</p>
         <h2 id="comps-heading">Find comparable sales</h2>
     </div>
     <p id="hc-coverage" class="hc-small hc-source-note">{county.metadata.coverage} County snapshot: <time datetime={county.metadata.asOf}>{county.metadata.asOf}</time>.</p>
     <p id="hc-window" class="hc-small hc-source-note">Recorded sales: {county.metadata.windowStart} through {county.metadata.asOf}. This snapshot is not a live feed.</p>
+    <p class="hc-small hc-source-note">Source: Mecklenburg County public records, checked {county.metadata.sourceCheckedAt.slice(0, 10)}. Not live MLS data; Cabarrus sales are excluded.</p>
     <p id="hc-stale" class="hc-notice" hidden></p>
     <form id="hc-search" hidden novalidate>
         <label for="hc-address">Your property address</label>
@@ -29,7 +30,7 @@ const publicData = JSON.stringify({ county, criteria: rules }).replace(/</g, '\\
                 <input id="hc-address" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="hc-options" aria-describedby="hc-search-help hc-match-status" autocomplete="off" autocapitalize="words" spellcheck="false" maxlength="150" />
                 <ul id="hc-options" role="listbox" aria-label="Matching property addresses" hidden></ul>
             </div>
-            <button type="submit">CHECK MY HOME</button>
+            <button type="submit">See comparable sales</button>
         </div>
         <p id="hc-match-status" class="hc-small" role="status" aria-live="polite"></p>
     </form>
@@ -42,14 +43,34 @@ const publicData = JSON.stringify({ county, criteria: rules }).replace(/</g, '\\
         <ol id="hc-cards" class="hc-cards"></ol>
     </div>
     <p class="hc-small">These automated comparisons are not an appraisal or a price estimate. Inga has not reviewed these homes' condition or selected them personally.</p>
+    <details class="hc-rules">
+        <summary>How these sales are chosen</summary>
+        <p>Single-family homes in mapped Highland Creek, within {rules.maxDistanceMiles} miles, heated size within {rules.sqftTolerancePercent}%, bedrooms within {rules.maxBedroomDifference} and full baths within {rules.maxFullBathroomDifference}. Required facts must be available.</p>
+        <p>Only eligible county-recorded sales within {rules.maxAgeCalendarMonths} calendar months of today (Eastern), through the snapshot date, qualify. We exclude your home, flagged or incomplete transfers and duplicate parcels, keeping the latest qualifying sale. Limits never expand to fill {rules.maxResults} spots.</p>
+        <p>Same street first, then verified village, then elsewhere in Highland Creek. Ties use size difference, bedrooms, full baths, year built, lot size, newer sale, distance, county and parcel ID, in that order. Missing year or lot facts sort last; half baths, year and lot size do not rule out a match. Records can lag and differ from MLS measurements.</p>
+        <p><a href="https://gis.mecknc.gov/data-center">County data source &amp; open-data policy</a></p>
+    </details>
         <section id="home-review" class="hc-next" aria-labelledby="review-heading">
-            <h3 id="review-heading">Want Inga's take? Request a complimentary Home Review.</h3>
-            <p>Review comparable sales, a likely price range and practical prep with Inga. Condition, updates, maintenance, layout and lot matter. A Home Review is not an appraisal or a guaranteed sale price.</p>
+            <div class="hc-review-intro">
+                <img src={siteConfig.images.about.src} srcset={siteConfig.images.about.srcset} sizes="(min-width: 800px) 220px, 112px" width={siteConfig.images.about.width} height={siteConfig.images.about.height} alt={siteConfig.images.about.alt} loading="lazy" decoding="async" />
+                <div>
+                    <p class="eyebrow">A closer look with Inga</p>
+                    <h3 id="review-heading">The sales are a starting point. Your home has its own story.</h3>
+                    <p>A complimentary Home Review puts those sales in context: your home's condition, updates, maintenance, layout and lot, plus a likely price range and practical prep considerations.</p>
+                    <p class="hc-small">A Home Review is not an appraisal or a guaranteed sale price.</p>
+                </div>
+            </div>
+            <!-- Verified external form belongs in this region, above the working email fallback.
+                 Do not add a CRM URL or embed until the supported mechanism and data flow are reviewed. -->
+            <div id="hc-review-contact" class="hc-review-contact">
+            <h4>Request your complimentary Home Review</h4>
             <label for="hc-question">What would you like to understand? <span class="hc-small">(optional)</span></label>
             <textarea id="hc-question" rows="2" maxlength="1000" autocomplete="off"></textarea>
             <p id="hc-draft-help" class="hc-small">Opens your email app with your selected address and question, if provided. Your address is optional. Nothing is sent until you send the email.</p>
             <a id="hc-draft" class="hc-button" href={homeValueHref} aria-describedby="hc-draft-help">Open my Home Review email draft</a>
             <p class="hc-small">Or contact Inga: <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a> · <a href={siteConfig.contact.phoneHref}>{siteConfig.contact.phone}</a></p>
+            <p class="hc-small">This email option does not sign you up for a newsletter or text messages. <a href="/privacy/">Privacy details</a></p>
+            </div>
         </section>
     <script id="hc-public-data" type="application/json" set:html={publicData} />
 </section>
@@ -343,38 +364,22 @@ const publicData = JSON.stringify({ county, criteria: rules }).replace(/</g, '\\
     get('hc-load-fallback').hidden = true;
     status.textContent = 'Enter your address to begin. No home is selected.';
 </script>
-</>}
 
-
-{section === 'methodology' && <section class="hc-comps" aria-labelledby="method-heading">
-    <h2 id="method-heading">Methodology &amp; sources</h2>
-    <details class="hc-rules">
-        <summary>How these sales are chosen</summary>
-        <p>Single-family homes must be within {rules.maxDistanceMiles} miles and mapped Highland Creek, with heated size within {rules.sqftTolerancePercent}%, bedrooms within {rules.maxBedroomDifference} and full baths within {rules.maxFullBathroomDifference} of yours. Missing required facts rule out a match.</p>
-        <p>Sales must fall within {rules.maxAgeCalendarMonths} calendar months of today (Eastern time), through the snapshot date. Both date limits are inclusive; older sales age out. Only the latest qualifying sale per county and parcel is used, excluding your own. We never relax these limits to fill {rules.maxResults} spots.</p>
-        <p>Matching homes on your street come first, then your verified village, then elsewhere in Highland Creek. Village matches use the address roster's county and parcel, not tax-neighborhood names. Within each group, the order is closest size (percentage difference), bedroom count, full-bath count, year built and lot size; then newer sale, shorter straight-line distance, county and parcel ID. Missing year or lot facts sort last at that step. Half baths, year and lot size do not rule out a match.</p>
-        <p>{county.metadata.eligibility} Flagged, under-review and incomplete transfers are excluded. County records can lag and differ from MLS measurements. Cabarrus sale dates, qualification and reuse remain unresolved, so those sales are excluded.</p>
-    </details>
-    <details class="hc-data-use">
-        <summary>How we use the data</summary>
-        <p>Individual comparisons use Mecklenburg County public records, not a live MLS search or IDX feed. No confidential remarks, photos or access details are published; no Canopy endorsement or new data license is claimed.</p>
-        <p>County sources checked {county.metadata.sourceCheckedAt.slice(0, 10)}. This snapshot does not auto-refresh. The lookup creates no marketing signup or automatic CRM enrollment.</p>
-        <p><a href="https://gis.mecknc.gov/data-center">Mecklenburg County open-data policy</a></p>
-    </details>
-</section>}
 
 <!-- Selectors are Highland Creek namespaced so dynamically created cards share the same styles. -->
 <style is:global>
-    .hc-comps { margin-bottom: 3rem; padding: 1.25rem; border: 1px solid #cbb9b4; border-radius: 8px; background: #fffdf8; color: #5a4a4a; font-weight: 400; }
+    .hc-comps { margin-bottom: 2rem; padding: 1.25rem; border: 1px solid #cbb9b4; border-radius: 8px; background: #fffdf8; color: #5a4a4a; font-weight: 400; }
+    #check-comps { border-top: 4px solid #7a2e48; }
+    .hc-opening { border-bottom: 1px solid #cbb9b4; padding-bottom: .75rem; margin-bottom: 1rem; }
     .hc-comps [hidden] { display: none !important; }
     .hc-comps h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin: .5rem 0 .8rem; }
     .hc-comps h3 { font-size: 1.4rem; line-height: 1.3; }
     .hc-comps p { margin: .6rem 0; }
     .hc-comps .hc-small { font-size: .8125rem; line-height: 1.5; }
     .hc-comps .hc-source-note, .hc-cards .hc-small, .hc-subject .hc-small,
-    .hc-cards article > a, .hc-subject > a { font-size: .75rem; line-height: 1.5; }
+    .hc-cards article > a, .hc-subject > a { font-size: .875rem; line-height: 1.5; }
     .hc-comps .hc-source-note, .hc-cards .hc-small { margin: .375rem 0; }
-    .hc-rules, .hc-data-use { font-size: .8125rem; line-height: 1.5; }
+    .hc-rules { font-size: .8125rem; line-height: 1.5; }
     .hc-comps .eyebrow, .hc-comps a { color: #7a2e48; }
     .hc-comps a { text-decoration: underline; text-underline-offset: 4px; display: inline-flex; align-items: center; min-height: 44px; }
     .hc-comps :is(a, button, input, textarea, summary, [tabindex]):focus-visible { outline: 2px solid #7a2e48; outline-offset: 4px; }
@@ -391,15 +396,26 @@ const publicData = JSON.stringify({ county, criteria: rules }).replace(/</g, '\\
     .hc-comps summary { cursor: pointer; min-height: 44px; padding: .6rem 0; color: #7a2e48; font-size: .8125rem; line-height: 1.5; font-weight: 500; }
     .hc-comps details { border-top: 1px solid #cbb9b4; margin-top: .75rem; }
     .hc-subject, .hc-notice, .hc-next { border-radius: 6px; background: #f0ddd8; padding: 1rem; margin: 1.25rem 0; }
+    .hc-subject { border-left: 3px solid #7a2e48; background: #f7f0eb; }
+    .hc-next { margin: 2rem 0 0; padding: 1.25rem; background: #f7f0eb; border-top: 1px solid #cbb9b4; }
+    .hc-review-intro { display: grid; gap: 1.25rem; align-items: center; }
+    .hc-review-intro img { width: 112px; height: 128px; object-fit: cover; object-position: top; border-radius: 6px; }
+    .hc-review-intro h3 { font-size: clamp(1.6rem, 3vw, 2.2rem); max-width: 28ch; }
+    .hc-review-contact { margin-top: 1.5rem; border-top: 1px solid #cbb9b4; padding-top: 1.25rem; }
+    .hc-review-contact h4 { font-family: 'Jost', sans-serif; font-size: 1.1rem; font-weight: 500; line-height: 1.5; }
     .hc-cards { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; margin-top: 1rem; list-style: none; padding: 0; }
-    .hc-cards li { min-width: 0; border: 1px solid #cbb9b4; border-radius: 6px; padding: 1rem; }
+    .hc-cards { counter-reset: sale; }
+    .hc-cards li { min-width: 0; border: 1px solid #cbb9b4; border-radius: 6px; padding: 1.25rem; background: #fffdf8; box-shadow: 0 6px 18px #3b303008; counter-increment: sale; }
+    .hc-cards li::before { content: 'COMPARISON ' counter(sale, decimal-leading-zero); display: block; color: #7a2e48; font-size: .75rem; letter-spacing: .12em; margin-bottom: .75rem; }
+    .hc-ranking { display: inline-block; border: 1px solid #cbb9b4; border-radius: 3px; padding: .2rem .5rem; background: #f7f0eb; color: #5a4a4a; }
     .hc-cards h4 { font-family: 'Playfair Display',serif; font-weight: 600; color: #2c2c2c; font-size: 1.15rem; line-height: 1.4; }
-    .hc-price { font-family: 'Cormorant Garamond',serif; font-size: 2rem; color: #2c2c2c; font-weight: 600; }
+    .hc-price { font-family: 'Cormorant Garamond',serif; font-size: 2.5rem; line-height: 1.1; color: #2c2c2c; font-weight: 600; font-variant-numeric: lining-nums tabular-nums; }
     .hc-facts, .hc-difference { border-top: 1px solid #cbb9b4; padding-top: .65rem; font-size: .9rem; }
     .hc-difference { font-size: .8125rem; line-height: 1.5; }
 
     .hc-comps :is(p,h3,h4,a,dd) { overflow-wrap: anywhere; }
     @media (min-width: 640px) { .hc-comps { padding: 1.5rem; } }
+    @media (min-width: 800px) { .hc-next { padding: 2rem; } .hc-review-intro { grid-template-columns: 220px minmax(0,1fr); gap: 2rem; } .hc-review-intro img { width: 220px; height: 250px; } .hc-review-contact { margin-left: 252px; } }
     @media (max-width: 639px) { .hc-search-row { flex-direction: column; } .hc-input-wrap, .hc-search-row button { width: 100%; } #hc-options { position: static; } .hc-cards { grid-template-columns: minmax(0,1fr); } }
     @media (prefers-reduced-motion: reduce) { .hc-comps { scroll-behavior: auto; } }
 </style>

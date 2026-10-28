@@ -1,5 +1,6 @@
 """Comps-first presentation contracts, separate from county refresh logic tests."""
 from pathlib import Path
+import re
 import subprocess
 import unittest
 
@@ -21,9 +22,23 @@ class PageTests(unittest.TestCase):
         self.assertEqual(1, (page + component).count('id="hc-draft"'))
         for identifier in ('hc-address', 'hc-options', 'hc-results', 'hc-cards', 'hc-question', 'hc-result-status'):
             self.assertIn(f'id="{identifier}"', component)
-        for disclosure in ('County snapshot:', 'not an appraisal or a price estimate', 'How these sales are chosen', 'How we use the data', 'Nothing is sent'):
-            self.assertIn(disclosure, component)
-        self.assertIn('highlandcreek.com/community-info/', page)
+        # Keep criteria available without restoring the removed HOA or data-use panels.
+        for obsolete in ('highlandcreek.com/', 'resources-heading', 'method-heading', 'hc-data-use', 'How we use the data', 'Methodology &amp; sources'):
+            self.assertNotIn(obsolete, page + component)
+        disclosures = re.findall(r'<details\b([^>]*)>(.*?)</details>', component, re.S)
+        self.assertEqual(1, len(disclosures))
+        attributes, criteria = disclosures[0]
+        self.assertIn('class="hc-rules"', attributes)
+        self.assertIsNone(re.search(r'\bopen\b', attributes))
+        # Native details/summary supplies keyboard activation, without custom roles
+        # or tabindex overrides. The rendered UI check exercises Enter toggling.
+        self.assertTrue(criteria.lstrip().startswith('<summary>How these sales are chosen</summary>'))
+        for disclosure in ('Required facts must be available', 'Limits never expand', 'Records can lag', 'County data source &amp; open-data policy'):
+            self.assertIn(disclosure, criteria)
+        visible = re.sub(r'<details\b[^>]*>.*?</details>', '', component, flags=re.S).split('<script id="hc-public-data"')[0]
+        for disclosure in ('County snapshot:', 'Recorded sales:', 'not a live feed', 'Mecklenburg County public records', 'sourceCheckedAt', 'Not live MLS data; Cabarrus sales are excluded', 'not an appraisal or a price estimate', 'nothing is tracked or sent', 'Nothing is sent until you send the email', 'does not sign you up for a newsletter or text messages'):
+            self.assertIn(disclosure, visible)
+        self.assertIn('<a href="/privacy/">Privacy details</a>', visible)
 
     def test_question_survives_address_reset_and_invalid_submit(self):
         component = (ROOT / 'src/components/HighlandCreekComps.astro').read_text(encoding='utf-8')
