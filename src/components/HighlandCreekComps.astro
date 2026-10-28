@@ -1,20 +1,22 @@
 ---
 import market from '../data/highland-creek-market.json';
 import { siteConfig } from '../siteConfig';
-interface Props { section?: 'lookup' | 'market' | 'methodology'; }
+interface Props { section?: 'lookup' | 'methodology'; }
 const { section = 'lookup' } = Astro.props;
 const county = market.countyComps;
 const rules = market.comparisonCriteria;
-const mls = market.mlsContext;
+const emailBody = ['Hi Inga, I would like a complimentary Highland Creek Home Review.', '',
+    'Property address (optional):', 'Updates or maintenance questions:', 'What I would like to understand:', '',
+    'Please include recent comparable sales, a likely price range and practical prep considerations.'].join('\r\n');
+const homeValueHref = `mailto:${siteConfig.contact.email}?subject=${encodeURIComponent('Highland Creek Home Review')}&body=${encodeURIComponent(emailBody)}`;
 // Only audited public property data is serialized. Escaping prevents HTML script termination.
 const publicData = JSON.stringify({ county, criteria: rules }).replace(/</g, '\\u003c');
-const money = (value: number) => value.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
 ---
 {section === 'lookup' && <>
-<section id="check-comps" class="hc-comps" aria-labelledby="comps-heading" data-email={siteConfig.contact.email}>
+<section id="check-comps" class="hc-comps" aria-labelledby="comps-heading" data-email={siteConfig.contact.email} data-review-href={homeValueHref}>
     <div class="hc-opening">
-        <h2 id="comps-heading">SO WHERE DOES YOURS FIT?</h2>
-        <p>Enter your address to see up to five similar sold homes.</p>
+        <h2 id="comps-heading">Find comparable sales</h2>
     </div>
     <p id="hc-coverage" class="hc-small hc-source-note">{county.metadata.coverage} County snapshot: <time datetime={county.metadata.asOf}>{county.metadata.asOf}</time>.</p>
     <p id="hc-window" class="hc-small hc-source-note">Recorded sales: {county.metadata.windowStart} through {county.metadata.asOf}. This snapshot is not a live feed.</p>
@@ -35,21 +37,20 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
     <p id="hc-load-fallback" class="hc-small">If address lookup is unavailable, <a href="#home-review">ask Inga for a Home Review</a>.</p>
     <div id="hc-results" hidden>
         <div id="hc-subject" class="hc-subject"></div>
-        <h3 id="hc-results-heading" tabindex="-1">HERE’S WHAT THE NUMBERS SAY.</h3>
-        <p>Nearby sales are a useful starting point, but they are only part of the picture.</p>
+        <h3 id="hc-results-heading" tabindex="-1">Comparable county-recorded sales</h3>
         <p id="hc-result-status" role="status" aria-live="polite"></p>
-        <p class="hc-small">These automated comparisons are not an appraisal or a price estimate. Inga has not reviewed these homes' condition or selected them personally.</p>
         <ol id="hc-cards" class="hc-cards"></ol>
-        <div class="hc-next">
-            <h3>What do these sales mean for your home?</h3>
-            <p>Ask Inga to review your home's condition, layout and updates alongside these sales and MLS context.</p>
+    </div>
+    <p class="hc-small">These automated comparisons are not an appraisal or a price estimate. Inga has not reviewed these homes' condition or selected them personally.</p>
+        <section id="home-review" class="hc-next" aria-labelledby="review-heading">
+            <h3 id="review-heading">Want Inga's take? Request a complimentary Home Review.</h3>
+            <p>Review comparable sales, a likely price range and practical prep with Inga. Condition, updates, maintenance, layout and lot matter. A Home Review is not an appraisal or a guaranteed sale price.</p>
             <label for="hc-question">What would you like to understand? <span class="hc-small">(optional)</span></label>
             <textarea id="hc-question" rows="2" maxlength="1000" autocomplete="off"></textarea>
-            <p id="hc-draft-help" class="hc-small">Opens your email app with this address and your question. Nothing is sent until you send the email.</p>
-            <a id="hc-draft" class="hc-button" href="#home-review" aria-describedby="hc-draft-help">Open my Home Review email draft</a>
-            <a href="#home-review">About your complimentary Home Review</a>
-        </div>
-    </div>
+            <p id="hc-draft-help" class="hc-small">Opens your email app with your selected address and question, if provided. Your address is optional. Nothing is sent until you send the email.</p>
+            <a id="hc-draft" class="hc-button" href={homeValueHref} aria-describedby="hc-draft-help">Open my Home Review email draft</a>
+            <p class="hc-small">Or contact Inga: <a href={`mailto:${siteConfig.contact.email}`}>{siteConfig.contact.email}</a> · <a href={siteConfig.contact.phoneHref}>{siteConfig.contact.phone}</a></p>
+        </section>
     <script id="hc-public-data" type="application/json" set:html={publicData} />
 </section>
 <script is:inline type="module">
@@ -215,10 +216,15 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
         results.hidden = true;
         cards.replaceChildren();
         get('hc-subject').replaceChildren();
-        get('hc-draft').setAttribute('href','#home-review');
+        updateDraft();
     }
     function updateDraft() {
-        if (!selected) return;
+        if (!selected) {
+            const draft = new URL(root.dataset.reviewHref);
+            draft.searchParams.set('body',draft.searchParams.get('body').replace('What I would like to understand:',`What I would like to understand: ${get('hc-question').value.trim()}`));
+            get('hc-draft').href = draft.href;
+            return;
+        }
         const body = ['Hi Inga, I would like a complimentary Highland Creek Home Review.','',
             `Property address: ${selected.address}`,`What I would like to understand: ${get('hc-question').value.trim()}`,'',
             'Please include recent comparable sales, a likely price range and practical prep considerations.'].join('\r\n');
@@ -339,23 +345,9 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
 </script>
 </>}
 
-{section === 'market' && <div class="hc-comps">
-    <aside class="hc-mls" aria-labelledby="hc-mls-heading">
-        <h3 id="hc-mls-heading">MLS market context</h3>
-        <p class="hc-small hc-source-note">{mls.source} · Checked {mls.checkedAt.slice(0, 10)} · {mls.periodStart} through {mls.periodEnd}</p>
-        <dl class="hc-metrics">
-            <div><dt>Closed listings</dt><dd>{mls.closedCount}</dd></div>
-            <div><dt>Median closed price</dt><dd>{money(mls.medianClosedPrice)}</dd></div>
-            <div><dt>Median / average cumulative days on market</dt><dd>{mls.medianCumulativeDaysOnMarket} / {mls.averageCumulativeDaysOnMarket} days</dd></div>
-            <div><dt>Median closed / list price</dt><dd>{mls.medianClosedToListPercent}%</dd></div>
-        </dl>
-        <p>A dated neighborhood summary, not your home's value or a prediction of how quickly it will sell.</p>
-        <details><summary>Report scope &amp; attribution</summary><p>{mls.scope}</p><p>{mls.disclaimer}</p><a href={mls.sourceUrl}>Canopy Matrix report platform</a></details>
-    </aside>
-</div>}
 
 {section === 'methodology' && <section class="hc-comps" aria-labelledby="method-heading">
-    <h2 id="method-heading">HOW THE HOME COMPARISON WORKS</h2>
+    <h2 id="method-heading">Methodology &amp; sources</h2>
     <details class="hc-rules">
         <summary>How these sales are chosen</summary>
         <p>Single-family homes must be within {rules.maxDistanceMiles} miles and mapped Highland Creek, with heated size within {rules.sqftTolerancePercent}%, bedrooms within {rules.maxBedroomDifference} and full baths within {rules.maxFullBathroomDifference} of yours. Missing required facts rule out a match.</p>
@@ -365,9 +357,9 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
     </details>
     <details class="hc-data-use">
         <summary>How we use the data</summary>
-        <p>Individual comparisons use Mecklenburg County public records. MLS figures are a separate dated summary, not a live MLS search or IDX feed. No confidential remarks, photos or access details are published; no Canopy endorsement or new data license is claimed.</p>
-        <p>County sources checked {county.metadata.sourceCheckedAt.slice(0, 10)}. This snapshot does not auto-refresh. The two additional sale examples above have separate sources and are not used in the address comparisons. The lookup creates no marketing signup or automatic CRM enrollment.</p>
-        <p><a href="https://brokerrelations.canopyrealtors.com/mls-compliance-training/rules-regulations/">Canopy rules &amp; regulations</a> · <a href="https://gis.mecknc.gov/data-center">Mecklenburg County open-data policy</a></p>
+        <p>Individual comparisons use Mecklenburg County public records, not a live MLS search or IDX feed. No confidential remarks, photos or access details are published; no Canopy endorsement or new data license is claimed.</p>
+        <p>County sources checked {county.metadata.sourceCheckedAt.slice(0, 10)}. This snapshot does not auto-refresh. The lookup creates no marketing signup or automatic CRM enrollment.</p>
+        <p><a href="https://gis.mecknc.gov/data-center">Mecklenburg County open-data policy</a></p>
     </details>
 </section>}
 
@@ -382,7 +374,7 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
     .hc-comps .hc-source-note, .hc-cards .hc-small, .hc-subject .hc-small,
     .hc-cards article > a, .hc-subject > a { font-size: .75rem; line-height: 1.5; }
     .hc-comps .hc-source-note, .hc-cards .hc-small { margin: .375rem 0; }
-    .hc-rules, .hc-data-use, .hc-mls details { font-size: .8125rem; line-height: 1.5; }
+    .hc-rules, .hc-data-use { font-size: .8125rem; line-height: 1.5; }
     .hc-comps .eyebrow, .hc-comps a { color: #7a2e48; }
     .hc-comps a { text-decoration: underline; text-underline-offset: 4px; display: inline-flex; align-items: center; min-height: 44px; }
     .hc-comps :is(a, button, input, textarea, summary, [tabindex]):focus-visible { outline: 2px solid #7a2e48; outline-offset: 4px; }
@@ -405,12 +397,9 @@ const money = (value: number) => value.toLocaleString('en-US', { style: 'currenc
     .hc-price { font-family: 'Cormorant Garamond',serif; font-size: 2rem; color: #2c2c2c; font-weight: 600; }
     .hc-facts, .hc-difference { border-top: 1px solid #cbb9b4; padding-top: .65rem; font-size: .9rem; }
     .hc-difference { font-size: .8125rem; line-height: 1.5; }
-    .hc-mls { border-top: 1px solid #cbb9b4; margin-top: 1.25rem; padding-top: 1.25rem; }
-    .hc-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 1rem; margin: 1rem 0; }
-    .hc-metrics dt { font-size: .85rem; }
-    .hc-metrics dd { font-size: 1.4rem; color: #2c2c2c; font-weight: 500; }
+
     .hc-comps :is(p,h3,h4,a,dd) { overflow-wrap: anywhere; }
     @media (min-width: 640px) { .hc-comps { padding: 1.5rem; } }
-    @media (max-width: 639px) { .hc-search-row { flex-direction: column; } .hc-input-wrap, .hc-search-row button { width: 100%; } #hc-options { position: static; } .hc-cards { grid-template-columns: minmax(0,1fr); } .hc-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+    @media (max-width: 639px) { .hc-search-row { flex-direction: column; } .hc-input-wrap, .hc-search-row button { width: 100%; } #hc-options { position: static; } .hc-cards { grid-template-columns: minmax(0,1fr); } }
     @media (prefers-reduced-motion: reduce) { .hc-comps { scroll-behavior: auto; } }
 </style>
