@@ -78,43 +78,52 @@ try {
         const f=document.querySelector('#home-review-form'); f.elements.name.value='Synthetic User'; f.elements.name.dispatchEvent(new Event('input')); f.elements.address.value='   '; f.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
         return f.elements.address.validity.customError;
     })()`, 'trimmed address validation');
+    await evaluate(`(() => {
+        const f=document.querySelector('#home-review-form'); f.elements.address.value='123 Example Street'; f.elements.address.dispatchEvent(new Event('input'));
+        window.relayCalls=[]; window.relayReply={status:200,body:{ok:true,requestId:'synthetic'}};
+        window.fetch=async (url,options) => { window.relayCalls.push({url,options}); if(window.relayReply.networkError) throw Error('offline'); return {status:window.relayReply.status,json:async()=>window.relayReply.body}; };
+    })()`);
     await run(`(() => {
-        const f=document.querySelector('#home-review-form'); f.elements.address.value='123 Example Street'; f.elements.address.dispatchEvent(new Event('input')); f.requestSubmit();
-        return document.querySelector('#home-review-status').textContent.includes('not available');
-    })()`, 'without a mock the form cannot submit');
-    await run(`(() => {
-        const f=document.querySelector('#home-review-form'); let called=false;
-        window.__homeReviewMockSubmit=()=>{called=true}; f.elements.website.value='spam'; f.requestSubmit(); f.elements.website.value='';
-        return !called && document.querySelector('#home-review-status').textContent.includes('Something went wrong');
+        const f=document.querySelector('#home-review-form'); f.elements.website.value='spam'; f.requestSubmit(); f.elements.website.value='';
+        return window.relayCalls.length===0 && document.querySelector('#home-review-status').textContent.includes('Something went wrong');
     })()`, 'non-empty honeypot does not submit');
     await run(`(async () => {
-        const f=document.querySelector('#home-review-form'); let payload;
-        window.__homeReviewMockSubmit=async data => { payload=data; return {status:200,json:async()=>({ok:true,requestId:'synthetic'})}; };
+        const f=document.querySelector('#home-review-form');
         f.elements.message.value='Optional note'; f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
-        return payload.name==='Synthetic User' && payload.email==='synthetic@example.test' && payload.address==='123 Example Street' && payload.message==='Optional note' && payload.website==='' && Object.keys(payload).length===5 && document.querySelector('#home-review-status').textContent.startsWith('Thank you');
+        const call=window.relayCalls[0], payload=JSON.parse(call.options.body);
+        return call.url==='https://forms.ingadraper.com/lead' && call.options.method==='POST' && call.options.headers['Content-Type']==='application/json' && payload.name==='Synthetic User' && payload.email==='synthetic@example.test' && payload.address==='123 Example Street' && payload.message==='Optional note' && payload.website==='' && Object.keys(payload).length===5 && document.querySelector('#home-review-status').textContent.startsWith('Thank you');
     })()`, 'mock 200 success and exact synthetic payload');
     await run(`(async () => {
         const f=document.querySelector('#home-review-form'); f.elements.name.value='Synthetic User'; f.elements.email.value='synthetic@example.test'; f.elements.address.value='123 Example Street'; f.elements.message.value='';
-        window.__homeReviewMockSubmit=async ()=>({status:422,json:async()=>({ok:false,error:'invalid',fields:{email:'invalid'}})}); f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
-        return f.elements.email.validity.customError && document.querySelector('#home-review-status').textContent.includes('check');
-    })()`, 'mock 422 per-field feedback');
+        window.relayReply={status:422,body:{ok:false,error:'invalid',fields:{email:'invalid'}}}; f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
+        const payload=JSON.parse(window.relayCalls.at(-1).options.body);
+        return !('message' in payload) && Object.keys(payload).length===4 && f.elements.email.validity.customError && document.querySelector('#home-review-status').textContent.includes('check');
+    })()`, 'optional message omitted and mock 422 per-field feedback');
     await run(`(async () => {
         const f=document.querySelector('#home-review-form'); f.elements.email.dispatchEvent(new Event('input'));
-        window.__homeReviewMockSubmit=async ()=>({status:502,json:async()=>({ok:false})}); f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
+        window.relayReply={status:502,body:{ok:false}}; f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
         return document.querySelector('#home-review-status').textContent.includes('Something went wrong');
     })()`, 'mock server error');
     await run(`(async () => {
-        const f=document.querySelector('#home-review-form'); window.__homeReviewMockSubmit=async ()=>{throw Error('offline')}; f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
+        const f=document.querySelector('#home-review-form'); window.relayReply={networkError:true}; f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
         return document.querySelector('#home-review-status').textContent.includes('Something went wrong');
     })()`, 'mock network error');
     await run(`(async () => {
-        const f=document.querySelector('#home-review-form'); window.__homeReviewMockSubmit=async ()=>({status:200,json:async()=>({ok:true})}); f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
+        const f=document.querySelector('#home-review-form'); window.relayReply={status:200,body:{ok:true}}; f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
         return document.querySelector('#home-review-status').textContent.includes('Something went wrong');
     })()`, 'malformed success is rejected');
     await run(`(async () => {
-        const f=document.querySelector('#home-review-form'); window.__homeReviewMockSubmit=async ()=>({status:201,json:async()=>({ok:true,requestId:'synthetic'})}); f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
+        const f=document.querySelector('#home-review-form'); window.relayReply={status:201,body:{ok:true,requestId:'synthetic'}}; f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
         return document.querySelector('#home-review-status').textContent.includes('Something went wrong');
     })()`, 'non-200 response is rejected');
+    await run(`(async () => {
+        const f=document.querySelector('#home-review-form'); window.relayReply={status:200,body:{ok:true,requestId:'synthetic',mode:'dry-run'}}; f.requestSubmit(); await new Promise(r=>setTimeout(r,25));
+        return document.querySelector('#home-review-status').textContent.includes('not available') && f.elements.name.value==='Synthetic User';
+    })()`, 'dry-run never claims a delivered request');
+    await run(`(() => {
+        const f=document.querySelector('#home-review-form'); const text=f.parentElement.textContent.toLowerCase();
+        return !f.querySelector('[name=consent], [name=phone], [name=source], [name=tag], [name=owner], [name=type]') && !/marketing|subscribe|text messages|sms/.test(text);
+    })()`, 'no implied marketing or SMS consent');
     await run(`(() => {
         const data=JSON.parse(document.querySelector('#hc-public-data').textContent); const home=data.county.properties[0]; const input=document.querySelector('#hc-address');
         if (!home || document.querySelector('#hc-search').hidden) return false;

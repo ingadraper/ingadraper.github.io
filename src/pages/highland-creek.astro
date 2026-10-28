@@ -67,7 +67,6 @@ const schemas = [
     </main>
 
     <script is:inline>
-        // Staging only: no relay is connected. Tests may supply a synthetic submit function.
         (() => {
             const form = document.getElementById('home-review-form');
             const status = document.getElementById('home-review-status');
@@ -76,6 +75,7 @@ const schemas = [
             const input = (name) => form.elements.namedItem(name);
             for (const name of fields) input(name).addEventListener('input', () => input(name).setCustomValidity(''));
             button.disabled = false;
+            status.textContent = '';
             form.addEventListener('submit', async (event) => {
                 event.preventDefault();
                 for (const name of fields) input(name).setCustomValidity('');
@@ -87,19 +87,22 @@ const schemas = [
                     status.textContent = 'Something went wrong. Please email Inga using the address below.';
                     return;
                 }
-                if (typeof window.__homeReviewMockSubmit !== 'function') {
-                    status.textContent = 'The online form is not available. Please contact Inga directly.';
-                    return;
-                }
+                if (!values.message) delete values.message;
                 button.disabled = true;
                 status.textContent = 'Sending…';
                 try {
-                    const response = await window.__homeReviewMockSubmit(values);
+                    const response = await fetch('https://forms.ingadraper.com/lead', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(values),
+                    });
                     const result = await response.json();
-                    if (response.status === 200 && result.ok === true && typeof result.requestId === 'string' && result.requestId) {
+                    if (response.status === 200 && result?.ok === true && typeof result.requestId === 'string' && result.requestId.trim() && result.mode === 'dry-run') {
+                        status.textContent = 'The online form is not available. Please email Inga using the address below.';
+                    } else if (response.status === 200 && result?.ok === true && typeof result.requestId === 'string' && result.requestId.trim()) {
                         form.reset();
                         status.textContent = 'Thank you. Your Home Review request has been sent.';
-                    } else if (response.status === 422 && result.ok === false && result.error === 'invalid' && result.fields && typeof result.fields === 'object' && ['name', 'email', 'address'].some((name) => result.fields[name])) {
+                    } else if (response.status === 422 && result?.ok === false && result.error === 'invalid' && result.fields && typeof result.fields === 'object' && ['name', 'email', 'address'].some((name) => result.fields[name])) {
                         for (const name of ['name', 'email', 'address']) {
                             if (result.fields[name]) input(name).setCustomValidity('Please check this field.');
                         }
