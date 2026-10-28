@@ -40,11 +40,82 @@ const schemas = [
                 </aside>
             </section>
 
-            <HighlandCreekComps />
+            <HighlandCreekComps>
+                <div slot="review-form" class="review-email rounded-[8px] border p-5 sm:p-6">
+                    <h4 class="text-xl font-semibold">Request your complimentary Highland Creek Home Review</h4>
+                    <p class="mt-3 leading-7">Tell Inga about your home. Required fields are marked required.</p>
+                    <form id="home-review-form" class="review-form mt-5" aria-describedby="home-review-status">
+                        <label for="review-name">Name (required)</label>
+                        <input id="review-name" name="name" type="text" autocomplete="name" minlength="2" maxlength="80" required />
+                        <label for="review-email">Email (required)</label>
+                        <input id="review-email" name="email" type="email" autocomplete="email" required />
+                        <label for="review-address">Property address (required)</label>
+                        <input id="review-address" name="address" type="text" autocomplete="street-address" minlength="5" maxlength="200" required />
+                        <label for="review-message">Message (optional)</label>
+                        <textarea id="review-message" name="message" rows="4" maxlength="1500"></textarea>
+                        <div class="review-honeypot" aria-hidden="true">
+                            <label for="review-website">Leave this field empty</label>
+                            <input id="review-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+                        </div>
+                        <button class="review-button mt-5 min-h-12 w-full rounded-[6px] px-5 py-3 text-sm font-medium" type="submit" disabled>WANT INGA’S TAKE?</button>
+                    </form>
+                    <p id="home-review-status" class="mt-3 text-sm leading-6" role="status" aria-live="polite">The online form is not available. Please contact Inga directly.</p>
+                </div>
+            </HighlandCreekComps>
         </div>
 
-
     </main>
+
+    <script is:inline>
+        // Staging only: no relay is connected. Tests may supply a synthetic submit function.
+        (() => {
+            const form = document.getElementById('home-review-form');
+            const status = document.getElementById('home-review-status');
+            const button = form.querySelector('button');
+            const fields = ['name', 'email', 'address', 'message'];
+            const input = (name) => form.elements.namedItem(name);
+            for (const name of fields) input(name).addEventListener('input', () => input(name).setCustomValidity(''));
+            button.disabled = false;
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                for (const name of fields) input(name).setCustomValidity('');
+                const values = Object.fromEntries([...fields, 'website'].map((name) => [name, input(name).value.trim()]));
+                if (values.name.length < 2) input('name').setCustomValidity('Please enter at least 2 characters.');
+                if (values.address.length < 5) input('address').setCustomValidity('Please enter at least 5 characters.');
+                if (!form.reportValidity()) return;
+                if (values.website) {
+                    status.textContent = 'Something went wrong. Please email Inga using the address below.';
+                    return;
+                }
+                if (typeof window.__homeReviewMockSubmit !== 'function') {
+                    status.textContent = 'The online form is not available. Please contact Inga directly.';
+                    return;
+                }
+                button.disabled = true;
+                status.textContent = 'Sending…';
+                try {
+                    const response = await window.__homeReviewMockSubmit(values);
+                    const result = await response.json();
+                    if (response.status === 200 && result.ok === true && typeof result.requestId === 'string' && result.requestId) {
+                        form.reset();
+                        status.textContent = 'Thank you. Your Home Review request has been sent.';
+                    } else if (response.status === 422 && result.ok === false && result.error === 'invalid' && result.fields && typeof result.fields === 'object' && ['name', 'email', 'address'].some((name) => result.fields[name])) {
+                        for (const name of ['name', 'email', 'address']) {
+                            if (result.fields[name]) input(name).setCustomValidity('Please check this field.');
+                        }
+                        status.textContent = 'Please check the highlighted fields.';
+                        form.reportValidity();
+                    } else {
+                        status.textContent = 'Something went wrong. Please email Inga using the address below.';
+                    }
+                } catch {
+                    status.textContent = 'Something went wrong. Please email Inga using the address below.';
+                } finally {
+                    button.disabled = false;
+                }
+            });
+        })();
+    </script>
 
     <style>
         .homeowner-guide { font-weight: 400; }
@@ -62,7 +133,14 @@ const schemas = [
         .homeowner-guide .guide-link:hover { color: #2c2c2c; }
         .homeowner-guide :is(a, summary):focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
         .homeowner-guide section[id] { scroll-margin-top: 1.5rem; }
-
+        .review-email { border-color: #e1c4be; }
+        .review-button { color: #2c2c2c; background: #f0ddd8; }
+        .review-button:hover { background: #fffdf8; }
+        .review-button:disabled { opacity: .7; }
+        .review-form label { display: block; margin-top: 1rem; font-size: .875rem; font-weight: 600; }
+        .review-form input, .review-form textarea { display: block; width: 100%; margin-top: .35rem; padding: .65rem; border: 1px solid #8b7772; border-radius: 6px; background: #fff; color: #202020; }
+        .review-form :is(input, textarea, button):focus-visible { outline: 2px solid #7a2e48; outline-offset: 3px; }
+        .review-honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
         /* Highland Creek only: preserve the shared footer markup and its disclosures.
            Official NAR black artwork, proportionately resized from 600px to 192px:
            https://www.nar.realtor/sites/default/files/2025-07/nar_membershipmark_black.png

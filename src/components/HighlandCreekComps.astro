@@ -60,8 +60,7 @@ const publicData = JSON.stringify({ county, criteria: rules }).replace(/</g, '\\
                     <p class="hc-small">A Home Review is not an appraisal or a guaranteed sale price.</p>
                 </div>
             </div>
-            <!-- Verified external form belongs in this region, above the working email fallback.
-                 Do not add a CRM URL or embed until the supported mechanism and data flow are reviewed. -->
+            <slot name="review-form" />
             <div id="hc-review-contact" class="hc-review-contact">
             <h4>Request your complimentary Home Review</h4>
             <label for="hc-question">What would you like to understand? <span class="hc-small">(optional)</span></label>
